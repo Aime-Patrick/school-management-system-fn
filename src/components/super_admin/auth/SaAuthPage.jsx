@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GraduationCap } from 'lucide-react';
-
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { useAuth } from '../../../hooks/useAuth';
 export const SaAuthPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { login,loginLoading} = useAuth()
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    //Demo login
-    if (email === 'admin@school.com' && password === 'admin') {
-      navigate('/sadmin/dashboard');
-    } else {
-      setError('Invalid student credentials');
+  const loginFormik = useFormik({
+    initialValues: {
+      email:"",
+      password:"",
+    },
+    validationSchema: yup.object({
+      email: yup.string().email().required('Email is required'),
+      password: yup.string().required('Password is required'),
+    }),
+    onSubmit: (values) => {
+      login(values.email, values.password)
     }
-  };
+    }) 
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -45,13 +52,16 @@ export const SaAuthPage = () => {
               <input
                 id="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={loginFormik.values.email}
+                onChange={loginFormik.handleChange}
+                onBlur={loginFormik.handleBlur}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 placeholder="admin"
               />
+              {loginFormik.touched.email && loginFormik.errors.email ? (
+              <div className="text-[#BA1500] text-sm">{loginFormik.errors.email}</div>
+            ) : null}
             </div>
-
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
@@ -59,11 +69,15 @@ export const SaAuthPage = () => {
               <input
                 id="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={loginFormik.values.password}
+                onChange={loginFormik.handleChange}
+                onBlur={loginFormik.handleBlur}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter your password"
               />
+              {loginFormik.touched.password && loginFormik.errors.password ? (
+              <div className="text-[#BA1500] text-sm">{loginFormik.errors.password}</div>
+            ) : null}
             </div>
 
             <div className="flex items-center justify-between">

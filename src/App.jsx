@@ -43,7 +43,7 @@ import { SaSchoolsStats } from "./components/super_admin/dashboard/SaSchoolsStat
 import SchoolsList from "./components/super_admin/pages/SchoolsList";
 import { SaProfileDropdown } from "./components/super_admin/dashboard/SaProfileDropDown";
 import { SaProfilePage } from "./components/super_admin/profile/SaProfilePage";
-import { SaAccountSettings } from './components/super_admin/settings/SaAccountSettings';
+import { SaAccountSettings } from "./components/super_admin/settings/SaAccountSettings";
 import { TeacherLogin } from "./components/teacher/auth/TeacherLogin";
 import { TeacherSidebar } from "./components/teacher/layout/TeacherSidebar";
 import { AppealsTeacher } from "./components/teacher/pages/AppealsTeacher";
@@ -51,7 +51,7 @@ import { TeacherLayout } from "./components/teacher/layout/TeacherLayout";
 import { Classes } from "./components/teacher/pages/Classes";
 import { School, Users, DollarSign, UserCircle } from "lucide-react";
 import { AdminDashboard } from "./components/dashboard/AdminDashboard";
-
+import ProtectedRoute from "./utils/protectedRoute";
 const DashboardHome = () => (
   <div className="p-6">
     <div className="mb-6">
@@ -108,17 +108,6 @@ const DashboardLayout = ({ children }) => (
     </div>
   </div>
 );
-
-const ProtectedRoute = ({ children }) => {
-  // For now, we'll assume the user is always authenticated
-  const isAuthenticated = true;
-
-  if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
-
-  return children;
-};
 
 const SettingsWrapper = () => {
   const navigate = useNavigate();
@@ -187,17 +176,6 @@ const SaDashboardLayout = ({ children }) => (
   </div>
 );
 
-const SaProtectedRoute = ({ children }) => {
-  // For now, we'll assume the user is always authenticated
-  const isAuthenticated = true;
-
-  if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
-
-  return children;
-};
-
 const SaSettingsWrapper = () => {
   const navigate = useNavigate();
   return <SaAccountSettings onBack={() => navigate("sadmin/dashboard")} />;
@@ -228,50 +206,26 @@ const App = () => {
         <Route>
           <Route path="/teacher/teacherLogin" element={<TeacherLogin />} />
           <Route path="/teacher" element={<TeacherLayout />}>
-             <Route path="classes" element={<Classes />} />
-             <Route path="appeals" element={<AppealsTeacher />} />
+            <Route path="classes" element={<Classes />} />
+            <Route path="appeals" element={<AppealsTeacher />} />
           </Route>
         </Route>
         <Route>
           <Route path="/" element={<LandingPage />} />
           <Route path="/sadmin/auth" element={<SaAuthPage />} />
           <Route
-            path="sadmin/dashboard"
+            path="sadmin"
             element={
-              <SaProtectedRoute>
-                <SaDashboardLayout>
-                  <SaDashboardHome />
-                </SaDashboardLayout>
-              </SaProtectedRoute>
+              <ProtectedRoute allowedRoles={["system-admin"]}>
+                <SaDashboardLayout />
+              </ProtectedRoute>
             }
-          />
-          <Route
-            path="sadmin/settings"
-            element={
-              <SaProtectedRoute>
-                <SaDashboardLayout>
-                <SaSettingsWrapper />
-                </SaDashboardLayout>
-              </SaProtectedRoute>
-            }
-          />
-          <Route
-            path="sadmin/profile"
-            element={
-              <SaProtectedRoute>
-                <SaProfileWrapper />
-              </SaProtectedRoute>
-            }
-          />
-          <Route
-          path="sadmin/dashboard/schools"
-          element={
-             <SaProtectedRoute>
-              <SaDashboardLayout>
-                <SchoolsList />
-              </SaDashboardLayout>
-             </SaProtectedRoute>            
-          }/>
+          >
+            <Route index element={<SaDashboardHome />} />
+            <Route path="settings" element={<SaSettingsWrapper />} />
+            <Route path="profile" element={<SaProfileWrapper />} />
+            <Route path="dashboard/schools" element={<SchoolsList />} />
+          </Route>
         </Route>
 
         <Route
