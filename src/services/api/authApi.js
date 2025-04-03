@@ -1,10 +1,10 @@
 import axiosInstance from "../axios";
 import { apiUrl } from "../axios";
 
-const API_URL = `${apiUrl}/auth`
-export const login = async (identifier, password) => {
+console.log(apiUrl)
+export const login = async ({identifier, password}) => {
     try {
-        const response = await axiosInstance.post(`${API_URL}/login`, {
+        const response = await axiosInstance.post(`${apiUrl}/auth/login`, {
             identifier,
             password,
         });

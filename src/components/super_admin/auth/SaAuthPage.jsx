@@ -6,9 +6,6 @@ import * as yup from 'yup';
 import { useAuth } from '../../../hooks/useAuth';
 export const SaAuthPage = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const { login,loginLoading} = useAuth()
 
   const loginFormik = useFormik({
@@ -21,7 +18,7 @@ export const SaAuthPage = () => {
       password: yup.string().required('Password is required'),
     }),
     onSubmit: (values) => {
-      login(values.email, values.password)
+      login({identifier:values.email, password:values.password})
     }
     }) 
 
@@ -38,16 +35,10 @@ export const SaAuthPage = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleLogin}>
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
-
+          <form className="space-y-6" onSubmit={loginFormik.handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Student Email
+                Email
               </label>
               <input
                 id="email"
@@ -106,9 +97,10 @@ export const SaAuthPage = () => {
             <div>
               <button
                 type="submit"
+                disabled={loginLoading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Sign in
+              {loginLoading ? <i className="pi pi-spin pi-spinner text-white" style={{ fontSize: '1rem' }}></i>  : " Sign in"}
               </button>
             </div>
             <div mt-4 className="text-center">

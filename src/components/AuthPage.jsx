@@ -2,47 +2,32 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "tailwindcss/tailwind.css";
 import "../styles/global.css";
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { useAuth } from "../hooks/useAuth";
 
 export const AuthPage = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    studentCode: "",
-    password: "",
-  });
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [activeRole, setActiveRole] = useState("admin");
+  const { login, loginLoading} = useAuth()
 
-  // Dummy credentials
-  const dummyData = {
-    studentCode: "test",
-    password: "123",
-  };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (
-      formData.studentCode === dummyData.studentCode &&
-      formData.password === dummyData.password
-    ) {
-      setSuccess("Login successful!");
-      setError("");
-      navigate("/dashboard");
-    } else {
-      setError("Invalid student code or password");
-      setSuccess("");
-    }
-  };
+    const loginFormik = useFormik({
+      initialValues: {
+        email:"",
+        password:"",
+      },
+      validationSchema: yup.object({
+        email: yup.string().email().required('Email is required'),
+        password: yup.string().required('Password is required'),
+      }),
+      onSubmit: (values) => {
+        login({identifier:values.username, password:values.password})
+      }
+      }) 
 
   const handleRoleNavigation = (role) => {
     setActiveRole(role);
@@ -93,35 +78,38 @@ export const AuthPage = () => {
             </button>
           ))}
         </div>
-
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-        {success && <p className="text-green-500 text-sm mb-4">{success}</p>}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={loginFormik.handleSubmit} className="space-y-6">
           <div>
             <input
               type="text"
-              name="studentCode"
-              value={formData.studentCode}
-              onChange={handleChange}
-              placeholder="Admin username"
+              id="email"
+              name="email"
+              value={loginFormik.username}
+              onChange={loginFormik.handleChange}
+              onBlur={loginFormik.handleBlur}
+              placeholder="Enter school admin email address"
               className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
             />
+            {loginFormik.touched.email && loginFormik.errors.email && (
+              <div className="text-red-500 text-xs">{loginFormik.errors.email}</div>
+            )}
           </div>
 
           <div>
             <input
               type="password"
+              id="password"
               name="password"
-              value={formData.password}
-              onChange={handleChange}
+              value={loginFormik.password}
+              onChange={loginFormik.handleChange}
+              onBlur={loginFormik.handleBlur}
               placeholder="Password"
               className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
             />
+            {loginFormik.touched.password && loginFormik.errors.password && (
+              <div className="text-red-500 text-xs">{loginFormik.errors.password}</div>
+            )}
           </div>
-
           <div className="flex items-center justify-between">
             <label className="flex items-center">
               <input
@@ -142,9 +130,10 @@ export const AuthPage = () => {
 
           <button
             type="submit"
+            disabled={loginFormik.isSubmitting}
             className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors"
           >
-            LOGIN
+            {loginLoading ? <i className="pi pi-spin pi-spinner text-white" style={{ fontSize: '1rem' }}></i>  : " Sign in"}
           </button>
           <div mt-4 className="text-center">
             <button

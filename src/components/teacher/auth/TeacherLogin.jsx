@@ -1,22 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap } from "lucide-react";
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { useAuth } from "../../../hooks/useAuth";
 
 export const TeacherLogin = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+   const { login, loginLoading} = useAuth()
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    //Demo login
-    if (email === "teacher@school.com" && password === "teacher") {
-      navigate("/teacher/classes");
-    } else {
-      setError("Invalid student credentials");
-    }
-  };
+   const loginFormik = useFormik({
+        initialValues: {
+          email:"",
+          password:"",
+        },
+        validationSchema: yup.object({
+          email: yup.string().email().required('Email is required'),
+          password: yup.string().required('Password is required'),
+        }),
+        onSubmit: (values) => {
+          login({identifier:values.email, password:values.password})
+        }
+        }) 
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -31,28 +36,28 @@ export const TeacherLogin = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleLogin}>
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
+          <form className="space-y-6" onSubmit={loginFormik.handleSubmit}>
 
             <div>
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Student Email
+                Email
               </label>
               <input
                 id="email"
+                name="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={loginFormik.values.email}
+                onChange={loginFormik.handleChange}
+                onBlur = {loginFormik.handleBlur}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 placeholder="teacher@school.com"
               />
+              {loginFormik.touched.email && loginFormik.errors.email? (
+                <div className="text-[#BA1500] text-sm">{loginFormik.errors.email}</div>
+              ) : null}
             </div>
 
             <div>
@@ -64,9 +69,11 @@ export const TeacherLogin = () => {
               </label>
               <input
                 id="password"
+                name="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={loginFormik.values.password}
+                onChange={loginFormik.handleChange}
+                onBlur={loginFormik.handleBlur}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter your password"
               />
@@ -99,12 +106,13 @@ export const TeacherLogin = () => {
             </div>
 
             <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Sign in
-              </button>
+            <button
+            type="submit"
+            disabled={loginFormik.isSubmitting}
+            className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            {loginLoading ? <i className="pi pi-spin pi-spinner text-white" style={{ fontSize: '1rem' }}></i>  : " Sign in"}
+          </button>
             </div>
             <div mt-4 className="text-center">
               <button
