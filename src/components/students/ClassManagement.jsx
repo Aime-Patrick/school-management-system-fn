@@ -10,6 +10,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { FilterMatchMode } from "primereact/api";
 import { Input } from "antd";
+import { Tooltip } from 'primereact/tooltip';
 export const ClassManagement = () => {
   const {classes} = useClasses();
   const [selectedClass, setSelectedClass] = useState(null);
@@ -31,11 +32,13 @@ export const ClassManagement = () => {
       setFilters(_filters);
       setGlobalFilterValue(value);
     };
+    const emptyCheck = (value) => value || 'None';
   return (
+   <><Tooltip target=".more-teachers" />
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-4">
-          <div className="relative">
+          <div className="">
           <Input
               type="text"
               value={globalFilterValue}
@@ -62,7 +65,29 @@ export const ClassManagement = () => {
     style={{ width: '3rem' }} 
   />
   <Column field="name" header="Class Name" />
-  <Column field="assignedTeachers" header="Assigned teachers" />
+  <Column field="assignedTeachers" header="Assigned teachers" 
+  body={(rowData) => {
+    const teachers = rowData?.assignedTeachers ?? [];
+
+    if (teachers.length === 0) return 'None';
+
+    const first = teachers[0];
+    const others = teachers.slice(1).join(', ');
+
+    return (
+      <div className="flex items-center gap-2">
+        <span>{first}</span>
+        {teachers.length > 1 && (
+          <Button
+            icon="pi pi-ellipsis-h"
+            className="p-button-text p-button-sm more-teachers"
+            data-pr-tooltip={others}
+            data-pr-position="top"
+          />
+        )}
+      </div>
+    );
+  }} />
   <Column field="studentCount" header="Student No" body={(rowData)=> rowData?.students?.length} />
   <Column 
     header="Students" 
@@ -76,6 +101,7 @@ export const ClassManagement = () => {
   <Column 
     header="Class Grade" 
     field='grade'
+    body={(rowData) => emptyCheck(rowData?.grade)}
   />
   <Column 
     header="Actions" 
@@ -180,7 +206,7 @@ export const ClassManagement = () => {
           }}
         />
       )}
-    </div>
+    </div></>
   );
 };
   

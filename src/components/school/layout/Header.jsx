@@ -33,7 +33,7 @@ export const Header = () => {
           />
         </div>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="z-50 flex items-center gap-4">
        {!isSchoolAdminHasSchool?.isSchoolExist && <button
           type="button"
           onClick={()=>setVisible(true)}

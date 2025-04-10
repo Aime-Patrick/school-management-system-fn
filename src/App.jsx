@@ -79,8 +79,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/AuthPage" element={<AuthPage />} />
-        <Route path="/student" element={<ProtectedRoute allowedRoles={["student"]} />}>
-        <Route element={<StudentLayout />}>
+        <Route path="/student" element={<StudentLayout />}>
+        <Route  element={<ProtectedRoute allowedRoles={["student"]} />}>
           <Route index element={<StudentDashboard />} />
           <Route path="announcements" element={<Announcements />} />
           <Route path="report-cards" element={<ReportCards />} />
@@ -92,8 +92,8 @@ const App = () => {
         </Route>
         </Route>
         <Route>
-          <Route path="/teacher" element={<ProtectedRoute allowedRoles={["teacher"]} />}>
-        <Route element={<TeacherLayout />}>
+        <Route path="/teacher" element={<TeacherLayout />}>
+          <Route  element={<ProtectedRoute allowedRoles={["teacher"]} />}>
             <Route path="classes" element={<Classes />} />
             <Route path="appeals" element={<AppealsTeacher />} />
           </Route>
@@ -101,8 +101,8 @@ const App = () => {
         </Route>
 
         <Route>
-          <Route path="/sadmin" element={ <ProtectedRoute allowedRoles={["system-admin"]} />}>
-            <Route element={<SaDashboardLayout />}>
+            <Route path="/sadmin" element={<SaDashboardLayout />}>
+          <Route element={ <ProtectedRoute allowedRoles={["system-admin"]} />}>
               <Route index element={<SaDashboardHome />}/>
               <Route path="settings" element={ <SaSettingsWrapper />} />
               <Route path="profile" element={ <SaProfileWrapper /> }/>
@@ -113,8 +113,8 @@ const App = () => {
         </Route>
 
         <Route>
-        <Route path="/school-admin" element={<ProtectedRoute allowedRoles={["school-admin"]} />}>
-          <Route element={<SchoolLayout />}>
+          <Route path="/school-admin" element={<SchoolLayout />}>
+        <Route element={<ProtectedRoute allowedRoles={["school-admin"]} />}>
             <Route index element={<AdminDashboard />} />
             <Route path="courses" element={<CoursesPage /> }/>
             <Route path="class" element={<ClassManagement /> }/>
