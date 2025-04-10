@@ -1,8 +1,8 @@
 import axiosInstance from '../axios'
 
-export const createClass = async() =>{
+export const createClass = async(name) =>{
     try {
-        const response = await axiosInstance.post('/classes');
+        const response = await axiosInstance.post('/classes',name);
         return response.data;
     } catch (error) {
         throw error

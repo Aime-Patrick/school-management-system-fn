@@ -6,7 +6,10 @@ import { AssignStudentsModal } from './modals/AssignStudentsModal';
 import { DeleteClassModal } from './modals/DeleteClassModal';
 import { EditClassModal } from './modals/EditClassModal';
 import { useClasses } from '../../hooks/useClasses';
-
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { FilterMatchMode } from "primereact/api";
+import { Input } from "antd";
 export const ClassManagement = () => {
   const {classes} = useClasses();
   const [selectedClass, setSelectedClass] = useState(null);
@@ -15,22 +18,31 @@ export const ClassManagement = () => {
   const [showAssignStudentsModal, setShowAssignStudentsModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-
-  const countClasses = (classes) =>{
-    return classes.length;
-  }
+    const [globalFilterValue, setGlobalFilterValue] = useState("");
+    const [filters, setFilters] = useState({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    });
+    const onGlobalFilterChange = (e) => {
+      const value = e.target.value;
+      let _filters = { ...filters };
+  
+      _filters["global"].value = value;
+  
+      setFilters(_filters);
+      setGlobalFilterValue(value);
+    };
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-4">
-          <button className="text-gray-600 px-4 py-2 rounded-lg border hover:bg-gray-50">
-            Add filter
-          </button>
           <div className="relative">
-            <input
+          <Input
               type="text"
-              placeholder="Search for class here"
+              value={globalFilterValue}
+              onChange={onGlobalFilterChange}
+              placeholder="Search ..."
               className="pl-4 pr-4 py-2 rounded-lg border w-[300px]"
+              prefix={<i className="pi pi-search"></i>}
             />
           </div>
         </div>
@@ -42,103 +54,61 @@ export const ClassManagement = () => {
         </button>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">#</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Class Name</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Headteacher Name</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Student No</th>
-              <th className="px-6 py-3 text-center text-sm font-medium text-gray-600">Students</th>
-              <th className="px-6 py-3 text-center text-sm font-medium text-gray-600">Assign Students</th>
-              <th className="px-6 py-3 text-center text-sm font-medium text-gray-600">Assign Lessons</th>
-              <th className="px-6 py-3 text-center text-sm font-medium text-gray-600">Lessons</th>
-              <th className="px-6 py-3 text-center text-sm font-medium text-gray-600">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {classes.map((classItem) => (
-              <tr key={classItem.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4">{classItem.id}</td>
-                <td className="px-6 py-4">{classItem.name}</td>
-                <td className="px-6 py-4">{classItem.headTeacher}</td>
-                <td className="px-6 py-4">{classItem.studentCount}</td>
-                <td className="px-6 py-4 text-center">
-                  <button className="p-1 hover:bg-gray-100 rounded">
-                    <Eye size={16} className="text-gray-600" />
-                  </button>
-                </td>
-                <td className="px-6 py-4 text-center">
-                  <button 
-                    onClick={() => {
-                      setSelectedClass(classItem);
-                      setShowAssignStudentsModal(true);
-                    }}
-                    className="p-1 hover:bg-gray-100 rounded"
-                  >
-                    <Pencil size={16} className="text-gray-600" />
-                  </button>
-                </td>
-                <td className="px-6 py-4 text-center">
-                  <button 
-                    onClick={() => {
-                      setSelectedClass(classItem);
-                      setShowAssignLessonsModal(true);
-                    }}
-                    className="p-1 hover:bg-gray-100 rounded"
-                  >
-                    <Pencil size={16} className="text-gray-600" />
-                  </button>
-                </td>
-                <td className="px-6 py-4 text-center">
-                  <button className="p-1 hover:bg-gray-100 rounded">
-                    <Eye size={16} className="text-gray-600" />
-                  </button>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex justify-center gap-2">
-                    <button 
-                      onClick={() => {
-                        setSelectedClass(classItem);
-                        setShowEditModal(true);
-                      }}
-                      className="p-1 hover:bg-gray-100 rounded"
-                    >
-                      <Pencil size={16} className="text-gray-600" />
-                    </button>
-                    <button 
-                      onClick={() => {
-                        setSelectedClass(classItem);
-                        setShowDeleteModal(true);
-                      }}
-                      className="p-1 hover:bg-gray-100 rounded"
-                    >
-                      <Trash2 size={16} className="text-red-600" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div>
+      <DataTable value={classes} globalFilter={filters.global.value} filters={filters} paginator rows={10} className="bg-white rounded-lg shadow text-sm">
+  <Column 
+    header="#" 
+    body={(rowData, { rowIndex }) => rowIndex + 1} 
+    style={{ width: '3rem' }} 
+  />
+  <Column field="name" header="Class Name" />
+  <Column field="assignedTeachers" header="Assigned teachers" />
+  <Column field="studentCount" header="Student No" body={(rowData)=> rowData?.students?.length} />
+  <Column 
+    header="Students" 
+    body={() => (
+      <button className="p-1 hover:bg-gray-100 rounded">
+        <Eye size={16} className="text-gray-600" />
+      </button>
+    )}
+    style={{ textAlign: 'center' }}
+  />
+  <Column 
+    header="Class Grade" 
+    field='grade'
+  />
+  <Column 
+    header="Actions" 
+    body={(rowData) => (
+      <div className="flex justify-center gap-2">
+        <button 
+          onClick={() => {
+            setSelectedClass(rowData);
+            setShowEditModal(true);
+          }}
+          className="p-1 hover:bg-gray-100 rounded"
+        >
+          <Pencil size={16} className="text-gray-600" />
+        </button>
+        <button 
+          onClick={() => {
+            setSelectedClass(rowData);
+            setShowDeleteModal(true);
+          }}
+          className="p-1 hover:bg-gray-100 rounded"
+        >
+          <Trash2 size={16} className="text-red-600" />
+        </button>
+      </div>
+    )}
+    style={{ textAlign: 'center' }}
+  />
+</DataTable>
       </div>
 
       {showCreateModal && (
         <CreateClassModal
           onClose={() => setShowCreateModal(false)}
-          onSubmit={(data) => {
-            setClasses([
-              ...classes,
-              {
-                id: classes.length + 1,
-                name: data.className,
-                headTeacher: 'New Teacher',
-                studentCount: data.studentCount,
-              },
-            ]);
-            setShowCreateModal(false);
-          }}
         />
       )}
 

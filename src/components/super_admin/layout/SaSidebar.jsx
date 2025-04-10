@@ -10,7 +10,7 @@ import {
   Settings,
   ChevronDown
 } from 'lucide-react';
-import { Logo } from './logo';
+import { Logo } from '../layout/Logo';
 
 const SaSidebarItem = ({ 
   icon, 
