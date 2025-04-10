@@ -1,8 +1,8 @@
 import React from 'react';
-import  Sidebar  from '../layout/Sidebar';
-import { Header } from '../dashboard/Header';
-import { ClaimsChart } from '../dashboard/ClaimsChart';
-import { SchoolsStats } from '../dashboard/SchoolsStats';
+import  Sidebar  from '../school/layout/Sidebar';
+import { Header } from '../school/layout/Header';
+import { ClaimsChart } from '../school/dashboard/ClaimsChart';
+import { SchoolsStats } from '../school/dashboard/SchoolsStats';
 
 export const ProfilePage = ({ onBack }) => {
   return (

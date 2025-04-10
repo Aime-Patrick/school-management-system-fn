@@ -7,6 +7,8 @@ import { Toaster } from 'react-hot-toast'
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { PrimeReactProvider } from 'primereact/api';
 import 'primeicons/primeicons.css';
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/primereact.min.css';  
         
 const queryClient = new QueryClient()
 createRoot(document.getElementById('root')).render(

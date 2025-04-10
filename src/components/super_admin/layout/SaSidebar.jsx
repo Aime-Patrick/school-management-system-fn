@@ -68,6 +68,12 @@ const SaSidebarItem = ({
             active={location.pathname.startsWith("/sadmin/schools")}
           />
           <SaSidebarItem
+            icon={<Users size={20} />}
+            label="Users"
+            to="/sadmin/users"
+            active={location.pathname.startsWith("/sadmin/users")}
+          />
+          <SaSidebarItem
             icon={<CreditCard size={20} />}
             label="Payment"
             to="/sadmin/payment"

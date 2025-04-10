@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
   baseURL: `${apiUrl}`,
 });
 
-// Prevent multiple logout redirects
+
 let isLoggingOut = false;
 function handleLogout() {
   if (!isLoggingOut) {
@@ -15,7 +15,7 @@ function handleLogout() {
   }
 }
 
-// ✅ Request Interceptor: Attach Token & Set Headers
+
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -29,14 +29,14 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ✅ Response Interceptor: Handle Errors
+
 axiosInstance.interceptors.response.use(
-  (response) => response, // Pass successful response
+  (response) => response,
   (error) => {
     if (error.response) {
       const { status } = error.response;
 
-      if (status === 401 || status === 403) {
+      if (status === 403) {
         handleLogout();
       }
     } else if (error.request) {

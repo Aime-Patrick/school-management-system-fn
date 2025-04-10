@@ -20,7 +20,7 @@ export const useAuth = () => {
         }
     };
 
-    const { data: authData = { isAuthenticated: false, role: "" }, isLoading } = useQuery({
+    const { data: authData = { isAuthenticated: false, role: "", username: "", email: "" }, isLoading } = useQuery({
         queryKey: ["auth"],
         queryFn: async () => {
             const token = localStorage.getItem("token");
@@ -31,7 +31,7 @@ export const useAuth = () => {
 
             try {
                 const decoded = jwtDecode(token);
-                return { isAuthenticated: true, role: decoded.role };
+                return { isAuthenticated: true, role: decoded.role, username:decoded.username, email:decoded.email };
             } catch (error) {
                 localStorage.removeItem("token");
                 toast.error("Session expired. Please log in again.");
@@ -48,7 +48,7 @@ export const useAuth = () => {
 
             try {
                 const decoded = jwtDecode(data.token);
-                queryClient.setQueryData(["auth"], { isAuthenticated: true, role: decoded.role });
+                queryClient.setQueryData(["auth"], { isAuthenticated: true, role: decoded.role , username: decoded.username, email: decoded.email});
                 queryClient.invalidateQueries(["auth"]);
 
                 setTimeout(() => {
@@ -57,13 +57,13 @@ export const useAuth = () => {
                             navigate("/sadmin");
                             break;
                         case "school-admin":
-                            navigate("/school-admin/dashboard");
+                            navigate("/school-admin");
                             break;
                         case "teacher":
-                            navigate("/teacher/dashboard");
+                            navigate("/teacher");
                             break;
                         case "student":
-                            navigate("/student/dashboard");
+                            navigate("/student");
                             break;
                         default:
                             localStorage.removeItem("token");
@@ -81,7 +81,7 @@ export const useAuth = () => {
         },
 
         onError: (error) => {
-            toast.error(error.message || "Login failed");
+            toast.error(error.response.data.message[0] || "Login failed");
             queryClient.setQueryData(["auth"], { isAuthenticated: false, role: "" });
             localStorage.removeItem("token");
         },

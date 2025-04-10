@@ -1,12 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Search, Bell } from "lucide-react";
-import { ProfileDropdown } from "./ProfileDropDown";
-
+import { ProfileDropdown } from "../../reusable/ProfileDropDown";
+import AddSchool from '../dashboard/AddSchool';
+import { useCheckIfAdminHasSchool } from "../../../hooks/useCheckIfAdminHasSchool";
 export const Header = () => {
   const navigate = useNavigate();
-
+  const [visible, setVisible]= useState(false)
+  const { data:isSchoolAdminHasSchool} = useCheckIfAdminHasSchool();
   const handleSettingsClick = () => {
     navigate("/settings");
   };
@@ -15,8 +17,9 @@ export const Header = () => {
     navigate("/profile");
   };
 
+
   return (
-    <div className="flex items-center justify-between p-4 border-b">
+    <div className="flex container items-center justify-between p-4 border-b">
       <div className="flex items-center gap-4 flex-1">
         <div className="relative max-w-md flex-1">
           <Search
@@ -31,12 +34,13 @@ export const Header = () => {
         </div>
       </div>
       <div className="flex items-center gap-4">
-        <button
+       {!isSchoolAdminHasSchool?.isSchoolExist && <button
           type="button"
+          onClick={()=>setVisible(true)}
           className="text-blue-600 px-4 py-2 rounded-lg border border-blue-600 hover:bg-blue-50"
         >
-          Add new Admission
-        </button>
+          Register School
+        </button>}
         <button
           type="button"
           className="p-2 rounded-lg hover:bg-gray-100"
@@ -50,6 +54,7 @@ export const Header = () => {
           onProfileClick={handleProfileClick}
         />
       </div>
+      {visible&&<AddSchool visible={visible} onClose={()=>setVisible(false)}/>}
     </div>
   );
 };

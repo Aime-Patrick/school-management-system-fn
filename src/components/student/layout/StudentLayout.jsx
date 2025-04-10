@@ -8,7 +8,7 @@ export const StudentLayout = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <StudentSidebar onLogoClick={() => navigate('/student/dashboard')} />
+      <StudentSidebar onLogoClick={() => navigate('/student/')} />
       <div className="flex-1">
         <StudentHeader />
         <Outlet />

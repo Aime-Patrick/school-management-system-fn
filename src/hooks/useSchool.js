@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { getSchools } from "../services/api/schoolApi";
+import { getSchools, isSchoolAdminRegisteredSchool } from "../services/api/schoolApi";
 
 
 export const useSchools = () => {
@@ -13,5 +13,7 @@ export const useSchools = () => {
             toast.error(error.message || "Failed to fetch schools");
         }
     })
-    return { schools: data, isLoading, error };
+
+    
+    return { schools: data, isLoading, error};
 }

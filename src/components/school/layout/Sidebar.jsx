@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   School, 
@@ -12,8 +12,10 @@ import {
   MessageSquare,
   Calendar
 } from 'lucide-react';
-import { Logo } from './Logo';
-
+import { Logo } from '../../layout/Logo';
+const isActive = (path) => {
+  return location.pathname === path;
+};
 const SidebarItem = ({ 
   icon, 
   label, 
@@ -26,7 +28,7 @@ const SidebarItem = ({
   <div>
     <div 
       className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-colors
-      ${active ? 'bg-white bg-opacity-10 text-white' : 'text-white/70 hover:bg-white/5'}`}
+      ${isActive(active) ? 'bg-white bg-opacity-10 text-white' : 'text-white/70 hover:bg-white/5'}`}
       onClick={onClick}
     >
       {icon}
@@ -48,9 +50,14 @@ const SidebarItem = ({
 
 const Sidebar = ({ onLogoClick = () => {} }) => {
   const navigate = useNavigate();
+  const location = useLocation(); 
   const [isStudentsOpen, setIsStudentsOpen] = useState(false);
   const [isAcademicOpen, setIsAcademicOpen] = useState(false);
   const [activeItem,setActiveItem] = useState('');
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
   return (
     <div className="w-64 bg-blue-600 min-h-screen p-4 flex flex-col">
       <Logo onClick={onLogoClick} />
@@ -58,54 +65,56 @@ const Sidebar = ({ onLogoClick = () => {} }) => {
       <nav className="space-y-1 flex-1">
         <SidebarItem 
           icon={<LayoutDashboard size={20} />} 
-          label="Dashboard" 
-          active 
-          onClick={() => navigate('/dashboard')} 
-        />
-        <SidebarItem 
-          icon={<School size={20} />} 
-          label="Schools" 
-          onClick={() => navigate('/dashboard')} 
-          // navigate('/dashboard/schools')}
+          label="Dashboard"  
+          active={'/school-admin'}
+          onClick={() => navigate('/school-admin')} 
         />  
         <SidebarItem 
           icon={<Users size={20} />} 
           label="Students" 
           hasDropdown
           isOpen={isStudentsOpen}
+          active={'/school-admin/students'}
           onClick={() => setIsStudentsOpen(!isStudentsOpen)}
         >
           <div 
-            className="text-white/70 hover:bg-white/5 py-2 px-4 rounded-lg cursor-pointer text-sm"
-            onClick={() => navigate('/students')}
+            className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+              isActive('/school-admin/students') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+            }`}
+            onClick={() => navigate('/school-admin/students')}
           >
             All Students
           </div>
           <div 
-            className="text-white/70 hover:bg-white/5 py-2 px-4 rounded-lg cursor-pointer text-sm"
+            className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+              isActive('/school-admin/students') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+            }`}
             onClick={() => navigate('/students')}
             // navigate('/dashboard/students/admission')}
           >
             Admission Form
           </div>
           <div 
-            className="text-white/70 hover:bg-white/5 py-2 px-4 rounded-lg cursor-pointer text-sm"
+            className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+              isActive('/school-admin/students') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+            }`}
             onClick={() => navigate('/students')}
             // navigate('/dashboard/students/promotion')}
           >
             Student Promotion
           </div>
-          <div 
-            className="text-white/70 hover:bg-white/5 py-2 px-4 rounded-lg cursor-pointer text-sm"
-            onClick={() => navigate('/dashboard/students/class')}
-          >
-            Class
-          </div>
         </SidebarItem>
         <SidebarItem 
           icon={<UserCog size={20} />} 
+          label="Class" 
+          active={'/school-admin/class'}
+          onClick={() => navigate('/school-admin/class')} 
+        />
+        <SidebarItem 
+          icon={<UserCog size={20} />} 
           label="Teachers" 
-          onClick={() => navigate('/dashboard/teachers')} 
+          active={'/school-admin/teachers'}
+          onClick={() => navigate('/school-admin/teachers')} 
         />
           <SidebarItem 
           icon={<Calendar size={20} />} 
@@ -120,7 +129,7 @@ const Sidebar = ({ onLogoClick = () => {} }) => {
             }`}
             onClick={() => {
               setActiveItem('academic-year');
-              navigate('/dashboard/academic-year');
+              navigate('/school-admin/academic-year');
             }}
           >
             Academic Year
@@ -131,7 +140,7 @@ const Sidebar = ({ onLogoClick = () => {} }) => {
             }`}
             onClick={() => {
               setActiveItem('academic-term');
-              navigate('/dashboard/academic-term');
+              navigate('/school-admin/academic-term');
             }}
           >
             Academic Term
@@ -147,12 +156,12 @@ const Sidebar = ({ onLogoClick = () => {} }) => {
         <SidebarItem 
           icon={<BookOpen size={20} />} 
           label="Courses" 
-          onClick={() => navigate('/dashboard/courses')} 
+          onClick={() => navigate('/school-admin/courses')} 
         />
         <SidebarItem 
           icon={<MessageSquare size={20} />} 
           label="Messages" 
-          onClick={() => navigate('/dashboard/messages')} 
+          onClick={() => navigate('/school-admin/messages')} 
         />
         <SidebarItem 
           icon={<Settings size={20} />} 

@@ -1,51 +1,17 @@
 import React from "react";
 import { MoreVertical } from "lucide-react";
+import { useSchools } from "../../../hooks/useSchool";
+import { Empty } from "antd";
 
-const schools = [
-  {
-    id: 1,
-    logo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=faces",
-    adminName: "Cordell Edwards",
-    schoolName: "Udemy School",
-    email: "info@udemy.com",
-    status: "Approved",
-  },
-  {
-    id: 2,
-    logo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=faces",
-    adminName: "Sarah Wilson",
-    schoolName: "Coursera Academy",
-    email: "contact@coursera.edu",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    logo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=faces",
-    adminName: "Michael Chen",
-    schoolName: "EdX Institute",
-    email: "admin@edx.org",
-    status: "Approved",
-  },
-  {
-    id: 4,
-    logo: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=40&h=40&fit=crop&crop=faces",
-    adminName: "Jessica Brown",
-    schoolName: "Khan School",
-    email: "info@khan.edu",
-    status: "Approved",
-  },
-  {
-    id: 5,
-    logo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=faces",
-    adminName: "David Miller",
-    schoolName: "Pluralsight Academy",
-    email: "contact@pluralsight.com",
-    status: "Pending",
-  },
-];
 
-export const SaSchoolsTable = () => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+export const SaSchoolsTable = () => {
+  const { isLoading, schools } = useSchools();
+  const sortedSchools = [...schools]?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const schoolAdmin = (school) =>{
+    return school.schoolAdmin.username
+  }
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100">
     <div className="p-4 border-b border-gray-100">
       <h2 className="text-lg font-semibold">Recent Joined Schools</h2>
     </div>
@@ -71,24 +37,25 @@ export const SaSchoolsTable = () => (
             <th className="px-4 py-3 text-left text-sm font-medium text-gray-600"></th>
           </tr>
         </thead>
+        {sortedSchools.length > 0 ? 
         <tbody>
-          {schools.map((school) => (
+          { sortedSchools.map((school) => (
             <tr key={school.id} className="border-t border-gray-100">
               <td className="px-4 py-3">
                 <img
-                  src={school.logo}
+                  src={school.schoolLogo}
                   alt={`${school.schoolName} logo`}
                   className="w-8 h-8 rounded-full"
                 />
               </td>
-              <td className="px-4 py-3 text-sm">{school.adminName}</td>
+              <td className="px-4 py-3 text-sm">{schoolAdmin(school)}</td>
               <td className="px-4 py-3 text-sm">{school.schoolName}</td>
-              <td className="px-4 py-3 text-sm">{school.email}</td>
+              <td className="px-4 py-3 text-sm">{school.email || school.schoolAdmin.email}</td>
               <td className="px-4 py-3">
                 <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
                   ${
-                    school.status === "Approved"
+                    school.status === "active"
                       ? "bg-green-100 text-green-800"
                       : "bg-yellow-100 text-yellow-800"
                   }`}
@@ -107,8 +74,10 @@ export const SaSchoolsTable = () => (
               </td>
             </tr>
           ))}
-        </tbody>
+        </tbody> 
+        : <div className="flex items-center justify-center w-full"> <p>No schools available</p></div>}
       </table>
     </div>
   </div>
-);
+  )
+}

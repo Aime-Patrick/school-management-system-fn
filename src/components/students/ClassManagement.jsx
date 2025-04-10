@@ -5,16 +5,10 @@ import { AssignLessonsModal } from './modals/AssignLessonsModal';
 import { AssignStudentsModal } from './modals/AssignStudentsModal';
 import { DeleteClassModal } from './modals/DeleteClassModal';
 import { EditClassModal } from './modals/EditClassModal';
-
-const mockClasses = Array(8).fill(null).map((_, index) => ({
-  id: index + 1,
-  name: 'Year 1 A',
-  headTeacher: 'Alice Mukabaranga',
-  studentCount: 30,
-}));
+import { useClasses } from '../../hooks/useClasses';
 
 export const ClassManagement = () => {
-  const [classes, setClasses] = useState(mockClasses);
+  const {classes} = useClasses();
   const [selectedClass, setSelectedClass] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAssignLessonsModal, setShowAssignLessonsModal] = useState(false);
@@ -22,6 +16,9 @@ export const ClassManagement = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
+  const countClasses = (classes) =>{
+    return classes.length;
+  }
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">

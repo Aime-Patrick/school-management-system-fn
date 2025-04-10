@@ -10,6 +10,10 @@
   }
 }
 
+.btn {
+  @apply  py-2 px-4 rounded;
+}
+
 .hero-gradient {
   background: linear-gradient(135deg, #0A1B3D 0%, #1E3A8A 100%);
 }
@@ -77,4 +81,21 @@
 .feature-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide arrows in WebKit browsers */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.card {
+  /* padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem; */
 }

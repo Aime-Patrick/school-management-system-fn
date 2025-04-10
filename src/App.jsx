@@ -8,12 +8,6 @@ import {
   Outlet,
 } from "react-router-dom";
 import { AuthPage } from "./components/AuthPage";
-import Sidebar from "./components/layout/Sidebar";
-import { Header } from "./components/dashboard/Header";
-import { StatsCard } from "./components/dashboard/StatsCard";
-import { SchoolsTable } from "./components/dashboard/SchoolsTable";
-import { ClaimsChart } from "./components/dashboard/ClaimsChart";
-import { SchoolsStats } from "./components/dashboard/SchoolsStats";
 import { AccountSettings } from "./components/settings/AccountSettings";
 import { ProfilePage } from "./components/profile/ProfilePage";
 import Messaging from "./components/messageComponents/messaging";
@@ -24,7 +18,6 @@ import StudentsPage from "./components/students/StudentsPage";
 import { ClassManagement } from "./components/students/ClassManagement";
 import { TeachersPage } from "./components/teachers/TeachersPage";
 import CoursesPage from "./components/courses/CoursesPage";
-import { StudentLogin } from "./components/student/auth/StudentLogin";
 import { StudentLayout } from "./components/student/layout/StudentLayout";
 import { StudentDashboard } from "./components/student/dashboard/StudentDashboard";
 import { ReportCards } from "./components/student/pages/ReportCards";
@@ -34,82 +27,19 @@ import { Appeals } from "./components/student/pages/Appeals";
 import { Timetable } from "./components/student/pages/Timetable";
 import { Performance } from "./components/student/pages/Perfomance";
 import { Notifications } from "./components/student/pages/Notification";
-import { SaAuthPage } from "./components/super_admin/auth/SaAuthPage";
 import SaSidebar from "./components/super_admin/layout/SaSidebar";
-import { SaClaimsChart } from "./components/super_admin/dashboard/SaClaimsChart";
 import { SaHeader } from "./components/super_admin/dashboard/SaHeader";
-import { SaStatsCard } from "./components/super_admin/dashboard/SaStatsCard";
-import { SaSchoolsTable } from "./components/super_admin/dashboard/SaSchoolsTable";
-import { SaSchoolsStats } from "./components/super_admin/dashboard/SaSchoolsStats";
 import SchoolsList from "./components/super_admin/pages/SchoolsList";
-import { SaProfileDropdown } from "./components/super_admin/dashboard/SaProfileDropDown";
 import { SaProfilePage } from "./components/super_admin/profile/SaProfilePage";
 import { SaAccountSettings } from "./components/super_admin/settings/SaAccountSettings";
-import { TeacherLogin } from "./components/teacher/auth/TeacherLogin";
-import { TeacherSidebar } from "./components/teacher/layout/TeacherSidebar";
 import { AppealsTeacher } from "./components/teacher/pages/AppealsTeacher";
 import { TeacherLayout } from "./components/teacher/layout/TeacherLayout";
 import { Classes } from "./components/teacher/pages/Classes";
-import { School, Users, DollarSign, UserCircle } from "lucide-react";
-import { AdminDashboard } from "./components/dashboard/AdminDashboard";
+import { AdminDashboard } from "./components/school/dashboard/AdminDashboard";
 import ProtectedRoute from "./utils/protectedRoute";
 import { SaDashboardHome } from "./components/super_admin/pages/Dashboard";
-const DashboardHome = () => (
-  <div className="p-6">
-    <div className="mb-6">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-1">
-        Welcome Back, Super Admin!
-      </h1>
-      <p className="text-gray-600">Enjoy World's No.1 Education Software</p>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-      <StatsCard
-        title="Total Schools"
-        value="25.1k"
-        change={15}
-        icon={<School className="text-blue-600" />}
-      />
-      <StatsCard
-        title="Total Students"
-        value="2,435k"
-        change={-1.9}
-        icon={<Users className="text-blue-600" />}
-      />
-      <StatsCard
-        title="Total Income"
-        value="3.5M"
-        change={15}
-        icon={<DollarSign className="text-blue-600" />}
-      />
-      <StatsCard
-        title="Total Users"
-        value="10.5M"
-        change={15}
-        icon={<UserCircle className="text-blue-600" />}
-      />
-    </div>
-
-    <SchoolsTable />
-
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-      <div className="lg:col-span-2">
-        <ClaimsChart />
-      </div>
-      <SchoolsStats />
-    </div>
-  </div>
-);
-
-const DashboardLayout = ({ children }) => (
-  <div className="flex min-h-screen bg-gray-50">
-    <Sidebar />
-    <div className="flex-1">
-      <Header />
-      <main>{children}</main>
-    </div>
-  </div>
-);
+import SchoolLayout from "./components/school/layout/schoolLayout";
+import Users from "./components/super_admin/pages/users";
 
 const SettingsWrapper = () => {
   const navigate = useNavigate();
@@ -121,13 +51,13 @@ const ProfileWrapper = () => {
   return <ProfilePage onBack={() => navigate("/dashboard")} />;
 };
 
-const SaDashboardLayout = ({children}) => (
+const SaDashboardLayout = () => (
   <div className="flex min-h-screen bg-gray-50">
     <SaSidebar />
     <div className="flex-1">
       <SaHeader />
       <main>
-        {children}
+        <Outlet />
       </main>
     </div>
   </div>
@@ -149,9 +79,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/AuthPage" element={<AuthPage />} />
-        <Route path="/student/login" element={<StudentLogin />} />
-        <Route path="/student" element={<StudentLayout />}>
-          <Route path="dashboard" element={<StudentDashboard />} />
+        <Route path="/student" element={<ProtectedRoute allowedRoles={["student"]} />}>
+        <Route element={<StudentLayout />}>
+          <Route index element={<StudentDashboard />} />
           <Route path="announcements" element={<Announcements />} />
           <Route path="report-cards" element={<ReportCards />} />
           <Route path="parent-meetings" element={<ParentMeetings />} />
@@ -160,158 +90,48 @@ const App = () => {
           <Route path="timetable" element={<Timetable />} />
           <Route path="notifications" element={<Notifications />} />
         </Route>
+        </Route>
         <Route>
-          <Route path="/teacher/teacherLogin" element={<TeacherLogin />} />
-          <Route path="/teacher" element={<TeacherLayout />}>
+          <Route path="/teacher" element={<ProtectedRoute allowedRoles={["teacher"]} />}>
+        <Route element={<TeacherLayout />}>
             <Route path="classes" element={<Classes />} />
             <Route path="appeals" element={<AppealsTeacher />} />
           </Route>
         </Route>
+        </Route>
+
         <Route>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/sadmin/auth" element={<SaAuthPage />} />
           <Route path="/sadmin" element={ <ProtectedRoute allowedRoles={["system-admin"]} />}>
-            <Route
-              index
-              element={
-                <SaDashboardLayout >
-                  <SaDashboardHome />
-                </SaDashboardLayout>
-              }
-            />
-            <Route
-              path="settings"
-              element={
-                <SaDashboardLayout >
-                  <SaSettingsWrapper />
-                </SaDashboardLayout>
-              }
-            />
-            <Route
-              path="profile"
-              element={
-                <SaDashboardLayout >
-                  <SaProfileWrapper />
-                </SaDashboardLayout>
-              }
-            />
-            <Route
-              path="schools"
-              element={
-                <SaDashboardLayout >
-                  <SchoolsList />
-                </SaDashboardLayout>
-              }
-            />
+            <Route element={<SaDashboardLayout />}>
+              <Route index element={<SaDashboardHome />}/>
+              <Route path="settings" element={ <SaSettingsWrapper />} />
+              <Route path="profile" element={ <SaProfileWrapper /> }/>
+            <Route path="schools" element={ <SchoolsList /> } />
+            <Route path="users" element={ <Users /> } />
+          </Route>
           </Route>
         </Route>
-        <Route
-          path="dashboard/courses"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <CoursesPage />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
 
-        <Route
-          path="dashboard/students/class"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <ClassManagement />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/students"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <StudentsPage />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard/academic-year"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <AcademicYear />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard/academic-term"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <AcademicTerm />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="dashboard/students/class"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <ClassManagement />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="dashboard/teachers"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <TeachersPage />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <AdminDashboard />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard/messages"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <Messaging />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute>
-              <SettingsWrapper />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <ProfileWrapper />
-            </ProtectedRoute>
-          }
-        />
+        <Route>
+        <Route path="/school-admin" element={<ProtectedRoute allowedRoles={["school-admin"]} />}>
+          <Route element={<SchoolLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="courses" element={<CoursesPage /> }/>
+            <Route path="class" element={<ClassManagement /> }/>
+            <Route path="students" element={<StudentsPage /> }/>
+            <Route path="academic-year" element={<AcademicYear /> }/>
+            <Route path="academic-term" element={<AcademicTerm /> }/>
+            <Route path="teachers" element={<TeachersPage />}/>
+            <Route path="messages" element={ <Messaging /> }/>
+        </Route>
+        </Route>
+        </Route>
+        <Route path="/settings" element={ <ProtectedRoute allowedRoles={["system-admin","school-admin","teacher","student"]}/> }>
+        <Route index element={ <SettingsWrapper /> } />
+        </Route>
+        <Route path="/profile" element={ <ProtectedRoute allowedRoles={["system-admin","school-admin","teacher","student"]}/> } >
+        <Route index element={ <ProfileWrapper /> } />
+        </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

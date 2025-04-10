@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Search, Bell } from "lucide-react";
-import { SaProfileDropdown } from "./SaProfileDropDown";
+import { ProfileDropdown } from "../../reusable/ProfileDropDown";
 
 export const SaHeader = () => {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ export const SaHeader = () => {
         >
           <Bell size={20} className="text-gray-600" />
         </button>
-        <SaProfileDropdown
+        <ProfileDropdown
           imageUrl="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=faces"
           onSettingsClick={handleSettingsClick}
           onProfileClick={handleProfileClick}
