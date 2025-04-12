@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { login } from "../services/api/authApi";
 import { jwtDecode } from "jwt-decode";
+import { isArr } from "./useTeacher";
 
 export const useAuth = () => {
     const navigate = useNavigate();
@@ -81,7 +82,7 @@ export const useAuth = () => {
         },
 
         onError: (error) => {
-            toast.error(error.response.data.message[0] || "Login failed");
+            toast.error(isArr(error.response.data.message)|| "Login failed");
             queryClient.setQueryData(["auth"], { isAuthenticated: false, role: "" });
             localStorage.removeItem("token");
         },

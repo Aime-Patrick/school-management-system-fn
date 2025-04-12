@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'primereact/button';
 import AddSchool from '../../school/dashboard/AddSchool';
 import { useSchools } from '../../../hooks/useSchool';
+import { convertDate } from '../../../utils';
 const SchoolsList = () => {
   const { schools, isLoading } = useSchools();
   const [visible, setVisible] = useState(false);
@@ -26,9 +27,6 @@ const SchoolsList = () => {
     // Implement lock functionality here
   };
 
-  const convertDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US');
-  }
   if (isLoading) {
     return <div>loading</div>
   }

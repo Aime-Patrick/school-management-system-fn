@@ -11,7 +11,6 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { Logo } from '../layout/Logo';
-
 const SaSidebarItem = ({ 
   icon, 
   label, 
@@ -21,17 +20,17 @@ const SaSidebarItem = ({
   hasDropdown, 
   isOpen,
   children }) => {
-   
+   const navigate = useNavigate()
     return(
     <div>
       <div 
         className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors
         ${active ? 'bg-white bg-opacity-10 text-white' : 'text-white/70 hover:bg-white/5'}`}
-        onClick={onClick}
+        onClick={()=>navigate(to)}
       >
-        <Link to={to} className='flex items-center gap-3' onClick={() => handleNavClick(`${label}`)}>{icon}
+        <div className='flex items-center gap-3' onClick={() => handleNavClick(`${label}`)}>{icon}
         <span className="text-sm font-medium flex-1">{label}</span>
-        </Link>
+        </div>
         {hasDropdown && (
           <ChevronDown 
             size={16} 
@@ -48,7 +47,6 @@ const SaSidebarItem = ({
   }
   const SaSidebar = ({ onLogoClick }) => {
     const location = useLocation(); // Get the current route
-    const navigate = useNavigate();
   
     return (
       <div className="w-64 bg-blue-600 min-h-screen p-4 flex flex-col">

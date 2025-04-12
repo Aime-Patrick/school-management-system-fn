@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { getTeachers } from "../services/api/teacherApi";
+import { isArr } from "./useTeacher";
 
 export const useTeacherBySchoolId = (schoolId) => {
     const { data: teachers, isLoading, error } = useQuery({
@@ -8,7 +9,7 @@ export const useTeacherBySchoolId = (schoolId) => {
       queryFn: () => getTeachers(schoolId),
       enabled: !!schoolId,
       onError: (error) => {
-        toast.error(error.response?.data?.message?.[0] || "Failed to fetch teachers");
+        toast.error(isArr(error.response?.data?.message )|| "Failed to fetch teachers");
       },
     });
   

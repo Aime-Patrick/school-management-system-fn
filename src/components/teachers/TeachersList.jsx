@@ -4,6 +4,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { FilterMatchMode } from "primereact/api";
 import { Input } from "antd";
+import { convertDate } from "../../utils";
 export const TeachersList = ({
   teachers,
   onViewProfile,
@@ -23,9 +24,6 @@ export const TeachersList = ({
 
     setFilters(_filters);
     setGlobalFilterValue(value);
-  };
-  const convertDate = (date) => {
-    return new Date(date).toLocaleDateString();
   };
   const actionTemplate = (rowData) => {
     return (

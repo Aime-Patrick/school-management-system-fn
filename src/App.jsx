@@ -40,7 +40,7 @@ import ProtectedRoute from "./utils/protectedRoute";
 import { SaDashboardHome } from "./components/super_admin/pages/Dashboard";
 import SchoolLayout from "./components/school/layout/schoolLayout";
 import Users from "./components/super_admin/pages/users";
-
+import { SuperPayments } from "./pages/superPayments";
 const SettingsWrapper = () => {
   const navigate = useNavigate();
   return <AccountSettings onBack={() => navigate("/dashboard")} />;
@@ -108,6 +108,7 @@ const App = () => {
               <Route path="profile" element={ <SaProfileWrapper /> }/>
             <Route path="schools" element={ <SchoolsList /> } />
             <Route path="users" element={ <Users /> } />
+            <Route path="payment" element={ <SuperPayments /> } />
           </Route>
           </Route>
         </Route>
