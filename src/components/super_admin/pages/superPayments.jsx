@@ -1,21 +1,19 @@
 import React, { useState } from "react";
-import { DynamicBreadcrumb } from "../components/Breadcrumb/DynamicBreadcrumb";
+import { DynamicBreadcrumb } from "../../Breadcrumb/DynamicBreadcrumb";
 import { Button } from "primereact/button";
-import { RecordPayment } from "../components/Modal/recordPayment";
-import OverlappingImages from "../components/overlappingImages";
-import { usePayment } from "../hooks/usePayment";
+import { RecordPayment } from "../../Modal/recordPayment";
+import OverlappingImages from "../../overlappingImages";
+import { usePayment } from "../../../hooks/usePayment";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { FilterMatchMode } from "primereact/api";
 import { Pencil, Trash2 } from 'lucide-react';
 import { Input } from "antd";
-import { convertDate } from "../utils";
-import CountUpMotion from "../components/CountUpMotion";
+import { convertDate } from "../../../utils";
+import CountUpMotion from "../../CountUpMotion";
 export const SuperPayments = () => {
   const [visible, setVisible] = useState();
   const { payments } = usePayment();
-
-  console.log(payments)
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -65,8 +63,6 @@ export const SuperPayments = () => {
       </div>
     );
   };
-  
-
 
   const actionBodyTemplate = (rowData) => {
     return (

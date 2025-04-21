@@ -40,7 +40,9 @@ import ProtectedRoute from "./utils/protectedRoute";
 import { SaDashboardHome } from "./components/super_admin/pages/Dashboard";
 import SchoolLayout from "./components/school/layout/schoolLayout";
 import Users from "./components/super_admin/pages/users";
-import { SuperPayments } from "./pages/superPayments";
+import { SuperPayments } from "./components/super_admin/pages/superPayments";
+import { SubscriptionPlan } from "./components/super_admin/pages/subscriptionPlan";
+import { SubscriptionPage } from "./pages/SubscriptionPage";
 const SettingsWrapper = () => {
   const navigate = useNavigate();
   return <AccountSettings onBack={() => navigate("/dashboard")} />;
@@ -52,11 +54,11 @@ const ProfileWrapper = () => {
 };
 
 const SaDashboardLayout = () => (
-  <div className="flex min-h-screen bg-gray-50">
+  <div className="flex bg-gray-50">
     <SaSidebar />
     <div className="flex-1">
       <SaHeader />
-      <main>
+      <main className="h-screen overflow-y-auto">
         <Outlet />
       </main>
     </div>
@@ -109,6 +111,7 @@ const App = () => {
             <Route path="schools" element={ <SchoolsList /> } />
             <Route path="users" element={ <Users /> } />
             <Route path="payment" element={ <SuperPayments /> } />
+            <Route path="subscription" element={ <SubscriptionPlan /> } />
           </Route>
           </Route>
         </Route>
@@ -134,6 +137,7 @@ const App = () => {
         <Route index element={ <ProfileWrapper /> } />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/subscription-required" element={<SubscriptionPage />} />
       </Routes>
     </Router>
   );

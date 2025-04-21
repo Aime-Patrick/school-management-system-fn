@@ -8,9 +8,11 @@ import {
   CreditCard,
   BookOpen,
   Settings,
-  ChevronDown
+  ChevronDown,
+  CircleDollarSign
 } from 'lucide-react';
 import { Logo } from '../layout/Logo';
+import { useAuth } from '../../../hooks/useAuth';
 const SaSidebarItem = ({ 
   icon, 
   label, 
@@ -21,11 +23,15 @@ const SaSidebarItem = ({
   isOpen,
   children }) => {
    const navigate = useNavigate()
+   const location = useLocation();
+    const isActive = (path) => {
+      return location.pathname === path;
+    };
     return(
     <div>
       <div 
         className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors
-        ${active ? 'bg-white bg-opacity-10 text-white' : 'text-white/70 hover:bg-white/5'}`}
+        ${isActive(active) ? 'bg-white bg-opacity-10 text-white' : 'text-white/70 hover:bg-white/5'}`}
         onClick={()=>navigate(to)}
       >
         <div className='flex items-center gap-3' onClick={() => handleNavClick(`${label}`)}>{icon}
@@ -46,42 +52,47 @@ const SaSidebarItem = ({
     </div>)
   }
   const SaSidebar = ({ onLogoClick }) => {
-    const location = useLocation(); // Get the current route
-  
+   const {authData} = useAuth();
     return (
-      <div className="w-64 bg-blue-600 min-h-screen p-4 flex flex-col">
+      <div className="w-64 bg-blue-600 p-4 flex flex-col justify-between">
         <Logo onClick={onLogoClick} />
   
         <nav className="space-y-1 flex-1">
           <SaSidebarItem
             icon={<LayoutDashboard size={20} />}
             label="Dashboard"
-            to="/sadmin/"
-            active={location.pathname === "/sadmin"}
+            to="/sadmin"
+            active={"/sadmin"}
           />
           <SaSidebarItem
             icon={<School size={20} />}
             label="Schools"
             to="/sadmin/schools"
-            active={location.pathname.startsWith("/sadmin/schools")}
+            active={"/sadmin/schools"}
           />
           <SaSidebarItem
             icon={<Users size={20} />}
             label="Users"
             to="/sadmin/users"
-            active={location.pathname.startsWith("/sadmin/users")}
+            active={"/sadmin/users"}
           />
           <SaSidebarItem
             icon={<CreditCard size={20} />}
             label="Payment"
             to="/sadmin/payment"
-            active={location.pathname.startsWith("/sadmin/payment")}
+            active={"/sadmin/payment"}
+          />
+          <SaSidebarItem
+            icon={<CircleDollarSign size={20} />}
+            label="Subscription"
+            to="/sadmin/subscription"
+            active={"/sadmin/subscription"}
           />
           <SaSidebarItem
             icon={<Settings size={20} />}
             label="Settings"
             to="/sadmin/settings"
-            active={location.pathname.startsWith("/sadmin/settings")}
+            active={"/sadmin/settings"}
           />
         </nav>
   
@@ -94,8 +105,8 @@ const SaSidebarItem = ({
                 className="rounded-full"
               />
             </div>
-            <div className="text-white text-sm font-medium">Anna Karin</div>
-            <div className="text-white/70 text-xs">anna@email.com</div>
+            <div className="text-white text-sm font-medium">{authData?.username}</div>
+            <div className="text-white/70 text-xs">{authData?.email}</div>
           </div>
         </div>
       </div>

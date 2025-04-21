@@ -3,7 +3,7 @@ import { apiUrl } from "../axios";
 
 export const getSchools = async() =>{
     try {
-        const response = await axiosInstance.get(`/school`);
+        const response = await axiosInstance.get(`/system-admin/all-schools`);
         return response.data;
     } catch (error) {
         throw error;

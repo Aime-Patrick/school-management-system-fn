@@ -18,7 +18,7 @@ export const DynamicBreadcrumb = () => {
 
   return (
     <BreadCrumb
-    className='bg-gray-50'
+    className='bg-gray-50 text-[12px] px-0'
       model={items}
       home={{ icon: 'pi pi-home', command: () => navigate('/') }}
     />

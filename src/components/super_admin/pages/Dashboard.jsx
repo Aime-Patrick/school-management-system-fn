@@ -7,12 +7,16 @@ import { SaClaimsChart } from "../dashboard/SaClaimsChart";
 import { useSchools } from '../../../hooks/useSchool';
 import { useStudents } from '../../../hooks/useStudent';
 import { useUsers } from '../../../hooks/useUsers';
+import { usePayment } from '../../../hooks/usePayment';
 export const SaDashboardHome = () => {
   const { schools, isLoading } = useSchools();
   const { students, isLoading: studentsLoading } = useStudents();
   const { users, isLoading: usersLoading } = useUsers();
+  const {payments, isLoading:paymentLoading} = usePayment();
 
-  if (isLoading || studentsLoading || usersLoading) return <div>Loading...</div>;
+  if (isLoading || studentsLoading || usersLoading || paymentLoading) return <div className='p-6 flex justify-center items-center h-screen'>
+    <i className="pi pi-spin pi-spinner text-blue-700" style={{ fontSize: '2rem' }}></i>
+  </div>;
   return (
     <div className="p-6">
         <div className="mb-6">
@@ -37,7 +41,7 @@ export const SaDashboardHome = () => {
         />
         <SaStatsCard
           title="Total Income"
-          value="3.5M"
+          value={`${payments?.totalPayment || 0}`}
           change={15}
           icon={<DollarSign className="text-blue-600" />}
         />

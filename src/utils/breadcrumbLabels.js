@@ -14,6 +14,7 @@ export const breadcrumbMap = {
     '/sadmin/schools': 'Schools',
     '/sadmin/users': 'Users',
     '/sadmin/payment': 'Payment',
+    '/sadmin/subscription': 'Subscription',
     '/student': 'Student Dashboard',
     // Add more routes as needed
   };
