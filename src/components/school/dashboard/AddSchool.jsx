@@ -23,7 +23,6 @@ export default function AddSchool({ visible, onClose }) {
       address: Yup.string().required("Address is required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
       createSchool({schoolCode:values.schoolCode, schoolName:values.schoolCode, address:values.address, file: values.file})
     },
   });

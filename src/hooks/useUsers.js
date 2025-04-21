@@ -20,7 +20,6 @@ export const useUsers = () => {
             queryClient.invalidateQueries("users");
         },
         onError: (error) => {
-            console.log(error)
             toast.error(error.message || "Failed to create user");
         }
     })

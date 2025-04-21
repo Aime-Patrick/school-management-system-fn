@@ -2,9 +2,10 @@ import React from "react";
 import { Subscription } from "../components/reusable/subscription";
 import { useSubscription } from "../hooks/useSubscription";
 import { GraduationCap, Moon, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 export const SubscriptionPage = () => {
   const { subscriptions, isLoading, isSubscriptionActive } = useSubscription();
-  console.log(isSubscriptionActive)
+  const navigate = useNavigate();
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">

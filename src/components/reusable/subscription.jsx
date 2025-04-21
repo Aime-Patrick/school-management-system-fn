@@ -1,7 +1,6 @@
 import React from 'react'
 import { CircleChevronRight } from 'lucide-react'
 export const Subscription = ({plan, index}) => {
-  console.log(plan)
   return (
       <div className='text-gray-600 border relative border-navy-800 border-opacity-85 rounded-2xl flex flex-col justify-between'>
        {plan?.isActive && <div className='absolute py-1 top-[-0.8rem] right-1/3 w-40 bg-gradient-to-br from-navy-800 to-gray-300 rounded-lg flex justify-center items-center'>

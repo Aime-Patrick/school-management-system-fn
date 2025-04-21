@@ -20,7 +20,6 @@ const SProfileDropDown = () => {
         break;
       case 'Logout':
        navigate('/AuthPage')
-        console.log('Logging out...');
         break;
       default:
         break;

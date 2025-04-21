@@ -20,7 +20,6 @@ export const usePayment = () =>{
         },
         onError:(error)=>{
             toast.error(isArr(error?.response?.data?.message))
-            console.log(isArr(error?.response?.data?.message))
         }
     })
 

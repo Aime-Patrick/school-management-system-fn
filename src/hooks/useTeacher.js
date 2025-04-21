@@ -12,7 +12,6 @@ export const useTeacher = () => {
             queryClient.invalidateQueries("teacher");
         },
         onError: (error) => {
-            console.log(error)
             toast.error(isArr(error.response.data.message) || "Failed to fetch teachers");
 
         }

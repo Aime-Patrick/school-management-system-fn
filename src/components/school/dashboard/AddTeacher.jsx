@@ -37,7 +37,6 @@ const AddTeacher = ({visible, onClose}) => {
     }),
     onSubmit: (values) =>{
       createTeacher({...values,phoneNumber:String(values.phoneNumber)})
-      console.log(values)
     }
   })
     const headerElement = (
