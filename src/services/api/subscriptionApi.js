@@ -9,9 +9,9 @@ export const getSubscription = async () => {
   }
 }
 
-export const checkSubscriptionStatus = async (id) => {
+export const checkSubscriptionStatus = async ({id}) => {
   try {
-    const response = await axiosInstance.get(`/plans/${id}/subscription-status`);
+    const response = await axiosInstance.get(`/school/${id}/subscription-status`);
     return response.data;
   } catch (error) {
     throw error;

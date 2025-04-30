@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { Search, Eye, Pencil, Trash2 } from 'lucide-react';
 
-export const StudentsList = ({ students, onSelectStudent }) => {
+export const StudentsList = ({ students=[], onSelectStudent }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Filter students based on the search term
-  const filteredStudents = students.filter(
-    (student) =>
-      student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredStudents = students.filter((student) => {
+    const firstName = student.firstName?.toLowerCase() || "";
+    const lastName = student.lasttName?.toLowerCase() || "";
+    const email = student.accountCredentails?.email?.toLowerCase() || "";
+    return (
+      firstName.includes(searchTerm.toLowerCase()) ||
+      email.includes(searchTerm.toLowerCase()) ||
+      lastName.includes(searchTerm.toLowerCase())
+    );
+  });
 
   return (
     <div>
@@ -36,7 +40,7 @@ export const StudentsList = ({ students, onSelectStudent }) => {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Name</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Student ID</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Reg number</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Email address</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Class</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Gender</th>
@@ -54,16 +58,16 @@ export const StudentsList = ({ students, onSelectStudent }) => {
                   <td className="px-6 py-4">
                     <div className="flex items-center">
                       <img
-                        src={student.avatar}
-                        alt={student.name}
+                        src={student.profilePicture || 'https://via.placeholder.com/150'}
+                        alt={student.firstName}
                         className="w-8 h-8 rounded-full mr-3"
                       />
-                      <span>{student.name}</span>
+                      <span>{student.firstName} {student.lastName}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">{student.id}</td>
-                  <td className="px-6 py-4">{student.email}</td>
-                  <td className="px-6 py-4">{student.class}</td>
+                  <td className="px-6 py-4">{student.registrationNumber}</td>
+                  <td className="px-6 py-4">{student.accountCredentails.email}</td>
+                  <td className="px-6 py-4">{student.class.name}</td>
                   <td className="px-6 py-4">{student.gender}</td>
                   <td className="px-6 py-4">
                     <div className="flex gap-2">

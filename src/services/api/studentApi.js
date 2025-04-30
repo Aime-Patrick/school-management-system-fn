@@ -1,5 +1,5 @@
 import axiosInstance from "../axios";
-import { apiUrl } from "../axios";
+
 
 export const getAllStudentInSystem = async() => {
     try {
@@ -9,3 +9,21 @@ export const getAllStudentInSystem = async() => {
         throw error;
     }
 };
+
+export const getStudentBySchool = async () => {
+    try {
+        const response = await axiosInstance.get(`/students`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const registerStudent = async (studentData) => {
+    try {
+        const response = await axiosInstance.post(`/students`, studentData);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}

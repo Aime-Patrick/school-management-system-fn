@@ -7,10 +7,12 @@ import { usePayment } from "../../../hooks/usePayment";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { FilterMatchMode } from "primereact/api";
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, CircleCheckBig, CircleX } from 'lucide-react';
 import { Input } from "antd";
 import { convertDate } from "../../../utils";
 import CountUpMotion from "../../CountUpMotion";
+import { Tooltip } from "primereact/tooltip";
+
 export const SuperPayments = () => {
   const [visible, setVisible] = useState();
   const { payments } = usePayment();
@@ -70,18 +72,35 @@ export const SuperPayments = () => {
         <div className="flex justify-center gap-2">
           <button
             className="p-1 hover:bg-gray-100 rounded"
+            data-pr-tooltip={rowData?.status === "approved" ? "Approved" : "Not Approved"}
+            data-pr-position="top"
+          >
+            {rowData && rowData.status === "approved" ? (
+              <CircleCheckBig size={16} className="text-green-600" />
+            ) : (
+              <CircleX size={16} className="text-gray-600" />
+            )}
+          </button>
+          <button
+            className="p-1 hover:bg-gray-100 rounded"
+            data-pr-tooltip="Edit Payment"
+            data-pr-position="top"
           >
             <Pencil size={16} className="text-gray-600" />
           </button>
           <button
             className="p-1 hover:bg-gray-100 rounded"
+            data-pr-tooltip="Delete Payment"
+            data-pr-position="top"
           >
             <Trash2 size={16} className="text-red-600" />
           </button>
         </div>
+        <Tooltip target=".p-1" /> {/* Attach Tooltip to buttons */}
       </>
     );
   };
+
   return (
     <div className="px-5 py-2">
       <div>

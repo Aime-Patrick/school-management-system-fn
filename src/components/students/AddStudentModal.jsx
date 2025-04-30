@@ -1,133 +1,181 @@
-import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import React from "react";
+import { X, Loader } from "lucide-react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useClasses } from "../../hooks/useClasses";
+import { useSchoolStudent } from "../../hooks/useSchoolStudent";
+export const AddStudentModal = ({ onClose }) => {
+  const { classes = [], isLoading } = useClasses();
+  const { registerStudentMutation, isSubmitting } = useSchoolStudent();
 
-export const AddStudentModal = ({ onClose, onAdd }) => {
-  const [activeTab, setActiveTab] = useState('manually');
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    class: '',
-    gender: '',
-    phone: '',
-    password: '',
+  // Generate class options
+  const classOptions = classes.map((cls) => (
+    <option key={cls.id} value={cls._id}>
+      {cls.name}
+    </option>
+  ));
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      gender: "",
+      dateOfBirth: "",
+      enrollmentDate:"",
+      phoneNumber: "",
+      address: "",
+      city: "",
+      class: "",
+      password: "",
+      profilePicture: null,
+    },
+    validationSchema: Yup.object({
+      firstName: Yup.string().required("First name is required"),
+      lastName: Yup.string().required("Last name is required"),
+      email: Yup.string()
+        .email("Invalid email address"),
+      gender: Yup.string().required("Gender is required"),
+      dateOfBirth: Yup.date().required("Date of birth is required"),
+      enrollmentDate: Yup.date().required("Enrollment date is required"),
+      phoneNumber: Yup.string().required("Phone number is required"),
+      address: Yup.string().required("Address is required"),
+      city: Yup.string().required("City is required"),
+      class: Yup.string().required("Class is required"),
+      password: Yup.string()
+        .min(6, "Password must be at least 6 characters")
+        .required("Password is required"),
+      profilePicture: Yup.mixed().required("Profile picture is required"),
+    }),
+    onSubmit: (values) => {
+      const formData = new FormData();
+      Object.keys(values).forEach((key) => {
+        formData.append(key, values[key]);
+      });
+
+      registerStudentMutation.mutate(formData, {
+        onSuccess: () => {
+          formik.resetForm();
+          onClose();
+        },
+      });
+    },
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onAdd({
-      id: Math.random().toString(36).substr(2, 9),
-      ...formData,
-      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.name}`,
-    });
-  };
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className=" rounded-xl w-full max-w-2xl p-6">
+          <p className="text-center text-gray-500">
+            <Loader className="h-6 w-6 animate-spin" />
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white rounded-xl w-full max-w-2xl">
         <div className="flex justify-between items-center p-6 border-b">
           <h2 className="text-xl font-semibold">Add Students</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+          >
             <X size={24} />
           </button>
         </div>
 
         <div className="p-6">
-          <div className="flex gap-4 mb-6">
-            <button
-              className={`px-4 py-2 ${
-                activeTab === 'manually'
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600'
-              }`}
-              onClick={() => setActiveTab('manually')}
-            >
-              Manually
-            </button>
-            <button
-              className={`px-4 py-2 ${
-                activeTab === 'csv'
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600'
-              }`}
-              onClick={() => setActiveTab('csv')}
-            >
-              Import CSV
-            </button>
-          </div>
-
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={formik.handleSubmit}>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Name
+                  First Name
                 </label>
                 <input
                   type="text"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+                  name="firstName"
+                  value={formik.values.firstName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full px-3 py-2 border rounded-lg"
                 />
+                {formik.touched.firstName && formik.errors.firstName && (
+                  <p className="text-red-500 text-sm">
+                    {formik.errors.firstName}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Class
+                  Last Name
                 </label>
-                <select
-                  value={formData.class}
-                  onChange={(e) =>
-                    setFormData({ ...formData, class: e.target.value })
-                  }
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formik.values.lastName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full px-3 py-2 border rounded-lg"
-                >
-                  <option value="">Select class</option>
-                  <option value="JSS 1">JSS 1</option>
-                  <option value="JSS 2">JSS 2</option>
-                  <option value="JSS 3">JSS 3</option>
-                </select>
+                />
+                {formik.touched.lastName && formik.errors.lastName && (
+                  <p className="text-red-500 text-sm">
+                    {formik.errors.lastName}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email address
+                  Email Address
                 </label>
                 <input
                   type="email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full px-3 py-2 border rounded-lg"
                 />
+                {formik.touched.email && formik.errors.email && (
+                  <p className="text-red-500 text-sm">{formik.errors.email}</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone number
+                  Phone Number
                 </label>
                 <input
                   type="tel"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
+                  name="phoneNumber"
+                  value={formik.values.phoneNumber}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full px-3 py-2 border rounded-lg"
                 />
+                {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+                  <p className="text-red-500 text-sm">{formik.errors.phoneNumber}</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Gender
                 </label>
                 <select
-                  value={formData.gender}
-                  onChange={(e) =>
-                    setFormData({ ...formData, gender: e.target.value })
-                  }
+                  name="gender"
+                  value={formik.values.gender}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full px-3 py-2 border rounded-lg"
                 >
                   <option value="">Select gender</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
+                {formik.touched.gender && formik.errors.gender && (
+                  <p className="text-red-500 text-sm">{formik.errors.gender}</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -135,12 +183,122 @@ export const AddStudentModal = ({ onClose, onAdd }) => {
                 </label>
                 <input
                   type="password"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
+                  name="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full px-3 py-2 border rounded-lg"
                 />
+                {formik.touched.password && formik.errors.password && (
+                  <p className="text-red-500 text-sm">
+                    {formik.errors.password}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  name="dateOfBirth"
+                  value={formik.values.dateOfBirth}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+                {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
+                  <p className="text-red-500 text-sm">
+                    {formik.errors.dateOfBirth}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Enrollment Date
+                </label>
+                <input
+                  type="date"
+                  name="enrollmentDate"
+                  value={formik.values.enrollmentDate}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+                {formik.touched.enrollmentDate && formik.errors.enrollmentDate && (
+                  <p className="text-red-500 text-sm">
+                    {formik.errors.enrollmentDate}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  value={formik.values.address}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+                {formik.touched.address && formik.errors.address && (
+                  <p className="text-red-500 text-sm">
+                    {formik.errors.address}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  City
+                </label>
+                <input
+                  type="text"
+                  name="city"
+                  value={formik.values.city}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+                {formik.touched.city && formik.errors.city && (
+                  <p className="text-red-500 text-sm">{formik.errors.city}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Class
+                </label>
+                <select
+                  name="class"
+                  value={formik.values.class}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="w-full px-3 py-2 border rounded-lg"
+                >
+                  <option value="">Select class</option>
+                  {classOptions}
+                </select>
+                {formik.touched.class && formik.errors.class && (
+                  <p className="text-red-500 text-sm">{formik.errors.class}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Profile Picture
+                </label>
+                <input
+                  type="file"
+                  name="profilePicture"
+                  accept="image/*"
+                  onChange={(event) => {
+                    formik.setFieldValue("profilePicture", event.currentTarget.files[0]);
+                  }}
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+                {formik.touched.profilePicture && formik.errors.profilePicture && (
+                  <p className="text-red-500 text-sm">{formik.errors.profilePicture}</p>
+                )}
               </div>
             </div>
 
@@ -148,15 +306,23 @@ export const AddStudentModal = ({ onClose, onAdd }) => {
               <button
                 type="button"
                 className="text-blue-600 hover:underline"
-                onClick={() => setFormData({ ...formData })}
+                onClick={() => formik.resetForm()}
               >
-                Add another
+                Reset
               </button>
               <button
                 type="submit"
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                disabled={isSubmitting}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2"
               >
-                Add student
+                {isSubmitting ? (
+                  <>
+                    <Loader className="h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  "Add Student"
+                )}
               </button>
             </div>
           </form>

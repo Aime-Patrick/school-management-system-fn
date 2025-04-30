@@ -1,20 +1,75 @@
 import React, { useState } from "react";
-import { PencilIcon, Plus, X } from "lucide-react";
-
-const academicYears = [
-  { id: 1, name: "2021-2022", start: "September 2021", end: "June 2022" },
-  { id: 2, name: "2022-2023", start: "September 2022", end: "June 2023" },
-  { id: 3, name: "2023-2024", start: "September 2023", end: "June 2024" },
-];
+import { PencilIcon, Plus, X, Loader } from "lucide-react";
+import { useAcademic } from "../../hooks/useAcademic";
+import { exportToExcel } from "../../utils/index";
 
 export const AcademicYear = () => {
   const [selectedYear, setSelectedYear] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState("create");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { academicYears = [], createAcademicYearMutation, updateAcademicYearMutation } = useAcademic(); // Ensure academicYears is always an array
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setSelectedYear(null);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.target);
+    const startDate = formData.get("start");
+    const endDate = formData.get("end");
+
+    if (dialogMode === "create") {
+      createAcademicYearMutation.mutate(
+        { startDate, endDate },
+        {
+          onSuccess: () => {
+            setIsSubmitting(false);
+            setIsDialogOpen(false);
+          },
+          onError: () => {
+            setIsSubmitting(false);
+          },
+        }
+      );
+    } else {
+      updateAcademicYearMutation.mutate(
+        { id: selectedYear._id, startDate, endDate },
+        {
+          onSuccess: () => {
+            setIsSubmitting(false);
+            setIsDialogOpen(false);
+          },
+          onError: () => {
+            setIsSubmitting(false);
+          },
+        }
+      );
+    }
+  };
+
+  const handleConvertDate = (date) => {
+    const options = { year: "numeric", month: "long" };
+    return new Date(date).toLocaleDateString("en-US", options);
+  };
+
+  const handleExport = () => {
+    if (!academicYears || academicYears.length === 0) {
+      alert("No data available to export.");
+      return;
+    }
+
+    const exportData = academicYears.map((year, index) => ({
+      "#": index + 1,
+      Name: year.name,
+      Start: year.startDate,
+      End: year.endDate,
+    }));
+
+    exportToExcel(exportData, "AcademicYears", "Academic Years");
   };
 
   return (
@@ -22,8 +77,11 @@ export const AcademicYear = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">Academic Year</h1>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 text-blue-600 border border-blue-600 rounded hover:bg-blue-50">
-            Export CSV
+          <button
+            onClick={handleExport}
+            className="flex items-center gap-2 px-4 py-2 text-blue-600 border border-blue-600 rounded hover:bg-blue-50"
+          >
+            Export to Excel
           </button>
           <button
             onClick={() => {
@@ -60,30 +118,43 @@ export const AcademicYear = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {academicYears.map((year) => (
-              <tr key={year.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                  {year.id}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-500">{year.name}</td>
-                <td className="px-6 py-4 text-sm text-gray-500">
-                  {year.start}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-500">{year.end}</td>
-                <td className="px-6 py-4 text-right text-sm">
-                  <button
-                    onClick={() => {
-                      setDialogMode("edit");
-                      setSelectedYear(year);
-                      setIsDialogOpen(true);
-                    }}
-                    className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-2 py-1 rounded"
-                  >
-                    <PencilIcon className="h-4 w-4" />
-                  </button>
+            {academicYears.length > 0 ? (
+              academicYears.map((year, index) => (
+                <tr key={year.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                    {index + 1}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-500">{year.name}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    {handleConvertDate(year.startDate)}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    {handleConvertDate(year.endDate)}
+                  </td>
+                  <td className="px-6 py-4 text-right text-sm">
+                    <button
+                      onClick={() => {
+                        setDialogMode("edit");
+                        setSelectedYear(year);
+                        setIsDialogOpen(true);
+                      }}
+                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-2 py-1 rounded"
+                    >
+                      <PencilIcon className="h-4 w-4" />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="5"
+                  className="px-6 py-4 text-sm text-center text-gray-500"
+                >
+                  No academic years found.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
@@ -104,14 +175,20 @@ export const AcademicYear = () => {
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Start Time
                 </label>
                 <input
                   type="month"
-                  defaultValue={dialogMode === "edit" ? "2021-09" : ""}
+                  name="start"
+                  required
+                  defaultValue={
+                    dialogMode === "edit" && selectedYear
+                      ? selectedYear.startDate.slice(0, 7)
+                      : ""
+                  }
                   className="w-full p-2 border border-gray-200 rounded focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
@@ -121,14 +198,33 @@ export const AcademicYear = () => {
                 </label>
                 <input
                   type="month"
-                  defaultValue={dialogMode === "edit" ? "2022-06" : ""}
+                  name="end"
+                  required
+                  defaultValue={
+                    dialogMode === "edit" && selectedYear
+                      ? selectedYear.endDate.slice(0, 7)
+                      : ""
+                  }
                   className="w-full p-2 border border-gray-200 rounded focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
-              <button className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                {dialogMode === "create" ? "Create" : "Save Changes"}
+              <button
+                type="submit"
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader className="h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : dialogMode === "create" ? (
+                  "Create"
+                ) : (
+                  "Save Changes"
+                )}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}

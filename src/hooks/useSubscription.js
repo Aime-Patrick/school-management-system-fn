@@ -87,7 +87,7 @@ const queryClient = useQueryClient();
       queryClient.invalidateQueries(["subscription"], { refetchActive: true });
     },
     onError: (error) => {
-      toast.error(isArr(error?.response?.data?.message )|| "Failed to check subscription status");
+      toast.error(isArr(error?.response?.data?.message) || "Failed to check subscription status");
     },
   });
 
