@@ -3,17 +3,15 @@ import  Sidebar  from '../school/layout/Sidebar';
 import { Header } from '../school/layout/Header';
 import { ClaimsChart } from '../school/dashboard/ClaimsChart';
 import { SchoolsStats } from '../school/dashboard/SchoolsStats';
-
-export const ProfilePage = ({ onBack }) => {
+import { useAuth } from '../../hooks/useAuth';
+export const ProfilePage = () => {
+  const { authData } = useAuth();
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <Sidebar onLogoClick={onBack} />
+      <Sidebar/>
       
       <div className="flex-1">
-        <Header 
-          onSettingsClick={onBack}
-          onProfileClick={onBack}
-        />
+        <Header />
         
         <main className="p-6">
           <div className="mb-6">
@@ -30,22 +28,22 @@ export const ProfilePage = ({ onBack }) => {
                     alt="Profile"
                     className="w-32 h-32 rounded-full mx-auto mb-4"
                   />
-                  <h2 className="text-xl font-semibold">Anna Karin</h2>
-                  <p className="text-gray-600">Super Admin</p>
+                  <h2 className="text-xl font-semibold">{authData.username}</h2>
+                  <p className="text-gray-600 capitalize">{authData.role}</p>
                 </div>
 
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm text-gray-600">Email</label>
-                    <p className="font-medium">anna@email.com</p>
+                    <p className="font-medium">{authData.email}</p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-600">Role</label>
-                    <p className="font-medium">Administrator</p>
+                    <p className="font-medium">{authData.role}</p>
                   </div>
                   <div>
-                    <label className="text-sm text-gray-600">Member Since</label>
-                    <p className="font-medium">January 2024</p>
+                    <label className="text-sm text-gray-600">Phone</label>
+                    <p className="font-medium">{authData.phone}</p>
                   </div>
                 </div>
               </div>

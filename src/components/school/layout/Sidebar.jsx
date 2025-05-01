@@ -48,7 +48,7 @@ const SidebarItem = ({
   </div>
 );
 
-const Sidebar = ({ onLogoClick = () => {} }) => {
+const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation(); 
   const [isStudentsOpen, setIsStudentsOpen] = useState(false);
@@ -60,7 +60,7 @@ const Sidebar = ({ onLogoClick = () => {} }) => {
   };
   return (
     <div className="w-64 bg-blue-600 min-h-screen p-4 flex flex-col">
-      <Logo onClick={onLogoClick} />
+      <Logo />
 
       <nav className="space-y-1 flex-1">
         <SidebarItem 
@@ -85,7 +85,7 @@ const Sidebar = ({ onLogoClick = () => {} }) => {
           >
             All Students
           </div>
-          <div 
+          {/* <div 
             className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
               isActive('/school-admin/students') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
             }`}
@@ -102,7 +102,7 @@ const Sidebar = ({ onLogoClick = () => {} }) => {
             // navigate('/dashboard/students/promotion')}
           >
             Student Promotion
-          </div>
+          </div> */}
         </SidebarItem>
         <SidebarItem 
           icon={<UserCog size={20} />} 
@@ -150,7 +150,7 @@ const Sidebar = ({ onLogoClick = () => {} }) => {
         <SidebarItem 
           icon={<CreditCard size={20} />} 
           label="Payment" 
-          onClick={() => navigate('/dashboard')} 
+          onClick={() => navigate('/school-admin/payment')} 
           // navigate('/dashboard/payment')} 
         />
         <SidebarItem 

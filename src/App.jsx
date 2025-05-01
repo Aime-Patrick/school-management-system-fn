@@ -43,14 +43,14 @@ import Users from "./components/super_admin/pages/users";
 import { SuperPayments } from "./components/super_admin/pages/superPayments";
 import { SubscriptionPlan } from "./components/super_admin/pages/subscriptionPlan";
 import { SubscriptionPage } from "./pages/SubscriptionPage";
+import { Payment } from "./components/school/dashboard/payment";
 const SettingsWrapper = () => {
   const navigate = useNavigate();
-  return <AccountSettings onBack={() => navigate("/dashboard")} />;
+  return <AccountSettings />;
 };
 
 const ProfileWrapper = () => {
-  const navigate = useNavigate();
-  return <ProfilePage onBack={() => navigate("/dashboard")} />;
+  return <ProfilePage />;
 };
 
 const SaDashboardLayout = () => (
@@ -127,6 +127,7 @@ const App = () => {
             <Route path="academic-term" element={<AcademicTerm /> }/>
             <Route path="teachers" element={<TeachersPage />}/>
             <Route path="messages" element={ <Messaging /> }/>
+            <Route path="payment" element={ <Payment /> }/>
         </Route>
         </Route>
         </Route>

@@ -1,10 +1,9 @@
 import React from 'react';
 import { GraduationCap } from 'lucide-react';
 
-export const Logo = ({ onClick }) => (
+export const Logo = () => (
   <div 
     className="flex items-center gap-2 px-4 mb-8 cursor-pointer" 
-    onClick={onClick}
   >
     <div className="flex gap-1">
       <div className="w-4 h-4 rounded-full bg-yellow-400" />

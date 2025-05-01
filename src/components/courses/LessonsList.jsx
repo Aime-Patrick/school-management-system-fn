@@ -2,7 +2,7 @@ import React from "react";
 import { LessonTableHeader } from "./components/LessonTableHeader";
 import { LessonTableRow } from "./components/LessonTableRow";
 
-export const LessonsList = ({ lessons, onEdit, onDelete }) => {
+export const LessonsList = ({ lessons=[], onEdit, onDelete }) => {
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <table className="w-full">

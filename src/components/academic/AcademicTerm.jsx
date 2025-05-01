@@ -7,14 +7,12 @@ export const AcademicTerm = () => {
   const [selectedTerm, setSelectedTerm] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState("create");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
-    academicTerms,
-    academicYears,
+    academicTerms=[],
+    academicYears=[],
     createAcademicTermsMutation,
     createAcademicTermsIsloading,
     updateAcademicTermsMutation,
-    deleteAcademicTermsMutation,
     updateAcademicTermsIsloading
   } = useAcademic();
 

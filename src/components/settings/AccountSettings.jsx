@@ -1,20 +1,15 @@
 import React from 'react';
 import Sidebar from '../school/layout/Sidebar';
 import { Header } from '../school/layout/Header';
-
-interface AccountSettingsProps {
-  onBack: () => void;
-}
-
-export const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
+import { useAuth } from '../../hooks/useAuth';
+export const AccountSettings = () => {
+  const { authData } = useAuth();
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       
       <div className="flex-1">
         <Header 
-          onSettingsClick={onBack}
-          onProfileClick={onBack}
         />
         
         <main className="p-6">
@@ -34,7 +29,8 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
                     </label>
                     <input
                       type="text"
-                      defaultValue="Anna Karin"
+                      name="fullName"
+                      defaultValue={authData.username}
                       aria-label="Full Name"
                       className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
@@ -45,7 +41,8 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
                     </label>
                     <input
                       type="email"
-                      defaultValue="anna@email.com"
+                      name="email"
+                      defaultValue={authData.email}
                       aria-label="Email Address"
                       className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />

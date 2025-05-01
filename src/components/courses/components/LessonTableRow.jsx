@@ -4,8 +4,11 @@ import { Pencil, Trash2 } from "lucide-react";
 export const LessonTableRow = ({ lesson, index, onEdit, onDelete }) => (
   <tr className="hover:bg-gray-50">
     <td className="px-6 py-4">{index + 1}</td>
-    <td className="px-6 py-4">{lesson.lessonId}</td>
+    <td className="px-6 py-4">{lesson.courseCode}</td>
     <td className="px-6 py-4">{lesson.name}</td>
+    <td className="px-6 py-4">{lesson.department}</td>
+    <td className="px-6 py-4">{lesson.credits}</td>
+    <td className="px-6 py-4 "><p className={`rounded-full text-center capitalize ${lesson.status === "active" ? "bg-green-600/20 text-green-600" : "bg-red-600/20 text-red-600"}`}>{lesson.status}</p></td>
     <td className="px-6 py-4">
       <div className="flex justify-center gap-2">
         <button
