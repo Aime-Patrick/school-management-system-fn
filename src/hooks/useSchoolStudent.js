@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import {
   getStudentBySchool,
   registerStudent,
+  deleteStudent
 } from "../services/api/studentApi";
 import { isArr } from "./useTeacher";
 
@@ -30,16 +31,16 @@ export const useSchoolStudent = () => {
       );
     },
   });
-  // const deleteStudentMutation = useMutation({
-  //     mutationFn: getStudentBySchool,
-  //     onSuccess: (data) => {
-  //         toast.success(data.message || "Student deleted successfully");
-  //         queryClient.invalidateQueries(["students"], { refetchActive: true });
-  //     },
-  //     onError: (error) => {
-  //         toast.error(error.message || "Failed to delete student");
-  //     },
-  // });
+  const deleteStudentMutation = useMutation({
+      mutationFn: deleteStudent,
+      onSuccess: (data) => {
+          toast.success(data.message || "Student deleted successfully");
+          queryClient.invalidateQueries(["students"], { refetchActive: true });
+      },
+      onError: (error) => {
+          toast.error(error.message || "Failed to delete student");
+      },
+  });
   // const updateStudentMutation = useMutation({
   //     mutationFn: getStudentBySchool,
   //     onSuccess: (data) => {
@@ -67,7 +68,8 @@ export const useSchoolStudent = () => {
     registerStudentMutation,
     isSubmitting: registerStudentMutation.isPending,
     isLoading,
-    // deleteStudentMutation,
+    deleteStudentMutation,
+    deleteStudentLoading: deleteStudentMutation.isPending,
     // updateStudentMutation
   };
 };

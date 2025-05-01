@@ -1,19 +1,33 @@
 import React, { useState } from 'react';
-import { Search, Eye, Pencil, Trash2 } from 'lucide-react';
+import { Search, Eye, Pencil, Trash2, Loader } from 'lucide-react';
+import { useSchoolStudent } from '../../hooks/useSchoolStudent';
 
-export const StudentsList = ({ students=[], onSelectStudent }) => {
+export const StudentsList = ({ students = [], onSelectStudent }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [deletingStudentId, setDeletingStudentId] = useState(null);
+  const { deleteStudentLoading, deleteStudentMutation } = useSchoolStudent();
 
   const filteredStudents = students.filter((student) => {
-    const firstName = student.firstName?.toLowerCase() || "";
-    const lastName = student.lasttName?.toLowerCase() || "";
-    const email = student.accountCredentails?.email?.toLowerCase() || "";
+    const firstName = student.firstName?.toLowerCase() || '';
+    const lastName = student.lasttName?.toLowerCase() || '';
+    const email = student.accountCredentails?.email?.toLowerCase() || '';
     return (
       firstName.includes(searchTerm.toLowerCase()) ||
       email.includes(searchTerm.toLowerCase()) ||
       lastName.includes(searchTerm.toLowerCase())
     );
   });
+
+  const handleDeleteStudent = (studentId) => {
+    if (window.confirm('Are you sure you want to delete this student?')) {
+      setDeletingStudentId(studentId);
+      deleteStudentMutation.mutate(studentId, {
+        onSettled: () => {
+          setDeletingStudentId(null);
+        },
+      });
+    }
+  };
 
   return (
     <div>
@@ -41,7 +55,6 @@ export const StudentsList = ({ students=[], onSelectStudent }) => {
             <tr>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Name</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Reg number</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Email address</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Class</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Gender</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Actions</th>
@@ -50,11 +63,7 @@ export const StudentsList = ({ students=[], onSelectStudent }) => {
           <tbody className="divide-y divide-gray-200">
             {filteredStudents.length > 0 ? (
               filteredStudents.map((student) => (
-                <tr
-                  key={student.id}
-                  className="hover:bg-gray-50 cursor-pointer"
-                  onClick={() => onSelectStudent(student)}
-                >
+                <tr key={student.id} className="hover:bg-gray-50 cursor-pointer">
                   <td className="px-6 py-4">
                     <div className="flex items-center">
                       <img
@@ -66,19 +75,26 @@ export const StudentsList = ({ students=[], onSelectStudent }) => {
                     </div>
                   </td>
                   <td className="px-6 py-4">{student.registrationNumber}</td>
-                  <td className="px-6 py-4">{student.accountCredentails.email}</td>
                   <td className="px-6 py-4">{student.class.name}</td>
                   <td className="px-6 py-4">{student.gender}</td>
                   <td className="px-6 py-4">
                     <div className="flex gap-2">
                       <button className="p-1 hover:bg-gray-100 rounded">
-                        <Eye size={16} className="text-gray-600" />
+                        <Eye onClick={() => onSelectStudent(student)} size={16} className="text-gray-600" />
                       </button>
                       <button className="p-1 hover:bg-gray-100 rounded">
                         <Pencil size={16} className="text-gray-600" />
                       </button>
                       <button className="p-1 hover:bg-gray-100 rounded">
-                        <Trash2 size={16} className="text-red-600" />
+                        {deleteStudentLoading && deletingStudentId === student._id ? (
+                          <Loader size={16} className="text-red-600 animate-spin" />
+                        ) : (
+                          <Trash2
+                            onClick={() => handleDeleteStudent(student._id)}
+                            size={16}
+                            className="text-red-600"
+                          />
+                        )}
                       </button>
                     </div>
                   </td>

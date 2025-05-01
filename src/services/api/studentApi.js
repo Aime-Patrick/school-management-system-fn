@@ -27,3 +27,12 @@ export const registerStudent = async (studentData) => {
         throw error;
     }
 }
+
+export const deleteStudent = async (id) => {
+    try {
+        const response = await axiosInstance.delete(`/students/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}

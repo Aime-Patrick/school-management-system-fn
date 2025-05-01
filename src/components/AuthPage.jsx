@@ -104,6 +104,10 @@ export const AuthPage = () => {
                 type="text"
                 id="username"
                 name="username"
+                autoFocus= {false}
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck="false"
                 value={loginFormik.username}
                 onChange={loginFormik.handleChange}
                 onBlur={loginFormik.handleBlur}
@@ -122,6 +126,10 @@ export const AuthPage = () => {
                 type="text"
                 id="email"
                 name="email"
+                autoFocus= {false}
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck="false"
                 value={loginFormik.email}
                 onChange={loginFormik.handleChange}
                 onBlur={loginFormik.handleBlur}
@@ -141,6 +149,10 @@ export const AuthPage = () => {
               type="password"
               id="password"
               name="password"
+              autoFocus= {false}
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck="false"
               value={loginFormik.password}
               onChange={loginFormik.handleChange}
               onBlur={loginFormik.handleBlur}
