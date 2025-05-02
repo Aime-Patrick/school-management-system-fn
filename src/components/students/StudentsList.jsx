@@ -75,7 +75,7 @@ export const StudentsList = ({ students = [], onSelectStudent }) => {
                     </div>
                   </td>
                   <td className="px-6 py-4">{student.registrationNumber}</td>
-                  <td className="px-6 py-4">{student.class.name}</td>
+                  <td className="px-6 py-4">{student?.class?.name}</td>
                   <td className="px-6 py-4">{student.gender}</td>
                   <td className="px-6 py-4">
                     <div className="flex gap-2">

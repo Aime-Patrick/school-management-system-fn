@@ -4,13 +4,18 @@ import Sidebar from "./Sidebar";
 import {Header} from "./Header";
 const SchoolLayout = () => {
   return (
-    <div className="flex min-h-screen bg-gray-50">
-    <Sidebar />
-    <div className="flex-1">
-      <Header />
-      <main className='flex-grow container mx-auto px-4 py-6'><Outlet /></main>
-    </div>
-  </div>
+  <div className="flex bg-gray-50 h-screen">
+       <Sidebar />
+  
+        {/* Main Content */}
+        <div className="flex flex-col flex-1">
+          {/* Header */}
+          <Header />
+          <main className="flex-1 overflow-y-auto container mx-auto p-2">
+            <Outlet />
+          </main>
+        </div>
+      </div>
   )
 }
 

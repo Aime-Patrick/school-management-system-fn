@@ -29,7 +29,16 @@ export const createCourse = async (courseData) => {
 
 export const updateCourse = async (courseData) => {
   try {
-    const response = await axiosInstance.put(`/courses/${courseData.id}`, courseData);
+    const response = await axiosInstance.put(`/courses/${courseData.id}`, courseData.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const assignTeacherToCourse = async (courseData) => {
+  try {
+    const response = await axiosInstance.put(`/courses/assign-teacher/${courseData.id}`, courseData.data);
     return response.data;
   } catch (error) {
     throw error;

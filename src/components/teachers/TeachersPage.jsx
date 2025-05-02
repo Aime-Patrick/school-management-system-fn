@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TeachersList } from "./TeachersList";
 import { TeacherProfile } from "./TeacherProfile";
-import AddTeacherModal from "./modals/AddTeacherModal";
 import AddTeacher from "../school/dashboard/AddTeacher";
 import DeleteTeacherModal from "./modals/DeleteTeacherModal";
 import { useTeacherBySchoolId } from "../../hooks/useTeacherBySchool";
 import { useCheckIfAdminHasSchool } from "../../hooks/useCheckIfAdminHasSchool";
 import { Button } from "primereact/button";
+import { useTeacher } from "../../hooks/useTeacher";
 export const TeachersPage = () => {
   const { schoolId, data } = useCheckIfAdminHasSchool();
   const { teachers = [], isLoading } = useTeacherBySchoolId(schoolId);
+  const { deleteTeacher, deleteTeacherLoading, deleteTeacherSuccess } = useTeacher();
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
   const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
@@ -21,17 +22,31 @@ export const TeachersPage = () => {
     setShowAddTeacherModal(false);
   };
 
-  const handleDeleteTeacher = (teacherName) => {
-    console.log(`Deleted Teacher: ${teacherName}`);
-    setShowDeleteTeacherModal(false);
+  const handleDeleteTeacher = (teacher) => {
+    deleteTeacher({ id: teacher._id });
   };
+
+  useEffect(() => {
+    if (deleteTeacherSuccess) {
+      setShowDeleteTeacherModal(false);
+      setTeacherToDelete(null);
+    }
+  }
+  , [deleteTeacherSuccess]);
+  if (isLoading) {
+    return (
+      <div className="flex h-screen justify-center items-center">
+        <i className="pi pi-spin pi-spinner text-blue-700" style={{ fontSize: "2rem" }}></i>
+      </div>
+    );
+  }
 
   return (
     // <div >
     //   <div className="flex justify-between items-center mb-4">
     //     <h1 className="text-2xl font-semibold">Teachers</h1>
     //     <button
-    //       onClick={() => setShowAddTeacherModal(true)}
+    //
     //       className="px-4 py-2 bg-blue-600 btn text-white rounded-lg hover:bg-blue-700"
     //     >
     //       Add Teacher
@@ -50,24 +65,7 @@ export const TeachersPage = () => {
     //     />
     //   )}
 
-    //   {showProfile && selectedTeacher && (
-    //     <TeacherProfile
-    //       teacher={selectedTeacher}
-    //       onClose={() => {
-    //         setShowProfile(false);
-    //         setSelectedTeacher(null);
-    //       }}
-    //     />
-    //   )}
-    //   {showAddTeacherModal && <AddTeacher visible={showAddTeacherModal} onClose={()=>setShowAddTeacherModal(false)}/>}
-
-    //   {showDeleteTeacherModal && (
-    //     <DeleteTeacherModal
-    //       onClose={() => setShowDeleteTeacherModal(false)}
-    //       onDelete={() => handleDeleteTeacher(teacherToDelete)}
-    //       teacherName={teacherToDelete}
-    //     />
-    //   )}
+   
     // </div>
     <>
       <div className="w-full flex justify-between items-center">
@@ -75,6 +73,7 @@ export const TeachersPage = () => {
         <Button
           label="Add Teacher"
           icon="pi pi-plus"
+          onClick={() => setShowAddTeacherModal(true)}
           className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0"
         />
       </div>
@@ -84,7 +83,35 @@ export const TeachersPage = () => {
           setSelectedTeacher(teacher);
           setShowProfile(true);
         }}
+        onDelete={(teacher) => {
+          setTeacherToDelete(teacher);
+          setShowDeleteTeacherModal(true);
+        }}
+        
       />
+      {showAddTeacherModal && (
+        <AddTeacher
+          visible={showAddTeacherModal}
+          onClose={() => setShowAddTeacherModal(false)}
+        />
+      )}
+      {showProfile && selectedTeacher && (
+        <TeacherProfile
+          teacher={selectedTeacher}
+          onClose={() => {
+            setShowProfile(false);
+            setSelectedTeacher(null);
+          }}
+        />
+      )}
+   {showDeleteTeacherModal && (
+     <DeleteTeacherModal
+       onClose={() => setShowDeleteTeacherModal(false)}
+       onDelete={() => handleDeleteTeacher(teacherToDelete)}
+       teacher={teacherToDelete}
+      deleteTeacherLoading={deleteTeacherLoading}
+     />
+   )}
     </>
   );
 };

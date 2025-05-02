@@ -36,3 +36,12 @@ export const deleteStudent = async (id) => {
         throw error;
     }
 }
+
+export const getStudentById = async (id) => {
+    try {
+        const response = await axiosInstance.get(`/students/logged-student/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}

@@ -66,8 +66,8 @@ export const TeachersList = ({
         </div>
       </div>
 
-      <div>
-        <div className="rounded-lg shadow">
+      <div className=" bg-white mt-2 rounded-md shadow-md overflow-x-auto max-w-6xl" >
+        <div>
           <DataTable
             value={teachers}
             globalFilter={filters.global.value}
@@ -85,17 +85,34 @@ export const TeachersList = ({
               body={(rowData) => (
                 <div className="flex items-center">
                   <img
-                    src={rowData.profileImage}
+                    src={rowData.profilePicture || "https://via.placeholder.com/150"}
                     alt={rowData.lastName}
                     className="w-8 h-8 rounded-full mr-2"
                   />
-                  <span>
+                  <span className="capitalize text-gray-700">
                     {rowData.firstName} {rowData.lastName}
                   </span>
                 </div>
               )}
             />
-            <Column field="coursesTaught" header="Subject"  className="whitespace-nowrap"/>
+            <Column field="coursesTaught" header="Subject"  className="whitespace-nowrap" body={
+              (rowData) => (
+                <div className="flex items-center">
+                  {rowData.coursesTaught.length > 0 ? (
+                    rowData.coursesTaught.map((course, index) => (
+                      <span
+                        key={index}
+                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-1 px-2.5 py-0.5 rounded"
+                      >
+                        {course.name}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-gray-500">No Subject Assigned</span>
+                  )}
+                </div>
+              )
+            }/>
             <Column field="accountCredentails.email" header="Email" className="whitespace-nowrap"/>
             <Column
               field="address"
@@ -109,7 +126,18 @@ export const TeachersList = ({
               className="whitespace-nowrap"
               body={(rowData) => convertDate(rowData.hiredDate)}
             />
-            <Column field="status" header="Status" className="whitespace-nowrap"/>
+            <Column field="status" header="Status" className="whitespace-nowrap" 
+            body={(rowData) => (
+              <span
+                className={` capitalize px-4 py-2 rounded-full text-xs font-semibold ${
+                  rowData.status === "active"
+                    ? "text-green-600 bg-green-600/10"
+                    : "text-red-600 :bg-red-600/10"
+                }`}
+              >
+                {rowData.status}
+              </span>
+            )}/>
             <Column field="gender" header="Gender" className="whitespace-nowrap"/>
             <Column header="Actions" body={actionTemplate} />
           </DataTable>

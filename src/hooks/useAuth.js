@@ -32,7 +32,7 @@ export const useAuth = () => {
 
             try {
                 const decoded = jwtDecode(token);
-                return { isAuthenticated: true, role: decoded.role, username:decoded.username, email:decoded.email, schoolId: decoded.schoolId };
+                return { isAuthenticated: true, role: decoded.role, username:decoded.username, email:decoded.email, schoolId: decoded.schoolId , userId: decoded.id };
             } catch (error) {
                 localStorage.removeItem("token");
                 toast.error("Session expired. Please log in again.");

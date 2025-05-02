@@ -52,6 +52,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation(); 
   const [isStudentsOpen, setIsStudentsOpen] = useState(false);
+  const [isClassOpen, setIsClassOpen] = useState(false);
   const [isAcademicOpen, setIsAcademicOpen] = useState(false);
   const [activeItem,setActiveItem] = useState('');
 
@@ -107,9 +108,27 @@ const Sidebar = () => {
         <SidebarItem 
           icon={<UserCog size={20} />} 
           label="Class" 
-          active={'/school-admin/class'}
-          onClick={() => navigate('/school-admin/class')} 
-        />
+          onClick={() => setIsClassOpen(!isClassOpen)}
+          hasDropdown
+          isOpen={isClassOpen}
+        >
+          <div 
+            className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+              isActive('/school-admin/class') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+            }`}
+            onClick={() => navigate('/school-admin/class')}
+          >
+            All class
+          </div>
+          <div 
+            className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+              isActive('/school-admin/timetable') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+            }`}
+            onClick={() => navigate('/school-admin/timetables')}
+          >
+            Timetables
+          </div>
+        </SidebarItem>
         <SidebarItem 
           icon={<UserCog size={20} />} 
           label="Teachers" 

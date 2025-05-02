@@ -2,7 +2,7 @@ import React from 'react';
 import { Mail, Phone, MessageCircle } from 'lucide-react';
 
 export const TeacherProfile = ({ teacher, onClose }) => (
-  <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-xl p-6">
+  <div className="fixed z-50 right-0 top-0 h-full w-96 bg-white shadow-xl p-6">
     <div className="text-right mb-6">
       <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
         ×

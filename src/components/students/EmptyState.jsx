@@ -1,15 +1,13 @@
 import React from 'react';
-
+import { Empty } from 'antd';
 export const EmptyState = ({ onAddStudent }) => (
   <div className="flex flex-col items-center justify-center py-12">
-    <div className="w-64 h-64 mb-8">
-      <img
-        src="https://raw.githubusercontent.com/shadcn/ui/main/apps/www/public/examples/tasks-empty.svg"
-        alt="No students"
-        className="w-full h-full"
+    <div className="">
+      <Empty
+        image={Empty.PRESENTED_IMAGE_SIMPLE}
+        description={<span className="text-gray-500">No students found</span>}
       />
     </div>
-    <h2 className="text-2xl font-semibold mb-2">No students at this time</h2>
     <p className="text-gray-600 mb-6">
       Students will appear here after they enroll in your school.
     </p>

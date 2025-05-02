@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, Phone } from 'lucide-react';
-
+import { convertDate } from '../../utils';
 export const StudentDetails = ({ student, onClose }) => {
   // Function to calculate age from date of birth
   const calculateAge = (dateOfBirth) => {
@@ -43,7 +43,27 @@ export const StudentDetails = ({ student, onClose }) => {
       </div>
 
       <div className="space-y-6">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-4 overflow-y-auto max-h-[400px]">
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-1">Registration Number</h3>
+            <p>{student.registrationNumber}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-1">Address</h3>
+            <p>{student.address || "N/A"}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-1">City</h3>
+            <p>{student.city || "N/A"}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-1">Enrollment Date</h3>
+            <p>{convertDate(student.enrollmentDate) || "N/A"}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-1">Class</h3>
+            <p>{student.class?.name || "No class assigned"}</p>
+          </div>
           <div>
             <h3 className="text-sm font-medium text-gray-600 mb-1">Age</h3>
             <p>{calculateAge(student.dateOfBirth)}</p>

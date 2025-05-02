@@ -7,11 +7,19 @@ export const StudentLayout = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex bg-gray-50 h-screen">
+      {/* Sidebar */}
       <StudentSidebar onLogoClick={() => navigate('/student/')} />
-      <div className="flex-1">
+
+      {/* Main Content */}
+      <div className="flex flex-col flex-1">
+        {/* Header */}
         <StudentHeader />
-        <Outlet />
+
+        {/* Scrollable Main Content */}
+        <main className="flex-1 overflow-y-auto container mx-auto p-2">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

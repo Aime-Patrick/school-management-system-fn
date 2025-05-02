@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { getCourses, createCourse, deleteCourse, getCourseById, updateCourse } from "../services/api/coursesApi";
+import { getCourses, createCourse, deleteCourse, getCourseById, updateCourse, assignTeacherToCourse } from "../services/api/coursesApi";
 import { isArr } from "./useTeacher";
 
 
@@ -35,6 +35,8 @@ export const useCourses = () => {
         },
     });
 
+
+
     const deleteCourseMutation = useMutation({
         mutationFn: deleteCourse,
         onSuccess: () => {
@@ -43,6 +45,17 @@ export const useCourses = () => {
         },
         onError: (error) => {
             toast.error(isArr(error?.response?.data?.message )|| "Failed to delete course");
+        },
+    });
+
+    const assignTeacherToCourseMutation = useMutation({
+        mutationFn: assignTeacherToCourse,
+        onSuccess: (data) => {
+            toast.success(data.message || "Teacher assigned to course successfully");
+            queryClient.invalidateQueries(["courses"], { refetchActive: true });
+        },
+        onError: (error) => {
+            toast.error(isArr(error?.response?.data?.message )|| "Failed to assign teacher to course");
         },
     });
 
@@ -63,5 +76,8 @@ export const useCourses = () => {
         deleteCourseIsLoading: deleteCourseMutation.isPending,
         updateCourseMutation,
         deleteCourseMutation,
+        assignTeacherToCourseMutation,
+        assignTeacherToCourseIsLoading: assignTeacherToCourseMutation.isPending,
+        assignTeacherToCourseSuccess: assignTeacherToCourseMutation.isSuccess,
     };
 }

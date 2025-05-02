@@ -17,3 +17,28 @@ export const getTeachers = async (id)=>{
         throw error;
     }
 }
+
+export const getTeacherById = async (id)=>{
+    try {
+        const response = await axiosInstance.get(`/teachers/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+export const updateTeacher = async ({id, teacherData})=>{
+    try {
+        const response = await axiosInstance.put(`/teachers/${id}`, teacherData);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+export const deleteTeacher = async (id)=>{
+    try {
+        const response = await axiosInstance.delete(`/teachers/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}

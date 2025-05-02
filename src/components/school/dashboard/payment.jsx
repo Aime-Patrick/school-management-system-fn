@@ -158,14 +158,14 @@ export const Payment = () => {
         </div>
       </div>
 
-      <div className="py-5 bg-white-400 mt-2 rounded-md shadow-md overflow-x-auto max-w-6xl" >
+      <div className="bg-white mt-2 rounded-md shadow-md overflow-x-auto max-w-6xl" >
         <DataTable
           value={data}
           globalFilter={filters.global.value}
           emptytext="No payment found."
           filters={filters}
           tableClassName="text-[14px] bg-white whitespace-nowrap"
-          tableStyle={{ minWidth: "10px" }}
+          tableStyle={{ minWidth: "40rem" }}
           paginator
           rows={10}
         >
