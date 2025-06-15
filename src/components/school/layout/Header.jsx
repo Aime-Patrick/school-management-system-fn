@@ -5,10 +5,14 @@ import { Search, Bell } from "lucide-react";
 import { ProfileDropdown } from "../../reusable/ProfileDropDown";
 import AddSchool from '../dashboard/AddSchool';
 import { useCheckIfAdminHasSchool } from "../../../hooks/useCheckIfAdminHasSchool";
+import { useAuth } from '../../../hooks/useAuth';
+
 export const Header = () => {
   const navigate = useNavigate();
   const [visible, setVisible]= useState(false)
-  const { data:isSchoolAdminHasSchool} = useCheckIfAdminHasSchool();
+  const { data:isSchoolAdminHasSchool } = useCheckIfAdminHasSchool();
+  const { authData } = useAuth();
+
   const handleSettingsClick = () => {
     navigate("/settings");
   };
@@ -49,7 +53,7 @@ export const Header = () => {
           <Bell size={20} className="text-gray-600" />
         </button>
         <ProfileDropdown
-          imageUrl="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=faces"
+          imageUrl={authData.profilePicture || ''}
           onSettingsClick={handleSettingsClick}
           onProfileClick={handleProfileClick}
         />

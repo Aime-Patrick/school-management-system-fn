@@ -13,6 +13,8 @@ import {
   Calendar
 } from 'lucide-react';
 import { Logo } from '../../layout/Logo';
+import { useAuth } from '../../../hooks/useAuth';
+
 const isActive = (path) => {
   return location.pathname === path;
 };
@@ -55,6 +57,7 @@ const Sidebar = () => {
   const [isClassOpen, setIsClassOpen] = useState(false);
   const [isAcademicOpen, setIsAcademicOpen] = useState(false);
   const [activeItem,setActiveItem] = useState('');
+  const { authData } = useAuth();
 
   const isActive = (path) => {
     return location.pathname === path;
@@ -188,20 +191,6 @@ const Sidebar = () => {
           onClick={() => navigate('/settings')} 
         />
       </nav>
-
-      <div className="mt-auto">
-        <div className="bg-white/10 rounded-xl p-4 text-center">
-          <div className="w-16 h-16 mx-auto mb-3">
-            <img 
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=faces" 
-              alt="Profile" 
-              className="rounded-full" 
-            />
-          </div>
-          <div className="text-white text-sm font-medium">Anna Karin</div>
-          <div className="text-white/70 text-xs">anna@email.com</div>
-        </div>
-      </div>
     </div>
   );
 };

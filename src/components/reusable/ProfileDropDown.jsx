@@ -43,7 +43,13 @@ const {authData} = useAuth()
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-lg"
       >
-        <img src={imageUrl} alt="Profile" className="w-8 h-8 rounded-full" />
+        {imageUrl ? (
+          <img src={imageUrl} alt="Profile" className="w-8 h-8 rounded-full object-cover" />
+        ) : (
+          <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-base">
+            {authData.username ? authData.username.split(' ').map(n => n[0]).join('').toUpperCase() : ''}
+          </span>
+        )}
       </button>
 
       {isOpen && (
