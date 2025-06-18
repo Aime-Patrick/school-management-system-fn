@@ -5,6 +5,7 @@ import { AddSubscription } from "../../Modal/addSubscriptionPlan";
 import { Subscription } from "../../reusable/subscription";
 import PlanTable from "../../reusable/PlanTable";
 import { useSubscription } from "../../../hooks/useSubscription";
+
 export const SubscriptionPlan = () => {
   const [visible, setVisible] = useState();
   const { subscriptions, isLoading } = useSubscription();
@@ -20,7 +21,7 @@ export const SubscriptionPlan = () => {
   }));
 
   return (
-    <div className="px-5 py-2">
+    <div className="px-5 py-2 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
       <div>
         <DynamicBreadcrumb />
       </div>
@@ -57,6 +58,15 @@ export const SubscriptionPlan = () => {
       {visible && (
         <AddSubscription onClose={() => setVisible(false)} visible={visible} />
       )}
+      <style>{`
+        .animate-fade-in-up {
+          animation: fadeInUp 0.7s cubic-bezier(.4,0,.2,1) both;
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px);}
+          to { opacity: 1; transform: translateY(0);}
+        }
+      `}</style>
     </div>
   );
 };

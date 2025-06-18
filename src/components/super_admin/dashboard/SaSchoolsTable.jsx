@@ -1,83 +1,80 @@
 import React from "react";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import { MoreVertical } from "lucide-react";
 import { useSchools } from "../../../hooks/useSchool";
-import { Empty } from "antd";
+import { Empty, Tooltip } from "antd";
 
 
 export const SaSchoolsTable = () => {
   const { isLoading, schools } = useSchools();
   const sortedSchools = [...schools]?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  const schoolAdmin = (school) =>{
-    return school.schoolAdmin.username
-  }
+  const schoolAdmin = (school) => school.schoolAdmin.username;
+
+  // Custom body templates
+  const logoBody = (rowData) => (
+    <img
+      src={rowData.schoolLogo || "/logo192.png"}
+      alt={`${rowData.schoolName} logo`}
+      className="w-10 h-10 rounded-full border-2 border-blue-100 shadow-sm object-cover"
+    />
+  );
+
+  const adminBody = (rowData) => (
+    <Tooltip title={rowData.schoolAdmin.email}>
+      {schoolAdmin(rowData)}
+    </Tooltip>
+  );
+
+  const statusBody = (rowData) => (
+    <span
+      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold capitalize
+        ${
+          rowData.status === "active"
+            ? "bg-green-100 text-green-700"
+            : "bg-yellow-100 text-yellow-700"
+        }`}
+    >
+      {rowData.status}
+    </span>
+  );
+
+  const actionsBody = () => (
+    <button
+      type="button"
+      className="p-2 hover:bg-blue-100 rounded-full transition"
+      aria-label="More options"
+    >
+      <MoreVertical size={18} className="text-blue-400" />
+    </button>
+  );
+
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-    <div className="p-4 border-b border-gray-100">
-      <h2 className="text-lg font-semibold">Recent Joined Schools</h2>
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
+      <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+        <h2 className="text-xl font-bold text-blue-900">Recently Joined Schools</h2>
+        <span className="text-xs text-gray-400">{sortedSchools.length} total</span>
+      </div>
+      <div className="p-4">
+        <DataTable
+          value={sortedSchools}
+          paginator
+          rows={8}
+          emptyMessage={<Empty description="No schools available" />}
+          className="p-datatable-sm"
+          responsiveLayout="scroll"
+        >
+          <Column header="Logo" body={logoBody} style={{ width: "80px" }} />
+          <Column header="School Admin" body={adminBody} />
+          <Column field="schoolName" header="School Name" />
+          <Column
+            header="School Email"
+            body={(rowData) => rowData.email || rowData.schoolAdmin.email}
+          />
+          <Column header="Status" body={statusBody} />
+          <Column body={actionsBody} style={{ width: "60px" }} />
+        </DataTable>
+      </div>
     </div>
-    <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-              Logo
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-              School Admin
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-              School Name
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-              School Email
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-              Status
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-gray-600"></th>
-          </tr>
-        </thead>
-        {sortedSchools.length > 0 ? 
-        <tbody>
-          { sortedSchools.map((school) => (
-            <tr key={school.id} className="border-t border-gray-100">
-              <td className="px-4 py-3">
-                <img
-                  src={school.schoolLogo}
-                  alt={`${school.schoolName} logo`}
-                  className="w-8 h-8 rounded-full"
-                />
-              </td>
-              <td className="px-4 py-3 text-sm">{schoolAdmin(school)}</td>
-              <td className="px-4 py-3 text-sm">{school.schoolName}</td>
-              <td className="px-4 py-3 text-sm">{school.email || school.schoolAdmin.email}</td>
-              <td className="px-4 py-3">
-                <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-                  ${
-                    school.status === "active"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}
-                >
-                  {school.status}
-                </span>
-              </td>
-              <td className="px-4 py-3">
-                <button
-                  type="button"
-                  className="p-1 hover:bg-gray-100 rounded"
-                  aria-label="More options"
-                >
-                  <MoreVertical size={16} className="text-gray-400" />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody> 
-        : <div className="flex items-center justify-center w-full"> <p>No schools available</p></div>}
-      </table>
-    </div>
-  </div>
-  )
-}
+  );
+};

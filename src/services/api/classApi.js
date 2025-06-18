@@ -27,8 +27,6 @@ export const getClassById = async (id) => {
     }
 }
 export const updateClass = async ({id, classData}) => {
-
-    console.log(id, classData)
     try {
         const response = await axiosInstance.put(`/classes/${id}`, classData);
         return response.data;

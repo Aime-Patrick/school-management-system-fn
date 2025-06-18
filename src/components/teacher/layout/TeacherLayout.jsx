@@ -1,17 +1,25 @@
-import React from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { TeacherSidebar } from './TeacherSidebar';
-import { TeacherHeader } from './TeacherHeader';
+import React from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { TeacherSidebar } from "./TeacherSidebar";
+import { TeacherHeader } from "./TeacherHeader";
 
 export const TeacherLayout = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <TeacherSidebar onLogoClick={() => navigate('/teacher/dashboard')} />
-      <div className="flex-1">
+    <div className="flex bg-gray-50 h-screen">
+      {/* Sidebar */}
+      <TeacherSidebar onLogoClick={() => navigate("/teacher/")} />
+
+      {/* Main Content */}
+      <div className="flex flex-col flex-1">
+        {/* Header */}
         <TeacherHeader />
-        <Outlet />
+
+        {/* Scrollable Main Content */}
+        <main className="flex-1 overflow-y-auto container mx-auto p-2">
+          <Outlet />
+        </main>
       </div>
     </div>
   );
