@@ -11,8 +11,11 @@ import { Column } from 'primereact/column';
 import { FilterMatchMode } from "primereact/api";
 import { Input } from "antd";
 import { Tooltip } from 'primereact/tooltip';
+import { useClassBySchoolId } from '../../hooks/useClassesBySchoolId';
+import { useAuth } from '../../hooks/useAuth';
 export const ClassManagement = () => {
-  const {classes} = useClasses();
+  const { authData } = useAuth();
+  const { classes, isLoading } = useClassBySchoolId(authData?.schoolId);
   const [selectedClass, setSelectedClass] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAssignLessonsModal, setShowAssignLessonsModal] = useState(false);
@@ -33,6 +36,14 @@ export const ClassManagement = () => {
       setGlobalFilterValue(value);
     };
     const emptyCheck = (value) => value || 'None';
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen justify-center items-center">
+        <i className="pi pi-spin pi-spinner text-blue-700" style={{ fontSize: "2rem" }}></i>
+      </div>
+    );
+  }
   return (
    <><Tooltip target=".more-teachers" />
     <div className="p-6">

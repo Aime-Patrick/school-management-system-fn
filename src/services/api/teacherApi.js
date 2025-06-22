@@ -42,3 +42,13 @@ export const deleteTeacher = async (id)=>{
         throw error;
     }
 }
+
+export const resetTeacherPassword = async (id)=>{
+    try {
+        console.log("Resetting password for teacher with ID:", id);
+        const response = await axiosInstance.patch(`/school/reset-teacher-password/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}

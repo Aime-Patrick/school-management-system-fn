@@ -9,7 +9,7 @@ import { ForgotPassword } from "./ForgotPassword";
 
 export const AuthPage = () => {
   const navigate = useNavigate();
-  const [activeRole, setActiveRole] = useState("admin");
+  const [activeRole, setActiveRole] = useState("school admin");
   const [authView, setAuthView] = useState("login");
   const { login, loginLoading } = useAuth();
   const isStudent = activeRole === "student";
@@ -62,7 +62,7 @@ export const AuthPage = () => {
       case "super admin":
         setActiveRole("super admin");
         break;
-      case "admin":
+      case "school admin":
       default:
         setActiveRole("admin");
         break;
@@ -99,25 +99,17 @@ export const AuthPage = () => {
               Please enter your details below to access your account.
             </p>
 
-            <div className="flex justify-center space-x-2 mb-8">
-              {[
-                { role: "admin", label: "Admin" },
-                { role: "super admin", label: "Super Admin" },
-                { role: "student", label: "Student" },
-                { role: "Teacher", label: "Teacher" },
-              ].map(({ role, label }) => (
-                <button
-                  key={role}
-                  onClick={() => handleRoleNavigation(role)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
-                    activeRole === role
-                      ? "bg-blue-600 text-white border-blue-600 shadow"
-                      : "bg-white text-blue-700 border-blue-200 hover:bg-blue-50"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
+            <div className="mb-8 flex justify-center">
+              <select
+                value={activeRole}
+                onChange={e => handleRoleNavigation(e.target.value)}
+                className="px-4 py-2 rounded-lg border border-blue-200 bg-white text-blue-800 font-medium shadow focus:ring-2 focus:ring-blue-400"
+              >
+                <option value="school admin">School Admin</option>
+                <option value="super admin">Super Admin</option>
+                <option value="student">Student</option>
+                <option value="Teacher">Teacher</option>
+              </select>
             </div>
 
             <form onSubmit={loginFormik.handleSubmit} className="space-y-6">

@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -11,6 +11,7 @@ export const TeachersList = ({
   onViewRole,
   onEditRole,
   onDelete,
+  onResetPassword,
 }) => {
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({
@@ -33,6 +34,9 @@ export const TeachersList = ({
           className="p-1 hover:bg-gray-100 rounded"
         >
           <Eye size={16} className="text-gray-600" />
+        </button>
+        <button onClick={() => onResetPassword(rowData)}>
+          <i className="pi pi-key"></i>
         </button>
         <button
           onClick={() => onEditRole(rowData)}
@@ -66,7 +70,7 @@ export const TeachersList = ({
         </div>
       </div>
 
-      <div className=" bg-white mt-2 rounded-md shadow-md overflow-x-auto max-w-6xl" >
+      <div className=" bg-white mt-2 rounded-md shadow-md overflow-x-auto max-w-6xl">
         <div>
           <DataTable
             value={teachers}
@@ -74,29 +78,39 @@ export const TeachersList = ({
             emptytext="No Teacher found."
             filters={filters}
             tableClassName="text-[14px] white"
-            tableStyle={{minWidth:"60rem"}}
+            tableStyle={{ minWidth: "60rem" }}
             paginator
             rows={10}
           >
             <Column
-            className="whitespace-nowrap"
+              className="whitespace-nowrap"
               header="Name"
               style={{ width: "10%" }}
               body={(rowData) => (
                 <div className="flex items-center">
-                  <img
-                    src={rowData.profilePicture || "https://via.placeholder.com/150"}
-                    alt={rowData.lastName}
-                    className="w-8 h-8 rounded-full mr-2"
-                  />
+                  {rowData.profilePicture && rowData.profilePicture != "null" ? (
+                    <img
+                      src={rowData.profilePicture}
+                      alt={rowData.lastName}
+                      className="w-8 h-8 rounded-full mr-2 object-cover"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full mr-2 bg-blue-200 flex items-center justify-center text-blue-700 font-bold text-sm uppercase">
+                      {rowData.firstName?.[0] || ""}
+                      {rowData.lastName?.[0] || ""}
+                    </div>
+                  )}
                   <span className="capitalize text-gray-700">
                     {rowData.firstName} {rowData.lastName}
                   </span>
                 </div>
               )}
             />
-            <Column field="coursesTaught" header="Subject"  className="whitespace-nowrap" body={
-              (rowData) => (
+            <Column
+              field="coursesTaught"
+              header="Subject"
+              className="whitespace-nowrap"
+              body={(rowData) => (
                 <div className="flex items-center">
                   {rowData.coursesTaught.length > 0 ? (
                     rowData.coursesTaught.map((course, index) => (
@@ -111,9 +125,13 @@ export const TeachersList = ({
                     <span className="text-gray-500">No Subject Assigned</span>
                   )}
                 </div>
-              )
-            }/>
-            <Column field="accountCredentails.email" header="Email" className="whitespace-nowrap"/>
+              )}
+            />
+            <Column
+              field="accountCredentails.email"
+              header="Email"
+              className="whitespace-nowrap"
+            />
             <Column
               field="address"
               header="Address"
@@ -126,19 +144,27 @@ export const TeachersList = ({
               className="whitespace-nowrap"
               body={(rowData) => convertDate(rowData.hiredDate)}
             />
-            <Column field="status" header="Status" className="whitespace-nowrap" 
-            body={(rowData) => (
-              <span
-                className={` capitalize px-4 py-2 rounded-full text-xs font-semibold ${
-                  rowData.status === "active"
-                    ? "text-green-600 bg-green-600/10"
-                    : "text-red-600 :bg-red-600/10"
-                }`}
-              >
-                {rowData.status}
-              </span>
-            )}/>
-            <Column field="gender" header="Gender" className="whitespace-nowrap"/>
+            <Column
+              field="status"
+              header="Status"
+              className="whitespace-nowrap"
+              body={(rowData) => (
+                <span
+                  className={` capitalize px-4 py-2 rounded-full text-xs font-semibold ${
+                    rowData.status === "active"
+                      ? "text-green-600 bg-green-600/10"
+                      : "text-red-600 :bg-red-600/10"
+                  }`}
+                >
+                  {rowData.status}
+                </span>
+              )}
+            />
+            <Column
+              field="gender"
+              header="Gender"
+              className="whitespace-nowrap"
+            />
             <Column header="Actions" body={actionTemplate} />
           </DataTable>
         </div>

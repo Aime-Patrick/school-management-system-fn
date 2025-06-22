@@ -7,23 +7,31 @@ import { useTeacherBySchoolId } from "../../hooks/useTeacherBySchool";
 import { useCheckIfAdminHasSchool } from "../../hooks/useCheckIfAdminHasSchool";
 import { Button } from "primereact/button";
 import { useTeacher } from "../../hooks/useTeacher";
+import { Dialog } from "primereact/dialog";
+
 export const TeachersPage = () => {
-  const { schoolId, data } = useCheckIfAdminHasSchool();
+  const { schoolId } = useCheckIfAdminHasSchool();
   const { teachers = [], isLoading } = useTeacherBySchoolId(schoolId);
-  const { deleteTeacher, deleteTeacherLoading, deleteTeacherSuccess } = useTeacher();
+  const { deleteTeacher, deleteTeacherLoading, deleteTeacherSuccess, resetTeacherPassword, resetPasswordLoading, resetPasswordSuccess } = useTeacher();
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
   const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
   const [showDeleteTeacherModal, setShowDeleteTeacherModal] = useState(false);
   const [teacherToDelete, setTeacherToDelete] = useState(null);
-
-  const handleAddTeacher = (newTeacher) => {
-    console.log("New Teacher:", newTeacher);
-    setShowAddTeacherModal(false);
-  };
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+  const [teacherToReset, setTeacherToReset] = useState(null);
 
   const handleDeleteTeacher = (teacher) => {
     deleteTeacher({ id: teacher._id });
+  };
+
+  const handleResetPassword = (teacher) => {
+    setTeacherToReset(teacher);
+    setShowResetPasswordModal(true);
+  };
+
+  const confirmResetPassword = () => {
+    resetTeacherPassword(teacherToReset._id );
   };
 
   useEffect(() => {
@@ -31,8 +39,12 @@ export const TeachersPage = () => {
       setShowDeleteTeacherModal(false);
       setTeacherToDelete(null);
     }
-  }
-  , [deleteTeacherSuccess]);
+    if (resetPasswordSuccess) {
+      setShowResetPasswordModal(false);
+      setTeacherToReset(null);
+    }
+  }, [deleteTeacherSuccess, resetPasswordSuccess]);
+
   if (isLoading) {
     return (
       <div className="flex h-screen justify-center items-center">
@@ -42,59 +54,44 @@ export const TeachersPage = () => {
   }
 
   return (
-    // <div >
-    //   <div className="flex justify-between items-center mb-4">
-    //     <h1 className="text-2xl font-semibold">Teachers</h1>
-    //     <button
-    //
-    //       className="px-4 py-2 bg-blue-600 btn text-white rounded-lg hover:bg-blue-700"
-    //     >
-    //       Add Teacher
-    //     </button>
-    //   </div>
-
-    //   {teachers?.length === 0 ? (
-    //     <div>No teachers available</div>
-    //   ) : (
-    //     <TeachersList
-    //       teachers={teachers}
-    //       onViewProfile={(teacher) => {
-    //         setSelectedTeacher(teacher);
-    //         setShowProfile(true);
-    //       }}
-    //     />
-    //   )}
-
-   
-    // </div>
-    <>
-      <div className="w-full flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-400">Teachers</h1>
-        <Button
-          label="Add Teacher"
-          icon="pi pi-plus"
-          onClick={() => setShowAddTeacherModal(true)}
-          className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0"
+    <div className="p-6 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-blue-900">Teachers</h1>
+          <Button
+            label="Add Teacher"
+            icon="pi pi-plus"
+            onClick={() => setShowAddTeacherModal(true)}
+            className="bg-blue-600 text-white btn text-sm focus:outline-none focus:ring-0"
+          />
+        </div>
+        <TeachersList
+          teachers={teachers}
+          onViewProfile={(teacher) => {
+            setSelectedTeacher(teacher);
+            setShowProfile(true);
+          }}
+          onDelete={(teacher) => {
+            setTeacherToDelete(teacher);
+            setShowDeleteTeacherModal(true);
+          }}
+          onResetPassword={handleResetPassword}
+          onEditRole={(teacher) => {
+            setSelectedTeacher(teacher);
+            setShowProfile(true);
+          }
+          }
         />
-      </div>
-      <TeachersList
-        teachers={teachers}
-        onViewProfile={(teacher) => {
-          setSelectedTeacher(teacher);
-          setShowProfile(true);
-        }}
-        onDelete={(teacher) => {
-          setTeacherToDelete(teacher);
-          setShowDeleteTeacherModal(true);
-        }}
-        
-      />
+      
+
+      {/* Add Teacher Modal */}
       {showAddTeacherModal && (
         <AddTeacher
           visible={showAddTeacherModal}
           onClose={() => setShowAddTeacherModal(false)}
         />
       )}
+
+      {/* Teacher Profile Modal */}
       {showProfile && selectedTeacher && (
         <TeacherProfile
           teacher={selectedTeacher}
@@ -104,14 +101,50 @@ export const TeachersPage = () => {
           }}
         />
       )}
-   {showDeleteTeacherModal && (
-     <DeleteTeacherModal
-       onClose={() => setShowDeleteTeacherModal(false)}
-       onDelete={() => handleDeleteTeacher(teacherToDelete)}
-       teacher={teacherToDelete}
-      deleteTeacherLoading={deleteTeacherLoading}
-     />
-   )}
-    </>
+
+      {/* Delete Teacher Modal */}
+      {showDeleteTeacherModal && (
+        <DeleteTeacherModal
+          onClose={() => setShowDeleteTeacherModal(false)}
+          onDelete={() => handleDeleteTeacher(teacherToDelete)}
+          teacher={teacherToDelete}
+          deleteTeacherLoading={deleteTeacherLoading}
+        />
+      )}
+
+      {/* Reset Password Modal */}
+      <Dialog
+        header="Reset Password"
+        visible={showResetPasswordModal}
+        onHide={() => setShowResetPasswordModal(false)}
+        footer={
+          <div>
+            <Button
+              label="Cancel"
+              className="p-button-text p-2"
+              onClick={() => setShowResetPasswordModal(false)}
+            />
+            <Button
+              label={resetPasswordLoading ? "Resetting..." : "Confirm"}
+              className="bg-blue-600 text-white p-2"
+              onClick={confirmResetPassword}
+              disabled={resetPasswordLoading}
+            />
+          </div>
+        }
+        modal
+        closable
+      >
+        <p>
+          Are you sure you want to reset the password for
+          <span className="font-semibold text-blue-700">{teacherToReset?.lastName} {teacherToReset?.firstName}</span>?
+        </p>
+        {resetPasswordSuccess && (
+          <div className="mt-4 text-green-600 font-medium">
+            Password reset link sent to teacher's email!
+          </div>
+        )}
+      </Dialog>
+    </div>
   );
 };

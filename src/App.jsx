@@ -46,6 +46,7 @@ import { SubscriptionPage } from "./pages/SubscriptionPage";
 import { Payment } from "./components/school/dashboard/payment";
 import { Timetables } from "./components/school/dashboard/Timetables";
 import ResetPassword from "./components/ResetPassword";
+import TeacherDashboard from "./components/teacher/dashboard/TeacherDashboard";
 
 const SettingsWrapper = () => {
   const navigate = useNavigate();
@@ -100,6 +101,7 @@ const App = () => {
         <Route>
           <Route path="/teacher" element={<TeacherLayout />}>
             <Route element={<ProtectedRoute allowedRoles={["teacher"]} />}>
+              <Route index element={<TeacherDashboard />} />
               <Route path="classes" element={<Classes />} />
               <Route path="appeals" element={<AppealsTeacher />} />
             </Route>

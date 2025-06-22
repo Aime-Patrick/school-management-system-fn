@@ -21,7 +21,7 @@ export const useAuth = () => {
         }
     };
 
-    const { data: authData = { isAuthenticated: false, role: "", username: "", email: "", profileImage:"", joinedAt:"" }, isLoading } = useQuery({
+    const { data: authData = { isAuthenticated: false, role: "", username: "", email: "", profileImage:"", joinedAt:"", userId:"" }, isLoading } = useQuery({
         queryKey: ["auth"],
         queryFn: async () => {
             const token = localStorage.getItem("token");

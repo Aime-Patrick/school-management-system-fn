@@ -42,3 +42,12 @@ export const deleteClass = async (id) => {
         throw error;
     }
 }
+
+export const getClassBySchoolId = async (schoolId) => {
+    try {
+        const response = await axiosInstance.get(`/classes/school/${schoolId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
