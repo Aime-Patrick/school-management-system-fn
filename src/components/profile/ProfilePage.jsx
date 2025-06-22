@@ -2,39 +2,14 @@ import React, { useRef, useState } from 'react';
 import Sidebar from '../school/layout/Sidebar';
 import { Header } from '../school/layout/Header';
 import { useAuth } from '../../hooks/useAuth';
-import { Camera, X, Save } from 'lucide-react';
+import { Camera, X, Save, Edit3 } from 'lucide-react';
+import { useCheckIfAdminHasSchool } from '../../hooks/useCheckIfAdminHasSchool';
 
 export const ProfilePage = () => {
   const { authData } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const fileInputRef = useRef(null);
-
-  const handleImageSelect = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedImage(file);
-      const reader = new FileReader();
-      reader.onload = (e) => setPreviewUrl(e.target.result);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRemoveImage = () => {
-    setSelectedImage(null);
-    setPreviewUrl(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
-
-  const handleSave = () => {
-    // Here you would call the backend to upload the image
-    setIsEditing(false);
-    // Optionally reset selectedImage and previewUrl after upload
-  };
+  const { data: schoolData, isLoading: schoolLoading } = useCheckIfAdminHasSchool();
 
   const getProfileImage = () => {
-    if (previewUrl) return previewUrl;
     if (authData.profilePicture) return authData.profilePicture;
     return '';
   };
@@ -45,110 +20,100 @@ export const ProfilePage = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-white">
       <Sidebar />
-      
       <div className="flex-1">
         <Header />
-        
-        <main className="p-6">
+        <main className="p-6 bg-white">
           <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-gray-800">Profile</h1>
-            <p className="text-gray-600">View and manage your profile</p>
+            <h1 className="text-2xl font-bold text-black">Profile</h1>
+            <p className="text-gray-700">View your profile and school information</p>
           </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="bg-white rounded-xl shadow border border-blue-100 p-6">
                 <div className="text-center mb-6">
                   <div className="relative inline-block w-32 h-32 mx-auto mb-4">
                     {getProfileImage() ? (
                       <img
                         src={getProfileImage()}
                         alt="Profile"
-                        className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
+                        className="w-32 h-32 rounded-full object-cover border-4 border-blue-400 shadow"
                       />
                     ) : (
-                      <span className="w-32 h-32 flex items-center justify-center rounded-full bg-gray-200 text-4xl text-gray-500 font-bold border-4 border-gray-200">
+                      <span className="w-32 h-32 flex items-center justify-center rounded-full bg-blue-100 text-4xl text-blue-600 font-bold border-4 border-blue-400 shadow">
                         {getInitials()}
                       </span>
                     )}
-                    <button
-                      onClick={() => setIsEditing(true)}
-                      className="absolute bottom-2 right-2 bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-colors"
-                      title="Change profile picture"
-                    >
-                      <Camera size={16} />
-                    </button>
                   </div>
-                  <h2 className="text-xl font-semibold">{authData.username}</h2>
-                  <p className="text-gray-600 capitalize">{authData.role}</p>
+                  <h2 className="text-xl font-bold text-black">{authData.username}</h2>
+                  <p className="text-gray-700 capitalize">{authData.role}</p>
                 </div>
-
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm text-gray-600">Email</label>
-                    <p className="font-medium">{authData.email}</p>
+                    <p className="font-medium text-black">{authData.email}</p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-600">Role</label>
-                    <p className="font-medium capitalize">{authData.role}</p>
+                    <p className="font-medium capitalize text-black">{authData.role}</p>
                   </div>
                   {authData.phoneNumber && (
                     <div>
                       <label className="text-sm text-gray-600">Phone</label>
-                      <p className="font-medium">{authData.phoneNumber}</p>
+                      <p className="font-medium text-black">{authData.phoneNumber}</p>
                     </div>
                   )}
                 </div>
-                {isEditing && (
-                  <div className="mt-4 flex flex-col items-center gap-2">
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleImageSelect}
-                      accept="image/*"
-                      className="hidden"
-                    />
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => fileInputRef.current && fileInputRef.current.click()}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                      >
-                        Choose Image
-                      </button>
-                      {selectedImage && (
-                        <button
-                          onClick={handleRemoveImage}
-                          className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
-                        >
-                          <X size={16} /> Remove
-                        </button>
-                      )}
-                      {selectedImage && (
-                        <button
-                          onClick={handleSave}
-                          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-                        >
-                          <Save size={16} /> Save
-                        </button>
-                      )}
-                      <button
-                        onClick={() => { setIsEditing(false); handleRemoveImage(); }}
-                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
-
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-lg font-semibold mb-4">Profile Information</h2>
-                <p className="text-gray-600">Profile editing functionality will be implemented here.</p>
+              <div className="bg-white rounded-xl shadow border border-blue-100 p-6">
+                <div className="mb-4">
+                  <h2 className="text-lg font-bold text-black">School Information</h2>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm text-gray-600">School Logo</label><br />
+                    {schoolLoading ? (
+                      <span className="text-gray-400">Loading...</span>
+                    ) : schoolData?.schoolLogo ? (
+                      <img src={schoolData.schoolLogo} alt="School Logo" className="w-24 h-24 object-contain rounded border border-blue-200" />
+                    ) : (
+                      <span className="text-gray-400">No logo</span>
+                    )}
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">School Name</label>
+                    <p className="font-medium text-black">{schoolData?.schoolName || '-'}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">School Code</label>
+                    <p className="font-medium text-black">{schoolData?.schoolCode || '-'}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">Address</label>
+                    <p className="font-medium text-black">{schoolData?.address || '-'}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">Status</label>
+                    <p className="font-medium capitalize text-black">{schoolData?.status || '-'}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">Subscription Plan</label>
+                    <p className="font-medium text-black">{schoolData?.subscriptionPlan || '-'}</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm text-gray-600">Subscription Start</label>
+                      <p className="font-medium text-black">{schoolData?.subscriptionStart ? schoolData.subscriptionStart.slice(0,10) : '-'}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-600">Subscription End</label>
+                      <p className="font-medium text-black">{schoolData?.subscriptionEnd ? schoolData.subscriptionEnd.slice(0,10) : '-'}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
