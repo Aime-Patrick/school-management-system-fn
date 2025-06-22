@@ -7,6 +7,8 @@ import AddSchool from '../dashboard/AddSchool';
 import { useCheckIfAdminHasSchool } from "../../../hooks/useCheckIfAdminHasSchool";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useAuth } from '../../../hooks/useAuth';
+
 export const Header = ({ onSidebarToggle }) => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);

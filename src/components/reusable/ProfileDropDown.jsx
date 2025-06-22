@@ -43,11 +43,17 @@ export const ProfileDropdown = ({
         className="flex items-center gap-2 hover:bg-blue-50 p-1.5 rounded-full transition"
         aria-label="Open profile menu"
       >
-        <img
+        {imageUrl ? (
+          <img
           src={imageUrl}
           alt="Profile"
-          className="w-8 h-8 rounded-full border-2 border-blue-200 object-cover"
+          className="w-8 h-8 rounded-full object-cover border-2 border-blue-200 object-cover"
         />
+        ) : (
+          <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-base">
+            {authData.username ? authData.username.split(' ').map(n => n[0]).join('').toUpperCase() : ''}
+          </span>
+        )}
       </button>
 
       <AnimatePresence>
