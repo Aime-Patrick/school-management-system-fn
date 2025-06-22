@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { login } from "../services/api/authApi";
+import { login, forgotPassword, resetPassword } from "../services/api/authApi";
 import { jwtDecode } from "jwt-decode";
 import { isArr } from "./useTeacher";
 
@@ -21,7 +21,7 @@ export const useAuth = () => {
         }
     };
 
-    const { data: authData = { isAuthenticated: false, role: "", username: "", email: "" }, isLoading } = useQuery({
+    const { data: authData = { isAuthenticated: false, role: "", username: "", email: "", profileImage:"", joinedAt:"", userId:"" }, isLoading } = useQuery({
         queryKey: ["auth"],
         queryFn: async () => {
             const token = localStorage.getItem("token");
@@ -32,7 +32,7 @@ export const useAuth = () => {
 
             try {
                 const decoded = jwtDecode(token);
-                return { isAuthenticated: true, role: decoded.role, username:decoded.username, email:decoded.email, schoolId: decoded.schoolId , userId: decoded.id };
+                return { isAuthenticated: true, role: decoded.role, username:decoded.username, email:decoded.email, schoolId: decoded.schoolId , userId: decoded.id, profileImage: decoded.profileImage, joinedAt: decoded.joinedAt };
             } catch (error) {
                 localStorage.removeItem("token");
                 toast.error("Session expired. Please log in again.");
@@ -49,7 +49,7 @@ export const useAuth = () => {
 
             try {
                 const decoded = jwtDecode(data.token);
-                queryClient.setQueryData(["auth"], { isAuthenticated: true, role: decoded.role , username: decoded.username, email: decoded.email});
+                queryClient.setQueryData(["auth"], { isAuthenticated: true, role: decoded.role , username: decoded.username, email: decoded.email, profileImage: decoded.profileImage, schoolId: decoded.schoolId, userId: decoded.id, joinedAt: decoded.joinedAt });
                 queryClient.invalidateQueries(["auth"]);
 
                 setTimeout(() => {
@@ -88,5 +88,29 @@ export const useAuth = () => {
         },
     });
 
-    return { authData, isLoading, login: loginMutation.mutate, loginLoading: loginMutation.isPending };
+    const forgotPasswordMutation = useMutation({
+        mutationFn: forgotPassword,
+        onSuccess: (data) => {
+            toast.success(data.message || "Password reset link sent successfully");
+        },
+        onError: (error) => {
+            toast.error(isArr(error.response.data.message) || "Failed to send password reset link");
+        },
+    });
+
+    const resetPasswordMutation = useMutation({
+        mutationFn: resetPassword,
+        onSuccess: (data) => {
+            toast.success(data.message || "Password reset successful");
+            navigate("/AuthPage", { state: { from: "resetPassword" }, replace: true });
+        },
+        onError: (error) => {
+            toast.error(isArr(error.response.data.message) || "Failed to reset password");
+        },
+    });
+
+    return { authData, isLoading, login: loginMutation.mutate, loginLoading: loginMutation.isPending,
+        forgotPassword: forgotPasswordMutation,
+        resetPassword: resetPasswordMutation, 
+     };
 };

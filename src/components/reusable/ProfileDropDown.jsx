@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Settings, LogOut, User } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import { motion, AnimatePresence } from "framer-motion";
+
 export const ProfileDropdown = ({
   imageUrl,
   onSettingsClick,
@@ -11,7 +13,7 @@ export const ProfileDropdown = ({
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-const {authData} = useAuth()
+  const { authData } = useAuth();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -19,7 +21,6 @@ const {authData} = useAuth()
         setIsOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -30,9 +31,7 @@ const {authData} = useAuth()
   };
 
   const handleLogout = () => {
-    // Clear any stored tokens/auth data
     localStorage.removeItem("token");
-    // Navigate to auth page
     navigate("/");
   };
 
@@ -40,11 +39,16 @@ const {authData} = useAuth()
     <div className="relative" ref={dropdownRef}>
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-lg"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="flex items-center gap-2 hover:bg-blue-50 p-1.5 rounded-full transition"
+        aria-label="Open profile menu"
       >
         {imageUrl ? (
-          <img src={imageUrl} alt="Profile" className="w-8 h-8 rounded-full object-cover" />
+          <img
+          src={imageUrl}
+          alt="Profile"
+          className="w-8 h-8 rounded-full object-cover border-2 border-blue-200 object-cover"
+        />
         ) : (
           <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-base">
             {authData.username ? authData.username.split(' ').map(n => n[0]).join('').toUpperCase() : ''}
@@ -52,40 +56,53 @@ const {authData} = useAuth()
         )}
       </button>
 
-      {isOpen && (
-        <div className="absolute z-50 right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1">
-          <div className="px-4 py-3 border-b border-gray-100">
-            <p className="text-sm font-medium text-gray-800">{authData?.username}</p>
-            <p className="text-xs text-gray-500">{authData.email}</p>
-          </div>
-          <div className="py-1">
-            <button
-              type="button"
-              onClick={() => handleItemClick(onProfileClick)}
-              className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-            >
-              <User size={16} />
-              Profile
-            </button>
-            <button
-              type="button"
-              onClick={() => handleItemClick(onSettingsClick)}
-              className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-            >
-              <Settings size={16} />
-              Account Settings
-            </button>
-            <button
-              type="button"
-              onClick={() => handleItemClick(handleLogout)}
-              className="w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-50 flex items-center gap-2"
-            >
-              <LogOut size={16} />
-              Logout
-            </button>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="dropdown"
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            transition={{ duration: 0.18, type: "spring" }}
+            className="absolute z-50 right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-1 min-w-[180px]"
+          >
+            <div className="px-4 py-3 border-b border-gray-100">
+              <p className="text-sm font-semibold text-blue-900 truncate">
+                {authData?.username}
+              </p>
+              <p className="text-xs text-gray-500 truncate">
+                {authData?.email}
+              </p>
+            </div>
+            <div className="py-1">
+              <button
+                type="button"
+                onClick={() => handleItemClick(onProfileClick)}
+                className="w-full px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 flex items-center gap-2 transition"
+              >
+                <User size={16} />
+                Profile
+              </button>
+              <button
+                type="button"
+                onClick={() => handleItemClick(onSettingsClick)}
+                className="w-full px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 flex items-center gap-2 transition"
+              >
+                <Settings size={16} />
+                Account Settings
+              </button>
+              <button
+                type="button"
+                onClick={() => handleItemClick(handleLogout)}
+                className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

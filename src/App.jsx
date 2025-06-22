@@ -45,6 +45,9 @@ import { SubscriptionPlan } from "./components/super_admin/pages/subscriptionPla
 import { SubscriptionPage } from "./pages/SubscriptionPage";
 import { Payment } from "./components/school/dashboard/payment";
 import { Timetables } from "./components/school/dashboard/Timetables";
+import ResetPassword from "./components/ResetPassword";
+import TeacherDashboard from "./components/teacher/dashboard/TeacherDashboard";
+
 const SettingsWrapper = () => {
   const navigate = useNavigate();
   return <AccountSettings />;
@@ -82,62 +85,78 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/AuthPage" element={<AuthPage />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/student" element={<StudentLayout />}>
-        <Route  element={<ProtectedRoute allowedRoles={["student"]} />}>
-          <Route index element={<StudentDashboard />} />
-          <Route path="announcements" element={<Announcements />} />
-          <Route path="report-cards" element={<ReportCards />} />
-          <Route path="parent-meetings" element={<ParentMeetings />} />
-          <Route path="appeals" element={<Appeals />} />
-          <Route path="performance" element={<Performance />} />
-          <Route path="timetable" element={<Timetable />} />
-          <Route path="notifications" element={<Notifications />} />
-        </Route>
-        </Route>
-        <Route>
-        <Route path="/teacher" element={<TeacherLayout />}>
-          <Route  element={<ProtectedRoute allowedRoles={["teacher"]} />}>
-            <Route path="classes" element={<Classes />} />
-            <Route path="appeals" element={<AppealsTeacher />} />
+          <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
+            <Route index element={<StudentDashboard />} />
+            <Route path="announcements" element={<Announcements />} />
+            <Route path="report-cards" element={<ReportCards />} />
+            <Route path="parent-meetings" element={<ParentMeetings />} />
+            <Route path="appeals" element={<Appeals />} />
+            <Route path="performance" element={<Performance />} />
+            <Route path="timetable" element={<Timetable />} />
+            <Route path="notifications" element={<Notifications />} />
           </Route>
         </Route>
+        <Route>
+          <Route path="/teacher" element={<TeacherLayout />}>
+            <Route element={<ProtectedRoute allowedRoles={["teacher"]} />}>
+              <Route index element={<TeacherDashboard />} />
+              <Route path="classes" element={<Classes />} />
+              <Route path="appeals" element={<AppealsTeacher />} />
+            </Route>
+          </Route>
         </Route>
 
         <Route>
-            <Route path="/sadmin" element={<SaDashboardLayout />}>
-          <Route element={ <ProtectedRoute allowedRoles={["system-admin"]} />}>
-              <Route index element={<SaDashboardHome />}/>
-              <Route path="settings" element={ <SaSettingsWrapper />} />
-              <Route path="profile" element={ <SaProfileWrapper /> }/>
-            <Route path="schools" element={ <SchoolsList /> } />
-            <Route path="users" element={ <Users /> } />
-            <Route path="payment" element={ <SuperPayments /> } />
-            <Route path="subscription" element={ <SubscriptionPlan /> } />
-          </Route>
+          <Route path="/sadmin" element={<SaDashboardLayout />}>
+            <Route element={<ProtectedRoute allowedRoles={["system-admin"]} />}>
+              <Route index element={<SaDashboardHome />} />
+              <Route path="settings" element={<SaSettingsWrapper />} />
+              <Route path="profile" element={<SaProfileWrapper />} />
+              <Route path="schools" element={<SchoolsList />} />
+              <Route path="users" element={<Users />} />
+              <Route path="payment" element={<SuperPayments />} />
+              <Route path="subscription" element={<SubscriptionPlan />} />
+            </Route>
           </Route>
         </Route>
 
         <Route>
           <Route path="/school-admin" element={<SchoolLayout />}>
-        <Route element={<ProtectedRoute allowedRoles={["school-admin"]} />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="courses" element={<CoursesPage /> }/>
-            <Route path="class" element={<ClassManagement /> }/>
-            <Route path="students" element={<StudentsPage /> }/>
-            <Route path="academic-year" element={<AcademicYear /> }/>
-            <Route path="academic-term" element={<AcademicTerm /> }/>
-            <Route path="teachers" element={<TeachersPage />}/>
-            <Route path="messages" element={ <Messaging /> }/>
-            <Route path="payment" element={ <Payment /> }/>
-            <Route path="timetables" element={ <Timetables /> }/>
+            <Route element={<ProtectedRoute allowedRoles={["school-admin"]} />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="courses" element={<CoursesPage />} />
+              <Route path="class" element={<ClassManagement />} />
+              <Route path="students" element={<StudentsPage />} />
+              <Route path="academic-year" element={<AcademicYear />} />
+              <Route path="academic-term" element={<AcademicTerm />} />
+              <Route path="teachers" element={<TeachersPage />} />
+              <Route path="messages" element={<Messaging />} />
+              <Route path="payment" element={<Payment />} />
+              <Route path="timetables" element={<Timetables />} />
+            </Route>
+          </Route>
         </Route>
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute
+              allowedRoles={["system-admin", "school-admin", "teacher", "student"]}
+            />
+          }
+        >
+          <Route index element={<SettingsWrapper />} />
         </Route>
-        </Route>
-        <Route path="/settings" element={ <ProtectedRoute allowedRoles={["system-admin","school-admin","teacher","student"]}/> }>
-        <Route index element={ <SettingsWrapper /> } />
-        </Route>
-        <Route path="/profile" element={ <ProtectedRoute allowedRoles={["system-admin","school-admin","teacher","student"]}/> } >
-        <Route index element={ <ProfileWrapper /> } />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute
+              allowedRoles={["system-admin", "school-admin", "teacher", "student"]}
+            />
+          }
+        >
+          <Route index element={<ProfileWrapper />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/subscription-required" element={<SubscriptionPage />} />

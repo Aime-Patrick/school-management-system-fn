@@ -27,8 +27,6 @@ export const getClassById = async (id) => {
     }
 }
 export const updateClass = async ({id, classData}) => {
-
-    console.log(id, classData)
     try {
         const response = await axiosInstance.put(`/classes/${id}`, classData);
         return response.data;
@@ -39,6 +37,15 @@ export const updateClass = async ({id, classData}) => {
 export const deleteClass = async (id) => {
     try {
         const response = await axiosInstance.delete(`/classes/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getClassBySchoolId = async (schoolId) => {
+    try {
+        const response = await axiosInstance.get(`/classes/school/${schoolId}`);
         return response.data;
     } catch (error) {
         throw error;
