@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { EmptyState } from "./EmptyState";
 import { StudentsList } from "./StudentsList";
 import { StudentDetails } from "./StudentDetails";
-import { ClassManagement } from "./ClassManagement";
+import { ClassManagement } from "../school/dashboard/ClassManagement";
 import { AddStudentModal } from "./AddStudentModal";
 import { exportToExcel } from "../../utils";
 import { useSchoolStudent } from "../../hooks/useSchoolStudent";

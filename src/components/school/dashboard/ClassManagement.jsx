@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { Eye, Pencil, Trash2 } from 'lucide-react';
-import { CreateClassModal } from './modals/CreateClassModal';
-import { AssignLessonsModal } from './modals/AssignLessonsModal';
-import { AssignStudentsModal } from './modals/AssignStudentsModal';
-import { DeleteClassModal } from './modals/DeleteClassModal';
-import { EditClassModal } from './modals/EditClassModal';
-import { useClasses } from '../../hooks/useClasses';
+import { Eye, Pencil, Trash2, PlusCircle } from 'lucide-react';
+import { CreateClassModal } from '../../students/modals/CreateClassModal';
+import { AssignLessonsModal } from '../../students/modals/AssignLessonsModal';
+import { AssignStudentsModal } from '../../students/modals/AssignStudentsModal';
+import { DeleteClassModal } from '../../students/modals/DeleteClassModal';
+import { EditClassModal } from '../../students/modals/EditClassModal';
+import { useClasses } from '../../../hooks/useClasses';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { FilterMatchMode } from "primereact/api";
 import { Input } from "antd";
 import { Tooltip } from 'primereact/tooltip';
-import { useClassBySchoolId } from '../../hooks/useClassesBySchoolId';
-import { useAuth } from '../../hooks/useAuth';
+import { useClassBySchoolId } from '../../../hooks/useClassesBySchoolId';
+import { useAuth } from '../../../hooks/useAuth';
+import { AddCombinationModal } from './modals/AddCombinationModal';
 export const ClassManagement = () => {
   const { authData } = useAuth();
   const { classes, isLoading } = useClassBySchoolId(authData?.schoolId);
@@ -22,20 +23,21 @@ export const ClassManagement = () => {
   const [showAssignStudentsModal, setShowAssignStudentsModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-    const [globalFilterValue, setGlobalFilterValue] = useState("");
-    const [filters, setFilters] = useState({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    });
-    const onGlobalFilterChange = (e) => {
-      const value = e.target.value;
-      let _filters = { ...filters };
-  
-      _filters["global"].value = value;
-  
-      setFilters(_filters);
-      setGlobalFilterValue(value);
-    };
-    const emptyCheck = (value) => value || 'None';
+  const [showCombinationModal, setShowCombinationModal] = useState(false);
+  const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+
+    _filters["global"].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+  const emptyCheck = (value) => value || 'None';
 
   if (isLoading) {
     return (
@@ -99,7 +101,16 @@ export const ClassManagement = () => {
       </div>
     );
   }} />
-  <Column field="studentCount" header="Student No" body={(rowData)=> rowData?.students?.length} />
+  <Column
+  header="Student No"
+  body={(rowData) => {
+    if (!Array.isArray(rowData.combinations) || rowData.combinations.length === 0) return 0;
+    return rowData.combinations.reduce(
+      (total, comb) => total + (Array.isArray(comb.students) ? comb.students.length : 0),
+      0
+    );
+  }}
+  />
   <Column 
     header="Students" 
     body={() => (
@@ -114,6 +125,25 @@ export const ClassManagement = () => {
     field='grade'
     body={(rowData) => emptyCheck(rowData?.grade)}
   />
+  <Column
+    header="Combinations"
+    body={(rowData) =>
+      Array.isArray(rowData.combinations) && rowData.combinations.length > 0
+        ? (
+          <div className="flex flex-wrap gap-1">
+            {rowData.combinations.map((comb, idx) => (
+              <span
+                key={idx}
+                className="px-2 py-0.5 rounded bg-blue-100 text-blue-700 text-xs font-semibold"
+              >
+                {comb.name}
+              </span>
+            ))}
+          </div>
+        )
+        : <span className="text-gray-400 text-xs">None</span>
+    }
+  />
   <Column 
     header="Actions" 
     body={(rowData) => (
@@ -124,6 +154,7 @@ export const ClassManagement = () => {
             setShowEditModal(true);
           }}
           className="p-1 hover:bg-gray-100 rounded"
+          title="Edit Class"
         >
           <Pencil size={16} className="text-gray-600" />
         </button>
@@ -133,8 +164,19 @@ export const ClassManagement = () => {
             setShowDeleteModal(true);
           }}
           className="p-1 hover:bg-gray-100 rounded"
+          title="Delete Class"
         >
           <Trash2 size={16} className="text-red-600" />
+        </button>
+        <button
+          onClick={() => {
+            setSelectedClass(rowData);
+            setShowCombinationModal(true);
+          }}
+          className="p-1 hover:bg-gray-100 rounded"
+          title="Add Combination"
+        >
+          <PlusCircle size={16} className="text-blue-600" />
         </button>
       </div>
     )}
@@ -185,11 +227,7 @@ export const ClassManagement = () => {
             setShowDeleteModal(false);
             setSelectedClass(null);
           }}
-          onConfirm={() => {
-            setClasses(classes.filter((c) => c.id !== selectedClass.id));
-            setShowDeleteModal(false);
-            setSelectedClass(null);
-          }}
+          classId={selectedClass._id}
         />
       )}
 
@@ -217,7 +255,18 @@ export const ClassManagement = () => {
           }}
         />
       )}
+
+      {showCombinationModal && (
+        <AddCombinationModal
+          visible={showCombinationModal}
+          onClose={() => {
+            setShowCombinationModal(false);
+            setSelectedClass(null);
+          }}
+          classId={selectedClass._id}
+          className={selectedClass.name}
+        />
+      )}
     </div></>
   );
 };
-  

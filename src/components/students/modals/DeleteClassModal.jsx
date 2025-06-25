@@ -1,7 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { X, AlertTriangle } from 'lucide-react';
+import { useClasses } from '../../../hooks/useClasses';
+export const DeleteClassModal = ({ className, onClose, classId }) => {
+  const { deleteClass,deleteClassLoading, deleteClassSuccess  } = useClasses();
 
-export const DeleteClassModal = ({ className, onClose, onConfirm }) => {
+  const handleDelete = () => {
+    deleteClass(classId);
+  }
+
+  useEffect(() => {
+    if (deleteClassSuccess) {
+      onClose();
+    }
+    // eslint-disable-next-line
+  }, [deleteClassSuccess, onClose]);
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white rounded-lg w-[400px]">
@@ -30,10 +42,11 @@ export const DeleteClassModal = ({ className, onClose, onConfirm }) => {
               Cancel
             </button>
             <button
-              onClick={onConfirm}
+              onClick={handleDelete}
+              disabled={deleteClassLoading}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
             >
-              Delete Class
+              {deleteClassLoading ? 'Deleting...' : 'Delete'}
             </button>
           </div>
         </div>

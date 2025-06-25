@@ -51,3 +51,13 @@ export const getClassBySchoolId = async (schoolId) => {
         throw error;
     }
 }
+
+export const addCombinationIntoClass = async ({classId, combination}) => {
+    console.log("Adding combination into class:", classId, combination);
+    try {
+        const response = await axiosInstance.post(`/classes/${classId}/combinations`, combination);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}

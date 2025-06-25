@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { X, Loader } from "lucide-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useClasses } from "../../hooks/useClasses";
+import { useAuth } from "../../hooks/useAuth";
+import { useClassBySchoolId } from "../../hooks/useClassesBySchoolId";
 import { useSchoolStudent } from "../../hooks/useSchoolStudent";
 export const AddStudentModal = ({ onClose }) => {
-  const { classes = [], isLoading } = useClasses();
+  const { authData } = useAuth();
+  const { classes, isLoading } = useClassBySchoolId(authData.schoolId);
   const { registerStudentMutation, isSubmitting } = useSchoolStudent();
+  const [selectedClassId, setSelectedClassId] = React.useState("");
 
-  // Generate class options
-  const classOptions = classes.map((cls) => (
-    <option key={cls.id} value={cls._id}>
-      {cls.name}
-    </option>
-  ));
+  // Find combinations for the selected class
+  const selectedClass = useMemo(
+    () => classes?.find((cls) => cls._id === selectedClassId),
+    [selectedClassId, classes]
+  );
+  const combinationOptions = selectedClass?.combinations || [];
+
 
   const formik = useFormik({
     initialValues: {
@@ -22,18 +26,18 @@ export const AddStudentModal = ({ onClose }) => {
       email: "",
       gender: "",
       dateOfBirth: "",
-      enrollmentDate:"",
+      enrollmentDate: "",
       phoneNumber: "",
       address: "",
       city: "",
       class: "",
+      combination: "",
       profilePicture: null,
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required("First name is required"),
       lastName: Yup.string().required("Last name is required"),
-      email: Yup.string()
-        .email("Invalid email address"),
+      email: Yup.string().email("Invalid email address"),
       gender: Yup.string().required("Gender is required"),
       dateOfBirth: Yup.date().required("Date of birth is required"),
       enrollmentDate: Yup.date().required("Enrollment date is required"),
@@ -41,7 +45,7 @@ export const AddStudentModal = ({ onClose }) => {
       address: Yup.string().required("Address is required"),
       city: Yup.string().required("City is required"),
       class: Yup.string().required("Class is required"),
-
+      combination: Yup.string().required("Combination is required"),
       profilePicture: Yup.mixed().required("Profile picture is required"),
     }),
     onSubmit: (values) => {
@@ -58,6 +62,13 @@ export const AddStudentModal = ({ onClose }) => {
       });
     },
   });
+
+  // When class changes, reset combination
+  React.useEffect(() => {
+    formik.setFieldValue("combination", "");
+    setSelectedClassId(formik.values.class);
+    // eslint-disable-next-line
+  }, [formik.values.class]);
 
   if (isLoading) {
     return (
@@ -256,10 +267,37 @@ export const AddStudentModal = ({ onClose }) => {
                   className="w-full px-3 py-2 border rounded-lg"
                 >
                   <option value="">Select class</option>
-                  {classOptions}
+                  {classes.map((cls) => (
+                    <option key={cls._id} value={cls._id}>
+                      {cls.name}
+                    </option>
+                  ))}
                 </select>
                 {formik.touched.class && formik.errors.class && (
                   <p className="text-red-500 text-sm">{formik.errors.class}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Combination
+                </label>
+                <select
+                  name="combination"
+                  value={formik.values.combination}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="w-full px-3 py-2 border rounded-lg"
+                  disabled={!selectedClassId}
+                >
+                  <option value="">Select combination</option>
+                  {combinationOptions.map((comb) => (
+                    <option key={comb._id} value={comb._id}>
+                      {comb.name}
+                    </option>
+                  ))}
+                </select>
+                {formik.touched.combination && formik.errors.combination && (
+                  <p className="text-red-500 text-sm">{formik.errors.combination}</p>
                 )}
               </div>
               <div>
