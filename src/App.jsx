@@ -47,6 +47,7 @@ import { Payment } from "./components/school/dashboard/payment";
 import { Timetables } from "./components/school/dashboard/Timetables";
 import ResetPassword from "./components/ResetPassword";
 import TeacherDashboard from "./components/teacher/dashboard/TeacherDashboard";
+import TeacherAccountSettings from "./components/teacher/pages/TeacherAccountSettings";
 
 const SettingsWrapper = () => {
   const navigate = useNavigate();
@@ -104,6 +105,7 @@ const App = () => {
               <Route index element={<TeacherDashboard />} />
               <Route path="classes" element={<Classes />} />
               <Route path="appeals" element={<AppealsTeacher />} />
+              <Route path="settings" element={<TeacherAccountSettings />} />
             </Route>
           </Route>
         </Route>

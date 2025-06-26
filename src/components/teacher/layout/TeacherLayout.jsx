@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { TeacherSidebar } from "./TeacherSidebar";
 import { TeacherHeader } from "./TeacherHeader";
+import TeacherAccountSettings from "./components/teacher/pages/TeacherAccountSettings";
 
 export const TeacherLayout = () => {
   const navigate = useNavigate();
