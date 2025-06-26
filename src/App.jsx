@@ -15,7 +15,7 @@ import { AcademicTerm } from "./components/academic/AcademicTerm";
 import { AcademicYear } from "./components/academic/AcademicYear";
 import LandingPage from "./components/LandingPage";
 import StudentsPage from "./components/students/StudentsPage";
-import { ClassManagement } from "./components/students/ClassManagement";
+import { ClassManagement } from "./components/school/dashboard/ClassManagement";
 import { TeachersPage } from "./components/teachers/TeachersPage";
 import CoursesPage from "./components/courses/CoursesPage";
 import { StudentLayout } from "./components/student/layout/StudentLayout";
@@ -47,16 +47,7 @@ import { Payment } from "./components/school/dashboard/payment";
 import { Timetables } from "./components/school/dashboard/Timetables";
 import ResetPassword from "./components/ResetPassword";
 import TeacherDashboard from "./components/teacher/dashboard/TeacherDashboard";
-import TeacherAccountSettings from "./components/teacher/pages/TeacherAccountSettings";
 
-const SettingsWrapper = () => {
-  const navigate = useNavigate();
-  return <AccountSettings />;
-};
-
-const ProfileWrapper = () => {
-  return <ProfilePage />;
-};
 
 const SaDashboardLayout = () => (
   <div className="flex bg-gray-50">
@@ -70,15 +61,6 @@ const SaDashboardLayout = () => (
   </div>
 );
 
-const SaSettingsWrapper = () => {
-  const navigate = useNavigate();
-  return <SaAccountSettings onBack={() => navigate("sadmin/")} />;
-};
-
-const SaProfileWrapper = () => {
-  const navigate = useNavigate();
-  return <SaProfilePage onBack={() => navigate("sadmin/")} />;
-};
 
 const App = () => {
   return (
@@ -97,6 +79,8 @@ const App = () => {
             <Route path="performance" element={<Performance />} />
             <Route path="timetable" element={<Timetable />} />
             <Route path="notifications" element={<Notifications />} />
+            <Route path="settings" element={<AccountSettings />} />
+            <Route path="profile" element={<ProfilePage />} />
           </Route>
         </Route>
         <Route>
@@ -105,7 +89,8 @@ const App = () => {
               <Route index element={<TeacherDashboard />} />
               <Route path="classes" element={<Classes />} />
               <Route path="appeals" element={<AppealsTeacher />} />
-              <Route path="settings" element={<TeacherAccountSettings />} />
+              <Route path="settings" element={<AccountSettings />} />
+            <Route path="profile" element={<ProfilePage />} />
             </Route>
           </Route>
         </Route>
@@ -114,12 +99,12 @@ const App = () => {
           <Route path="/sadmin" element={<SaDashboardLayout />}>
             <Route element={<ProtectedRoute allowedRoles={["system-admin"]} />}>
               <Route index element={<SaDashboardHome />} />
-              <Route path="settings" element={<SaSettingsWrapper />} />
-              <Route path="profile" element={<SaProfileWrapper />} />
               <Route path="schools" element={<SchoolsList />} />
               <Route path="users" element={<Users />} />
               <Route path="payment" element={<SuperPayments />} />
               <Route path="subscription" element={<SubscriptionPlan />} />
+              <Route path="settings" element={<SaAccountSettings />} />
+            <Route path="profile" element={<SaProfilePage />} />
             </Route>
           </Route>
         </Route>
@@ -137,29 +122,12 @@ const App = () => {
               <Route path="messages" element={<Messaging />} />
               <Route path="payment" element={<Payment />} />
               <Route path="timetables" element={<Timetables />} />
+              <Route path="settings" element={<AccountSettings />} />
+            <Route path="profile" element={<ProfilePage />} />
             </Route>
           </Route>
         </Route>
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute
-              allowedRoles={["system-admin", "school-admin", "teacher", "student"]}
-            />
-          }
-        >
-          <Route index element={<SettingsWrapper />} />
-        </Route>
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute
-              allowedRoles={["system-admin", "school-admin", "teacher", "student"]}
-            />
-          }
-        >
-          <Route index element={<ProfileWrapper />} />
-        </Route>
+
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/subscription-required" element={<SubscriptionPage />} />
       </Routes>

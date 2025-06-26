@@ -1,9 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Sidebar from '../school/layout/Sidebar';
-import { Header } from '../school/layout/Header';
 import { useAuth } from '../../hooks/useAuth';
 import { useProfile } from '../../hooks/useProfile';
-import { Camera, X, Save, Edit3 } from 'lucide-react';
+import { Camera, X, Save, Edit3, ShieldCheck, School } from 'lucide-react';
 import { useCheckIfAdminHasSchool } from '../../hooks/useCheckIfAdminHasSchool';
 
 export const AccountSettings = () => {
@@ -104,73 +102,123 @@ export const AccountSettings = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-white">
-      <Sidebar />
-      <div className="flex-1">
-        <Header />
-        <main className="p-6 bg-white">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-black">Account Settings</h1>
-            <p className="text-gray-700">Manage your account, school, and password</p>
-          </div>
-          <form className="bg-white rounded-xl shadow border border-blue-100 p-6 max-w-3xl mx-auto" onSubmit={handleSave}>
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+      <div className="flex-1 flex flex-col min-h-screen">
+        <main className="flex-1 p-4 md:p-8">
+          <div className="max-w-4xl mx-auto">
             <div className="mb-8">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold text-black">Profile & School Information</h2>
-                {!isEditing && (
-                  <button
-                    type="button"
-                    onClick={() => setIsEditing(true)}
-                    className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 shadow"
-                    title="Edit"
-                  >
-                    <Edit3 size={20} />
-                  </button>
-                )}
-              </div>
-              {isEditing ? (
-                <div className="space-y-6">
-                  {/* User fields */}
-                  <div className="flex flex-col items-center mb-6">
-                    <div className="relative inline-block w-32 h-32 mb-2">
-                      {previewUrl || authData.profilePicture ? (
-                        <img
-                          src={previewUrl || authData.profilePicture}
-                          alt="Profile"
-                          className="w-32 h-32 rounded-full object-cover border-4 border-blue-400 shadow"
-                        />
-                      ) : (
-                        <span className="w-32 h-32 flex items-center justify-center rounded-full bg-blue-100 text-4xl text-blue-600 font-bold border-4 border-blue-400 shadow">
-                          {authData.username ? authData.username.split(' ').map(n => n[0]).join('').toUpperCase() : ''}
-                        </span>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current && fileInputRef.current.click()}
-                        className="absolute bottom-2 right-2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 shadow"
-                        title="Change Image"
-                      >
-                        <Camera size={20} />
-                      </button>
-                      {selectedImage && (
+              <h1 className="text-3xl font-bold text-blue-900">Account Settings</h1>
+              <p className="text-blue-700 text-lg">Manage your account, school, and password</p>
+            </div>
+            <form className="bg-white rounded-2xl shadow-xl border border-blue-100 p-8 animate-fade-in-up" onSubmit={handleSave}>
+              <div className="flex flex-col md:flex-row gap-8">
+                {/* Profile Card */}
+                <div className="flex-1 flex flex-col items-center">
+                  <div className="relative w-32 h-32 mb-4">
+                    {previewUrl || authData.profilePicture ? (
+                      <img
+                        src={previewUrl || authData.profilePicture}
+                        alt="Profile"
+                        className="w-32 h-32 rounded-full object-cover border-4 border-blue-400 shadow"
+                      />
+                    ) : (
+                      <span className="w-32 h-32 flex items-center justify-center rounded-full bg-blue-100 text-4xl text-blue-600 font-bold border-4 border-blue-400 shadow">
+                        {authData.username ? authData.username.split(' ').map(n => n[0]).join('').toUpperCase() : ''}
+                      </span>
+                    )}
+                    {isEditing && (
+                      <>
                         <button
                           type="button"
-                          onClick={handleRemoveImage}
-                          className="absolute bottom-2 left-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 shadow"
-                          title="Remove"
+                          onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                          className="absolute bottom-2 right-2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 shadow"
+                          title="Change Image"
                         >
-                          <X size={20} />
+                          <Camera size={20} />
                         </button>
-                      )}
-                      <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleImageSelect}
-                        accept="image/*"
-                        className="hidden"
-                      />
-                    </div>
+                        {selectedImage && (
+                          <button
+                            type="button"
+                            onClick={handleRemoveImage}
+                            className="absolute bottom-2 left-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 shadow"
+                            title="Remove"
+                          >
+                            <X size={20} />
+                          </button>
+                        )}
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          onChange={handleImageSelect}
+                          accept="image/*"
+                          className="hidden"
+                        />
+                      </>
+                    )}
                   </div>
+                  <div className="text-center">
+                    <h2 className="text-xl font-bold text-blue-900 mb-1 flex items-center gap-2 justify-center">
+                      {authData.username}
+                      <ShieldCheck size={18} className="text-blue-400" />
+                    </h2>
+                    <p className="text-blue-600 capitalize mb-2">{authData.role}</p>
+                    <p className="font-medium text-blue-800 break-all">{authData.email}</p>
+                    {authData.phoneNumber && (
+                      <p className="font-medium text-blue-800">{authData.phoneNumber}</p>
+                    )}
+                  </div>
+                </div>
+                {/* School Card */}
+                <div className="flex-1 flex flex-col items-center">
+                  <div className="relative w-24 h-24 mb-4">
+                    {schoolLogo ? (
+                      <img src={schoolLogo} alt="School Logo" className="w-24 h-24 object-contain rounded-full border border-blue-200 bg-white" />
+                    ) : (
+                      <span className="w-32 h-32 flex items-center justify-center rounded-full bg-blue-100 text-2xl text-blue-600 font-bold border-4 border-blue-400">No logo</span>
+                    )}
+                    {isEditing && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => document.getElementById('schoolLogoInput').click()}
+                          className="absolute bottom-[-1.5rem] right-[-1.5rem] bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 shadow"
+                          title="Change School Logo"
+                        >
+                          <Camera size={20} />
+                        </button>
+                        {schoolLogo && (
+                          <button
+                            type="button"
+                            onClick={handleRemoveSchoolLogo}
+                            className="absolute bottom-2 left-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 shadow"
+                            title="Remove School Logo"
+                          >
+                            <X size={20} />
+                          </button>
+                        )}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          id="schoolLogoInput"
+                          onChange={handleSchoolLogoSelect}
+                        />
+                      </>
+                    )}
+                  </div>
+                  <div className="text-center mt-8">
+                    <h2 className="text-xl font-bold text-blue-900 mb-1 flex items-center gap-2 justify-center">
+                      <School size={20} className="text-blue-400" />
+                      {schoolName || '-'}
+                    </h2>
+                    <p className="font-medium text-blue-800">{schoolCode || '-'}</p>
+                    <p className="font-medium text-blue-800">{address || '-'}</p>
+                  </div>
+                </div>
+              </div>
+              {/* Editable Fields */}
+              {isEditing && (
+                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                     <input
@@ -182,15 +230,6 @@ export const AccountSettings = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                    <input
-                      type="email"
-                      value={authData.email}
-                      className="w-full px-4 py-2 rounded-lg border border-blue-100 bg-gray-100 cursor-not-allowed text-black"
-                      readOnly
-                    />
-                  </div>
-                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                     <input
                       type="tel"
@@ -198,42 +237,6 @@ export const AccountSettings = () => {
                       onChange={e => setPhone(e.target.value)}
                       className="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     />
-                  </div>
-                  {/* School fields */}
-                  <hr className="my-4 border-blue-100" />
-                  <div className="flex flex-col items-center mb-6">
-                    <div className="relative inline-block w-24 h-24 mb-2">
-                      {schoolLogo ? (
-                        <img src={schoolLogo} alt="School Logo" className="w-24 h-24 object-contain rounded border border-blue-200" />
-                      ) : (
-                        <span className="w-24 h-24 flex items-center justify-center rounded bg-blue-100 text-2xl text-blue-600 font-bold border border-blue-200">No logo</span>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => document.getElementById('schoolLogoInput').click()}
-                        className="absolute bottom-2 right-2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 shadow"
-                        title="Change School Logo"
-                      >
-                        <Camera size={20} />
-                      </button>
-                      {schoolLogo && (
-                        <button
-                          type="button"
-                          onClick={handleRemoveSchoolLogo}
-                          className="absolute bottom-2 left-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 shadow"
-                          title="Remove School Logo"
-                        >
-                          <X size={20} />
-                        </button>
-                      )}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        id="schoolLogoInput"
-                        onChange={handleSchoolLogoSelect}
-                      />
-                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">School Name</label>
@@ -285,27 +288,30 @@ export const AccountSettings = () => {
                       className="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     />
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Subscription Start</label>
-                      <input
-                        type="date"
-                        value={subscriptionStart}
-                        onChange={e => setSubscriptionStart(e.target.value)}
-                        className="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Subscription End</label>
-                      <input
-                        type="date"
-                        value={subscriptionEnd}
-                        onChange={e => setSubscriptionEnd(e.target.value)}
-                        className="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Subscription Start</label>
+                    <input
+                      type="date"
+                      value={subscriptionStart}
+                      onChange={e => setSubscriptionStart(e.target.value)}
+                      className="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                    />
                   </div>
-                  <div className="flex gap-2 justify-end mt-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Subscription End</label>
+                    <input
+                      type="date"
+                      value={subscriptionEnd}
+                      onChange={e => setSubscriptionEnd(e.target.value)}
+                      className="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                    />
+                  </div>
+                </div>
+              )}
+              {/* Action Buttons */}
+              <div className="flex gap-2 justify-end mt-8">
+                {isEditing ? (
+                  <>
                     <button
                       type="button"
                       onClick={handleCancel}
@@ -321,86 +327,23 @@ export const AccountSettings = () => {
                     >
                       <Save size={20} />
                     </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {/* User info */}
-                  <div className="flex flex-col items-center mb-6">
-                    <div className="relative inline-block w-32 h-32 mb-2">
-                      {authData.profilePicture ? (
-                        <img
-                          src={authData.profilePicture}
-                          alt="Profile"
-                          className="w-32 h-32 rounded-full object-cover border-4 border-blue-400 shadow"
-                        />
-                      ) : (
-                        <span className="w-32 h-32 flex items-center justify-center rounded-full bg-blue-100 text-4xl text-blue-600 font-bold border-4 border-blue-400 shadow">
-                          {authData.username ? authData.username.split(' ').map(n => n[0]).join('').toUpperCase() : ''}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">Full Name</label>
-                    <p className="font-medium text-black">{authData.username}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">Email</label>
-                    <p className="font-medium text-black">{authData.email}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">Phone</label>
-                    <p className="font-medium text-black">{authData.phoneNumber || '-'}</p>
-                  </div>
-                  <hr className="my-4 border-blue-100" />
-                  {/* School info */}
-                  <div className="flex flex-col items-center mb-6">
-                    <div className="relative inline-block w-24 h-24 mb-2">
-                      {schoolData?.schoolLogo ? (
-                        <img src={schoolData.schoolLogo} alt="School Logo" className="w-24 h-24 object-contain rounded border border-blue-200" />
-                      ) : (
-                        <span className="w-24 h-24 flex items-center justify-center rounded bg-blue-100 text-2xl text-blue-600 font-bold border border-blue-200">No logo</span>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">School Name</label>
-                    <p className="font-medium text-black">{schoolData?.schoolName || '-'}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">School Code</label>
-                    <p className="font-medium text-black">{schoolData?.schoolCode || '-'}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">Address</label>
-                    <p className="font-medium text-black">{schoolData?.address || '-'}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">Status</label>
-                    <p className="font-medium capitalize text-black">{schoolData?.status || '-'}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">Subscription Plan</label>
-                    <p className="font-medium text-black">{schoolData?.subscriptionPlan || '-'}</p>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm text-gray-600">Subscription Start</label>
-                      <p className="font-medium text-black">{schoolData?.subscriptionStart ? schoolData.subscriptionStart.slice(0,10) : '-'}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm text-gray-600">Subscription End</label>
-                      <p className="font-medium text-black">{schoolData?.subscriptionEnd ? schoolData.subscriptionEnd.slice(0,10) : '-'}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(true)}
+                    className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 shadow"
+                    title="Edit"
+                  >
+                    <Edit3 size={20} />
+                  </button>
+                )}
+              </div>
+            </form>
             {/* Password section */}
-            <div className="mb-8 mt-12">
-              <h2 className="text-lg font-bold text-black mb-4">Password</h2>
-              <div className="grid gap-6">
+            <div className="bg-white rounded-2xl shadow-xl border border-blue-100 p-8 mt-12 animate-fade-in-up delay-200">
+              <h2 className="text-xl font-bold text-blue-900 mb-4">Change Password</h2>
+              <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
                   <input
@@ -422,7 +365,7 @@ export const AccountSettings = () => {
                   />
                 </div>
               </div>
-              <div className="flex justify-end mt-4">
+              <div className="flex justify-end mt-6">
                 <button
                   type="button"
                   onClick={async () => {
@@ -442,9 +385,19 @@ export const AccountSettings = () => {
                 </button>
               </div>
             </div>
-          </form>
+          </div>
         </main>
       </div>
+      <style>{`
+        .animate-fade-in-up {
+          animation: fadeInUp 0.7s cubic-bezier(.4,0,.2,1) both;
+        }
+        .delay-200 { animation-delay: 0.2s; }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px);}
+          to { opacity: 1; transform: translateY(0);}
+        }
+      `}</style>
     </div>
   );
 };
