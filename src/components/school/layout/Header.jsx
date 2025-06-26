@@ -15,11 +15,11 @@ export const Header = ({ onSidebarToggle }) => {
   const { data: isSchoolAdminHasSchool } = useCheckIfAdminHasSchool();
 
   const handleSettingsClick = () => {
-    navigate("/settings");
+    navigate("settings");
   };
 
   const handleProfileClick = () => {
-    navigate("/profile");
+    navigate("profile");
   };
 
   return (
