@@ -130,20 +130,8 @@ export const TeacherSidebar = ({ onLogoClick }) => {
             className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 rounded-lg mt-4"
           >
             <Settings size={20} />
-            <span className="text-sm">Settings</span>
+            <span className="text-sm">Account Settings</span>
           </button>
-
-          <div className="mt-4 bg-white/10 rounded-xl p-4 text-center">
-            <div className="w-16 h-16 mx-auto mb-3">
-              <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=faces"
-                alt="Profile"
-                className="rounded-full"
-              />
-            </div>
-            <div className="text-white text-sm font-medium">Anna Karin</div>
-            <div className="text-white/70 text-xs">annakarin@gmail.com</div>
-          </div>
         </div>
       </aside>
       {/* Overlay for mobile */}
