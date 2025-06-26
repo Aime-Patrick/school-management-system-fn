@@ -128,45 +128,27 @@ export const AdminDashboard = () => {
   // Students chart
   let studentsChartContent;
   if (studentsLoading) {
-    studentsChartContent = <div className="flex items-center justify-center h-[300px] text-gray-400">Loading chart...</div>;
+    studentsChartContent = <div className="flex items-center justify-center h-[200px] text-gray-400">Loading chart...</div>;
   } else {
     const chartData = getChartDataByYear(studentsData, 'createdAt', 'Students Joined', '#3B82F6');
     studentsChartContent = chartData ? (
-      <Line options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Student Enrollment Over Time' } }, scales: { y: { beginAtZero: true } } }} data={chartData} height={300} />
-    ) : <div className="flex items-center justify-center h-[300px] text-gray-400">No student data for chart</div>;
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-1 md:p-2 h-[200px] flex items-center justify-center">
+        <Line options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Student Enrollment Over Time' } }, scales: { y: { beginAtZero: true } } }} data={chartData} height={200} />
+      </div>
+    ) : <div className="flex items-center justify-center h-[200px] text-gray-400">No student data for chart</div>;
   }
 
   // Teachers chart
   let teachersChartContent;
   if (teachersLoading) {
-    teachersChartContent = <div className="flex items-center justify-center h-[300px] text-gray-400">Loading chart...</div>;
+    teachersChartContent = <div className="flex items-center justify-center h-[200px] text-gray-400">Loading chart...</div>;
   } else {
     const chartData = getChartDataByYear(teachersData, 'createdAt', 'Teachers Joined', '#22C55E');
     teachersChartContent = chartData ? (
-      <Line options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Teacher Hiring Over Time' } }, scales: { y: { beginAtZero: true } } }} data={chartData} height={300} />
-    ) : <div className="flex items-center justify-center h-[300px] text-gray-400">No teacher data for chart</div>;
-  }
-
-  // Classes chart
-  let classesChartContent;
-  if (classesLoading) {
-    classesChartContent = <div className="flex items-center justify-center h-[300px] text-gray-400">Loading chart...</div>;
-  } else {
-    const chartData = getChartDataByYear(classesData, 'createdAt', 'Classes Created', '#F59E42');
-    classesChartContent = chartData ? (
-      <Line options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Classes Created Over Time' } }, scales: { y: { beginAtZero: true } } }} data={chartData} height={300} />
-    ) : <div className="flex items-center justify-center h-[300px] text-gray-400">No class data for chart</div>;
-  }
-
-  // Revenue chart
-  let revenueChartContent;
-  if (paymentsLoading) {
-    revenueChartContent = <div className="flex items-center justify-center h-[300px] text-gray-400">Loading chart...</div>;
-  } else {
-    const chartData = getChartDataByYear(paymentsData.payments, 'date', 'Revenue', '#F43F5E', 'amount');
-    revenueChartContent = chartData ? (
-      <Line options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Revenue Over Time' } }, scales: { y: { beginAtZero: true } } }} data={chartData} height={300} />
-    ) : <div className="flex items-center justify-center h-[300px] text-gray-400">No revenue data for chart</div>;
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-1 md:p-2 h-[200px] flex items-center justify-center">
+        <Line options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Teacher Hiring Over Time' } }, scales: { y: { beginAtZero: true } } }} data={chartData} height={200} />
+      </div>
+    ) : <div className="flex items-center justify-center h-[200px] text-gray-400">No teacher data for chart</div>;
   }
 
   // Table data: students list
@@ -176,6 +158,7 @@ export const AdminDashboard = () => {
   } else {
     studentsTableContent = (
       <div className="overflow-x-auto w-full">
+        <div className="font-semibold text-blue-900 text-sm mb-1">Students</div>
         <table className="min-w-full bg-white rounded-xl shadow-sm border border-gray-100">
           <thead className="bg-gray-50">
             <tr>
@@ -209,6 +192,7 @@ export const AdminDashboard = () => {
   } else {
     teachersTableContent = (
       <div className="overflow-x-auto w-full">
+        <div className="font-semibold text-blue-900 text-sm mb-1">Teachers</div>
         <table className="min-w-full bg-white rounded-xl shadow-sm border border-gray-100">
           <thead className="bg-gray-50">
             <tr>
@@ -242,6 +226,7 @@ export const AdminDashboard = () => {
   } else {
     classesTableContent = (
       <div className="overflow-x-auto w-full">
+        <div className="font-semibold text-blue-900 text-sm mb-1">Classes</div>
         <table className="min-w-full bg-white rounded-xl shadow-sm border border-gray-100">
           <thead className="bg-gray-50">
             <tr>
@@ -275,6 +260,7 @@ export const AdminDashboard = () => {
   } else {
     revenueTableContent = (
       <div className="overflow-x-auto w-full">
+        <div className="font-semibold text-blue-900 text-sm mb-1">Payments</div>
         <table className="min-w-full bg-white rounded-xl shadow-sm border border-gray-100">
           <thead className="bg-gray-50">
             <tr>
@@ -302,30 +288,41 @@ export const AdminDashboard = () => {
   }
 
   return (
-    <div className="p-4 md:p-8 w-full">
+    <div className="p-2 md:p-4 w-full">
+      {/* Welcome Message */}
+      <div className="mb-4">
+        <h1 className="text-xl md:text-2xl font-bold text-blue-900 mb-0.5">Welcome to your dashboard{authData?.username ? `, ${authData.username}` : ''}!</h1>
+        <p className="text-blue-700 text-base">Here you can monitor your school's key stats and activities.</p>
+      </div>
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
         {stats.map((stat) => (
           <StatsCard key={stat.title} {...stat} />
         ))}
       </div>
-      {/* Analytics Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      {/* Analytics Section: Only show students/teachers charts, all tables */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4">
         <div>
+          {/* Students chart and table */}
           {studentsChartContent}
-          <div className="mt-8">{studentsTableContent}</div>
+          <div className="mt-3 bg-white rounded-lg shadow-sm border border-gray-100 p-1 md:p-2 max-h-40 overflow-y-auto text-xs">
+            {studentsTableContent}
+          </div>
+          {/* Classes table only */}
+          <div className="mt-3 bg-white rounded-lg shadow-sm border border-gray-100 p-1 md:p-2 max-h-40 overflow-y-auto text-xs">
+            {classesTableContent}
+          </div>
         </div>
         <div>
+          {/* Teachers chart and table */}
           {teachersChartContent}
-          <div className="mt-8">{teachersTableContent}</div>
-        </div>
-        <div>
-          {classesChartContent}
-          <div className="mt-8">{classesTableContent}</div>
-        </div>
-        <div>
-          {revenueChartContent}
-          <div className="mt-8">{revenueTableContent}</div>
+          <div className="mt-3 bg-white rounded-lg shadow-sm border border-gray-100 p-1 md:p-2 max-h-40 overflow-y-auto text-xs">
+            {teachersTableContent}
+          </div>
+          {/* Revenue table only */}
+          <div className="mt-3 bg-white rounded-lg shadow-sm border border-gray-100 p-1 md:p-2 max-h-40 overflow-y-auto text-xs">
+            {revenueTableContent}
+          </div>
         </div>
       </div>
     </div>
