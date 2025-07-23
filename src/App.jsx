@@ -27,8 +27,6 @@ import { Appeals } from "./components/student/pages/Appeals";
 import { Timetable } from "./components/student/pages/Timetable";
 import { Performance } from "./components/student/pages/Perfomance";
 import { Notifications } from "./components/student/pages/Notification";
-import SaSidebar from "./components/super_admin/layout/SaSidebar";
-import { SaHeader } from "./components/super_admin/dashboard/SaHeader";
 import SchoolsList from "./components/super_admin/pages/SchoolsList";
 import { SaProfilePage } from "./components/super_admin/profile/SaProfilePage";
 import { SaAccountSettings } from "./components/super_admin/settings/SaAccountSettings";
@@ -47,21 +45,7 @@ import { Payment } from "./components/school/dashboard/payment";
 import { Timetables } from "./components/school/dashboard/Timetables";
 import ResetPassword from "./components/ResetPassword";
 import TeacherDashboard from "./components/teacher/dashboard/TeacherDashboard";
-
-
-const SaDashboardLayout = () => (
-  <div className="flex bg-gray-50">
-    <SaSidebar />
-    <div className="flex-1">
-      <SaHeader />
-      <main className="h-screen overflow-y-auto">
-        <Outlet />
-      </main>
-    </div>
-  </div>
-);
-
-
+import { SaDashboardLayout } from "./components/super_admin/layout/Layout";
 const App = () => {
   return (
     <Router>
