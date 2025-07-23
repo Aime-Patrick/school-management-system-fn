@@ -107,7 +107,7 @@ export const AccountSettings = () => {
         <main className="flex-1 p-4 md:p-8">
           <div className="max-w-4xl mx-auto">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-blue-900">Account Settings</h1>
+              <h1 className="text-3xl font-bold text-navy-800">Account Settings</h1>
               <p className="text-blue-700 text-lg">Manage your account, school, and password</p>
             </div>
             <form className="bg-white rounded-2xl shadow-xl border border-blue-100 p-8 animate-fade-in-up" onSubmit={handleSave}>
@@ -131,7 +131,7 @@ export const AccountSettings = () => {
                         <button
                           type="button"
                           onClick={() => fileInputRef.current && fileInputRef.current.click()}
-                          className="absolute bottom-2 right-2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 shadow"
+                          className="absolute bottom-2 right-2 bg-navy-800 text-white p-2 rounded-full hover:bg-blue-700 shadow"
                           title="Change Image"
                         >
                           <Camera size={20} />
@@ -157,7 +157,7 @@ export const AccountSettings = () => {
                     )}
                   </div>
                   <div className="text-center">
-                    <h2 className="text-xl font-bold text-blue-900 mb-1 flex items-center gap-2 justify-center">
+                    <h2 className="text-xl font-bold text-navy-800 mb-1 flex items-center gap-2 justify-center">
                       {authData.username}
                       <ShieldCheck size={18} className="text-blue-400" />
                     </h2>
@@ -181,7 +181,7 @@ export const AccountSettings = () => {
                         <button
                           type="button"
                           onClick={() => document.getElementById('schoolLogoInput').click()}
-                          className="absolute bottom-[-1.5rem] right-[-1.5rem] bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 shadow"
+                          className="absolute bottom-[-1.5rem] right-[-1.5rem] bg-navy-800 text-white p-2 rounded-full hover:bg-blue-700 shadow"
                           title="Change School Logo"
                         >
                           <Camera size={20} />
@@ -207,7 +207,7 @@ export const AccountSettings = () => {
                     )}
                   </div>
                   <div className="text-center mt-8">
-                    <h2 className="text-xl font-bold text-blue-900 mb-1 flex items-center gap-2 justify-center">
+                    <h2 className="text-xl font-bold text-navy-800 mb-1 flex items-center gap-2 justify-center">
                       <School size={20} className="text-blue-400" />
                       {schoolName || '-'}
                     </h2>
@@ -322,7 +322,7 @@ export const AccountSettings = () => {
                     </button>
                     <button
                       type="submit"
-                      className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 shadow"
+                      className="p-2 bg-navy-800 text-white rounded-full hover:bg-blue-700 shadow"
                       title="Save"
                     >
                       <Save size={20} />
@@ -332,7 +332,7 @@ export const AccountSettings = () => {
                   <button
                     type="button"
                     onClick={() => setIsEditing(true)}
-                    className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 shadow"
+                    className="p-2 bg-navy-800 text-white rounded-full hover:bg-blue-700 shadow"
                     title="Edit"
                   >
                     <Edit3 size={20} />
@@ -342,7 +342,7 @@ export const AccountSettings = () => {
             </form>
             {/* Password section */}
             <div className="bg-white rounded-2xl shadow-xl border border-blue-100 p-8 mt-12 animate-fade-in-up delay-200">
-              <h2 className="text-xl font-bold text-blue-900 mb-4">Change Password</h2>
+              <h2 className="text-xl font-bold text-navy-800 mb-4">Change Password</h2>
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
@@ -377,7 +377,7 @@ export const AccountSettings = () => {
                     }
                     setSaving(false);
                   }}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-60"
+                  className="px-6 py-2 bg-navy-800 text-white rounded-lg hover:bg-blue-700 disabled:opacity-60"
                   disabled={saving || changePasswordLoading}
                   title="Save Password"
                 >

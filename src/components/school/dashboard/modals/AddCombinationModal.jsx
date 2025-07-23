@@ -61,7 +61,7 @@ export const AddCombinationModal = ({ visible, onClose, classId, className }) =>
             Cancel
           </button>
           <button
-            className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition font-semibold flex items-center gap-2"
+            className="px-4 py-2 rounded-lg bg-navy-800 text-white hover:bg-blue-700 transition font-semibold flex items-center gap-2"
             onClick={handleSave}
             type="button"
             disabled={addCombinationIntoClassLoading}
@@ -86,7 +86,7 @@ export const AddCombinationModal = ({ visible, onClose, classId, className }) =>
         <X size={22} />
       </button>
       <div className="space-y-3 pt-2">
-        <label className="block text-sm font-semibold text-blue-900 mb-1">
+        <label className="block text-sm font-semibold text-navy-800 mb-1">
           Combination Name
         </label>
         <input
@@ -98,7 +98,7 @@ export const AddCombinationModal = ({ visible, onClose, classId, className }) =>
           }}
           placeholder="e.g. MCE"
           maxLength={10}
-          className="w-full px-4 py-2 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 font-semibold bg-blue-50 placeholder:text-blue-300 transition"
+          className="w-full px-4 py-2 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-navy-800 font-semibold bg-blue-50 placeholder:text-blue-300 transition"
         />
         {error && <div className="text-red-500 text-xs mt-1">{error}</div>}
         <p className="text-xs text-gray-500 mt-1">

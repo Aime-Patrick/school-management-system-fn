@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { DynamicBreadcrumb } from "../../Breadcrumb/DynamicBreadcrumb";
 import { Button } from "primereact/button";
 import { RecordPayment } from "../../Modal/recordPayment";
@@ -102,44 +102,43 @@ export const SuperPayments = () => {
   };
 
   return (
-    <div className="px-5 py-2">
+    <div className="px-2 md:px-5 py-2 min-h-screen bg-gray-50">
       <div>
         <DynamicBreadcrumb />
       </div>
-      <div className="w-full flex justify-between items-center">
-          <div>
-          <Input
-              type="text"
-              value={globalFilterValue}
-              onChange={onGlobalFilterChange}
-              placeholder="Search ..."
-              className="pl-4 pr-4 py-2 rounded-lg border w-[300px]"
-              prefix={<i className="pi pi-search"></i>}
-            />
-        </div>
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+        <Input
+          type="text"
+          value={globalFilterValue}
+          onChange={onGlobalFilterChange}
+          placeholder="Search ..."
+          className="pl-4 pr-4 py-2 rounded-lg border w-full md:w-[300px]"
+          prefix={<i className="pi pi-search"></i>}
+        />
         <Button
-          className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0"
+          className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0 w-full md:w-auto"
           icon="pi pi-plus"
           label="Record payment"
           onClick={() => setVisible(true)}
         />
       </div>
 
-      <div className="bg-white mt-2 rounded-md shadow-md">
+      <div className="bg-white mt-2 rounded-md shadow-md overflow-x-auto">
         <DataTable
           value={payments}
           globalFilter={filters.global.value}
-          emptytext="No payment found."
+          emptyMessage="No payment found."
           filters={filters}
           tableClassName="text-[14px] bg-white whitespace-nowrap"
           tableStyle={{ minWidth: "60rem" }}
           paginator
           rows={10}
+          responsiveLayout="scroll"
         >
           <Column
             header="#"
             body={(rowData, { rowIndex }) => rowIndex + 1}
-            style={{ width: "3rem" }}
+            style={{ width: '3rem' }}
           />
           <Column
             className="whitespace-nowrap"
@@ -170,6 +169,18 @@ export const SuperPayments = () => {
       {visible && (
         <RecordPayment onClose={() => setVisible(false)} visible={visible} />
       )}
+      <style>{`
+        @media (max-width: 900px) {
+          .p-datatable-table {
+            min-width: 700px !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .p-datatable-table {
+            min-width: 500px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

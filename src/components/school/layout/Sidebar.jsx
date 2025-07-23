@@ -57,7 +57,7 @@ const SidebarItem = ({
   </div>
 );
 
-const Sidebar = () => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
   const location = useLocation(); 
   const [isStudentsOpen, setIsStudentsOpen] = useState(false);
@@ -71,7 +71,14 @@ const Sidebar = () => {
     const handleResize = () => setCollapsed(window.innerWidth < 1024);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [setCollapsed]);
+
+  useEffect(() => {
+    // Open or close sidebar based on header toggle
+    if (typeof sidebarOpen === "boolean") {
+      setCollapsed(!sidebarOpen);
+    }
+  }, [sidebarOpen, setCollapsed]);
 
   const isActive = (path) => location.pathname === path;
 
@@ -86,19 +93,9 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Hamburger for mobile */}
-      <button
-        className="fixed top-4 left-4 z-50 lg:hidden bg-blue-600 p-2 rounded-full shadow-lg text-white"
-        onClick={() => setCollapsed(false)}
-        aria-label="Open sidebar"
-        style={{ display: collapsed ? 'block' : 'none' }}
-      >
-        <svg width={24} height={24} fill="none" stroke="currentColor"><rect width={24} height={4} y={4} rx={2}/><rect width={24} height={4} y={10} rx={2}/><rect width={24} height={4} y={16} rx={2}/></svg>
-      </button>
-      {/* Sidebar */}
       <aside
         className={`
-          fixed z-40 top-0 left-0 h-full bg-blue-600 transition-all duration-300
+          fixed z-40 top-0 left-0 h-full bg-navy-800 transition-all duration-300
           ${collapsed ? '-translate-x-full lg:translate-x-0' : 'translate-x-0'}
           w-64 lg:static lg:translate-x-0 lg:flex
         `}
@@ -121,7 +118,7 @@ const Sidebar = () => {
               icon={<LayoutDashboard size={20} />} 
               label="Dashboard"  
               active={isActive('/school-admin')}
-              onClick={() => {navigate('/school-admin'); if(window.innerWidth < 1024) setCollapsed(true);}}
+              onClick={() => {navigate('/school-admin'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
             />  
             <SidebarItem 
               icon={<Users size={20} />} 
@@ -135,7 +132,7 @@ const Sidebar = () => {
                 className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
                   isActive('/school-admin/students') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
                 }`}
-                onClick={() => {navigate('/school-admin/students'); if(window.innerWidth < 1024) setCollapsed(true);}}
+                onClick={() => {navigate('/school-admin/students'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
               >
                 All Students
               </div>
@@ -152,7 +149,7 @@ const Sidebar = () => {
                 className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
                   isActive('/school-admin/class') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
                 }`}
-                onClick={() => {navigate('/school-admin/class'); if(window.innerWidth < 1024) setCollapsed(true);}}
+                onClick={() => {navigate('/school-admin/class'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
               >
                 All class
               </div>
@@ -160,7 +157,7 @@ const Sidebar = () => {
                 className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
                   isActive('/school-admin/timetables') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
                 }`}
-                onClick={() => {navigate('/school-admin/timetables'); if(window.innerWidth < 1024) setCollapsed(true);}}
+                onClick={() => {navigate('/school-admin/timetables'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
               >
                 Timetables
               </div>
@@ -169,7 +166,7 @@ const Sidebar = () => {
               icon={<UserCog size={20} />} 
               label="Teachers" 
               active={isActive('/school-admin/teachers')}
-              onClick={() => {navigate('/school-admin/teachers'); if(window.innerWidth < 1024) setCollapsed(true);}}
+              onClick={() => {navigate('/school-admin/teachers'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
             />
             <SidebarItem 
               icon={<Calendar size={20} />} 
@@ -183,7 +180,7 @@ const Sidebar = () => {
                 className={`text-white/70 hover:bg-white/5 py-2 px-4 rounded-lg cursor-pointer text-sm ${
                   isActive('/school-admin/academic-year') ? 'bg-white/10 text-white' : ''
                 }`}
-                onClick={() => {setActiveItem('academic-year'); navigate('/school-admin/academic-year'); if(window.innerWidth < 1024) setCollapsed(true);}}
+                onClick={() => {setActiveItem('academic-year'); navigate('/school-admin/academic-year'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
               >
                 Academic Year
               </div>
@@ -191,7 +188,7 @@ const Sidebar = () => {
                 className={`text-white/70 hover:bg-white/5 py-2 px-4 rounded-lg cursor-pointer text-sm ${
                   isActive('/school-admin/academic-term') ? 'bg-white/10 text-white' : ''
                 }`}
-                onClick={() => {setActiveItem('academic-term'); navigate('/school-admin/academic-term'); if(window.innerWidth < 1024) setCollapsed(true);}}
+                onClick={() => {setActiveItem('academic-term'); navigate('/school-admin/academic-term'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
               >
                 Academic Term
               </div>
@@ -200,25 +197,25 @@ const Sidebar = () => {
               icon={<CreditCard size={20} />} 
               label="Payment" 
               active={isActive('/school-admin/payment')}
-              onClick={() => {navigate('/school-admin/payment'); if(window.innerWidth < 1024) setCollapsed(true);}}
+              onClick={() => {navigate('/school-admin/payment'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
             />
             <SidebarItem 
               icon={<BookOpen size={20} />} 
               label="Courses" 
               active={isActive('/school-admin/courses')}
-              onClick={() => {navigate('/school-admin/courses'); if(window.innerWidth < 1024) setCollapsed(true);}}
+              onClick={() => {navigate('/school-admin/courses'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
             />
             <SidebarItem 
               icon={<MessageSquare size={20} />} 
               label="Messages" 
               active={isActive('/school-admin/messages')}
-              onClick={() => {navigate('/school-admin/messages'); if(window.innerWidth < 1024) setCollapsed(true);}}
+              onClick={() => {navigate('/school-admin/messages'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
             />
             <SidebarItem 
               icon={<Settings size={20} />} 
               label="Settings" 
-              active={isActive('/settings')}
-              onClick={() => {navigate('/settings'); if(window.innerWidth < 1024) setCollapsed(true);}}
+              active={isActive('/school-admin/settings')}
+              onClick={() => {navigate('/school-admin/settings'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
             />
           </nav>
         </div>

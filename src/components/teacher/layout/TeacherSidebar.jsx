@@ -72,7 +72,7 @@ export const TeacherSidebar = ({ onLogoClick }) => {
     <>
       {/* Mobile/Tablet Hamburger */}
       <button
-        className="fixed top-4 left-4 z-[999] lg:hidden bg-blue-600 p-2 rounded-full shadow-lg text-white"
+        className="fixed top-4 left-4 z-[999] lg:hidden bg-navy-800 p-2 rounded-full shadow-lg text-white"
         onClick={() => setCollapsed(false)}
         aria-label="Open sidebar"
         style={{ display: collapsed ? 'block' : 'none' }}
@@ -83,7 +83,7 @@ export const TeacherSidebar = ({ onLogoClick }) => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed z-40 top-0 left-0 h-full bg-blue-600 transition-all duration-300
+          fixed z-40 top-0 left-0 h-full bg-navy-800 transition-all duration-300
           ${collapsed ? '-translate-x-full lg:translate-x-0' : 'translate-x-0'}
           w-64 lg:static lg:translate-x-0 lg:flex
         `}

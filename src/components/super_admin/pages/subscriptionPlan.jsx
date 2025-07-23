@@ -21,14 +21,12 @@ export const SubscriptionPlan = () => {
   }));
 
   return (
-    <div className="px-5 py-2 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+    <div className="px-2 md:px-5 py-2 min-h-screen bg-gray-50">
       <div>
         <DynamicBreadcrumb />
       </div>
-      <div className="w-full flex justify-between items-center">
-        <h1 className="text-lg font-semibold text-gray-400">
-          Subscription Plan
-        </h1>
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <h1 className="text-lg font-semibold text-gray-700">Subscription Plan</h1>
         <Button
           label="Add Plan"
           icon="pi pi-plus"
@@ -36,25 +34,34 @@ export const SubscriptionPlan = () => {
           className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0"
         />
       </div>
-      {subscriptions?.length === 0 && isLoading ? (
-        <div className="flex justify-center items-center h-screen">
+
+      {/* Loading State */}
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="flex flex-col items-center gap-2">
+            <span className="pi pi-spin pi-spinner text-3xl text-blue-500" />
+            <span className="text-blue-500 font-medium">Loading subscriptions...</span>
+          </div>
+        </div>
+      ) : subscriptions?.length <= 0 ? (
+        <div className="flex justify-center items-center h-64">
           <h1 className="text-2xl font-semibold text-gray-400">
             No subscription found
           </h1>
         </div>
       ) : (
         <div>
-          <div className="w-full flex justify-between items-center mt-5">
+          <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center mt-5 gap-4">
             <PlanTable />
           </div>
-
-          <div className="grid lg:grid-flow-col gap-5 mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-flow-col gap-5 mt-8">
             {mappedPlans?.map((plan, index) => (
               <Subscription key={index} plan={plan} index={index} />
             ))}
           </div>
         </div>
       )}
+
       {visible && (
         <AddSubscription onClose={() => setVisible(false)} visible={visible} />
       )}

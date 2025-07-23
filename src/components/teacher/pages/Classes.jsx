@@ -67,7 +67,7 @@ export const Classes = () => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-xl w-full max-w-md shadow-lg animate-fade-in-up">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-blue-900">Edit Deducted Marks</h3>
+          <h3 className="text-lg font-semibold text-navy-800">Edit Deducted Marks</h3>
           <button
             onClick={() => setShowDeductModal(false)}
             className="text-gray-400 hover:text-blue-600 text-2xl font-bold"
@@ -102,7 +102,7 @@ export const Classes = () => {
             <textarea className="w-full p-2 border rounded h-24" />
           </div>
           <button
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition"
+            className="w-full bg-navy-800 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition"
             onClick={() => setShowDeductModal(false)}
           >
             Save
@@ -131,7 +131,7 @@ export const Classes = () => {
 
   return (
     <div className="p-4 md:p-8 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
-      <h2 className="text-2xl font-bold text-blue-900 mb-6">Classes</h2>
+      <h2 className="text-2xl font-bold text-navy-800 mb-6">Classes</h2>
       {(!classes || classes.length === 0) ? (
         <div className="flex flex-col items-center justify-center h-64 bg-white rounded-xl shadow">
           <img src="/no-data-animate.svg" alt="No Classes" className="w-32 h-32 mb-4 opacity-80" />
@@ -147,8 +147,8 @@ export const Classes = () => {
                 onClick={() => setSelectedClass(cls.id)}
                 className={`p-6 rounded-xl text-center shadow border transition-all duration-150
                   ${selectedClass === cls.id
-                    ? "bg-blue-600 text-white ring-2 ring-blue-400"
-                    : "bg-white text-blue-900 hover:bg-blue-50"
+                    ? "bg-navy-800 text-white ring-2 ring-blue-400"
+                    : "bg-white text-navy-800 hover:bg-blue-50"
                   }`}
               >
                 <span className="block text-lg font-semibold">{cls.name}</span>
@@ -167,8 +167,8 @@ export const Classes = () => {
                       onClick={() => setSelectedSection(section)}
                       className={`px-4 py-2 rounded-lg font-medium transition
                         ${selectedSection === section
-                          ? "bg-blue-600 text-white"
-                          : "bg-gray-100 text-blue-900 hover:bg-blue-50"
+                          ? "bg-navy-800 text-white"
+                          : "bg-gray-100 text-navy-800 hover:bg-blue-50"
                         }`}
                     >
                       {section}
@@ -176,11 +176,11 @@ export const Classes = () => {
                   ))}
                 </div>
                 <div className="flex space-x-2">
-                  <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition">
+                  <button className="flex items-center space-x-2 px-4 py-2 bg-navy-800 hover:bg-blue-700 text-white rounded-lg font-semibold transition">
                     <Download className="h-5 w-5" />
                     <span>Download Excel</span>
                   </button>
-                  <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition">
+                  <button className="flex items-center space-x-2 px-4 py-2 bg-navy-800 hover:bg-blue-700 text-white rounded-lg font-semibold transition">
                     <Upload className="h-5 w-5" />
                     <span>Upload Excel</span>
                   </button>

@@ -2,7 +2,7 @@ import React from "react";
 
 export const SaSchoolsStats = () => {
   return (
-    <div className="bg-blue-600 text-white p-6 rounded-xl">
+    <div className="bg-navy-800 text-white p-6 rounded-xl">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-xl font-semibold">Schools Admin</h3>

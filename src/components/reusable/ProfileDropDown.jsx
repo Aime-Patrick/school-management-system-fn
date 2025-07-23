@@ -67,7 +67,7 @@ export const ProfileDropdown = ({
             className="absolute z-50 right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-1 min-w-[180px]"
           >
             <div className="px-4 py-3 border-b border-gray-100">
-              <p className="text-sm font-semibold text-blue-900 truncate">
+              <p className="text-sm font-semibold text-navy-800 truncate">
                 {authData?.username}
               </p>
               <p className="text-xs text-gray-500 truncate">

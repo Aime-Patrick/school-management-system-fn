@@ -143,7 +143,7 @@ export function SaAccountSettings({ onBack }) {
             </div>
           </div>
 
-          <div className="p-6 bg-blue-600 text-white rounded-lg">
+          <div className="p-6 bg-navy-800 text-white rounded-lg">
             <div className="flex justify-between items-start">
               <div>
                 <h3 className="text-2xl font-bold mb-2">Schools Admin</h3>

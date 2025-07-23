@@ -65,7 +65,7 @@ export const StudentSidebar = ({ onLogoClick }) => {
   };
 
   return (
-    <div className="w-64 bg-blue-600 min-h-screen p-4 flex flex-col">
+    <div className="w-64 bg-navy-800 min-h-screen p-4 flex flex-col">
       <Logo onClick={onLogoClick} />
 
       <nav className="space-y-1 flex-1">

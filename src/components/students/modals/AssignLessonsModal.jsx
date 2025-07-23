@@ -60,7 +60,7 @@ export const AssignLessonsModal = ({ onClose, onSubmit, className }) => {
                   onClick={() => toggleLesson(lesson.id)}
                   className={`px-3 py-1 rounded-full border ${
                     selectedLessons.includes(lesson.id)
-                      ? 'bg-blue-600 text-white border-blue-600'
+                      ? 'bg-navy-800 text-white border-blue-600'
                       : 'border-gray-300 hover:border-blue-600'
                   }`}
                 >
@@ -72,7 +72,7 @@ export const AssignLessonsModal = ({ onClose, onSubmit, className }) => {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+            className="w-full bg-navy-800 text-white py-2 rounded-lg hover:bg-blue-700"
           >
             Assign Lessons
           </button>

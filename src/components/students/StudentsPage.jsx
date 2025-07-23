@@ -53,7 +53,7 @@ export const StudentsPage = () => {
 
           <button
             onClick={() => setShowAddModal(true)}
-            className=" px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className=" px-4 py-2 bg-navy-800 text-white rounded-lg hover:bg-blue-700"
           >
             Add Student
           </button>

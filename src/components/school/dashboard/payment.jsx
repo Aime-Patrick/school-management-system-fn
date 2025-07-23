@@ -13,6 +13,7 @@ import CountUpMotion from "../../CountUpMotion";
 import { Tooltip } from "primereact/tooltip";
 import { AddStudentPayment } from "../../Modal/addStudentPayment";
 import { exportToExcel } from "../../../utils";
+
 export const Payment = () => {
   const [visible, setVisible] = useState();
   const { data } = useStudentPayment();
@@ -20,33 +21,27 @@ export const Payment = () => {
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
     let _filters = { ...filters };
-
     _filters["global"].value = value;
-
     setFilters(_filters);
     setGlobalFilterValue(value);
   };
 
   const imageBodyTemplate = (rowData) => {
     const proofFiles = rowData?.proof || [];
-
     if (proofFiles.length === 0) {
       return <p className="whitespace-nowrap">NO FILE</p>;
     }
-
     const imageFiles = proofFiles.filter((url) =>
       /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/i.test(url)
     );
-
     const pdfFiles = proofFiles.filter((url) => /\.pdf$/i.test(url));
-
     return (
       <div className="flex flex-col gap-1">
         {imageFiles.length > 0 && <OverlappingImages images={imageFiles} />}
-
         {pdfFiles.length > 0 && (
           <div className="flex flex-col gap-1 mt-2">
             {pdfFiles.map((pdfUrl, index) => (
@@ -66,49 +61,42 @@ export const Payment = () => {
     );
   };
 
-  const actionBodyTemplate = (rowData) => {
-    return (
-      <>
-        <div className="flex justify-center gap-2">
-          <button
-            className="p-1 hover:bg-gray-100 rounded"
-            data-pr-tooltip={
-              rowData?.status === "paid" ? "Paid" : "unpaid"
-            }
-            data-pr-position="top"
-          >
-            {rowData && rowData.status === "paid" ? (
-              <CircleCheckBig size={16} className="text-green-600" />
-            ) : (
-              <CircleX size={16} className="text-gray-600" />
-            )}
-          </button>
-          <button
-            className="p-1 hover:bg-gray-100 rounded"
-            data-pr-tooltip="Edit Payment"
-            data-pr-position="top"
-          >
-            <Pencil size={16} className="text-gray-600" />
-          </button>
-          <button
-            className="p-1 hover:bg-gray-100 rounded"
-            data-pr-tooltip="Delete Payment"
-            data-pr-position="top"
-          >
-            <Trash2 size={16} className="text-red-600" />
-          </button>
-        </div>
-        <Tooltip target=".p-1" /> {/* Attach Tooltip to buttons */}
-      </>
-    );
-  };
+  const actionBodyTemplate = (rowData) => (
+    <div className="flex justify-center gap-2">
+      <button
+        className="p-1 hover:bg-blue-50 rounded text-green-600"
+        data-pr-tooltip={rowData?.status === "paid" ? "Paid" : "Unpaid"}
+        data-pr-position="top"
+      >
+        {rowData && rowData.status === "paid" ? (
+          <CircleCheckBig size={16} />
+        ) : (
+          <CircleX size={16} className="text-gray-600" />
+        )}
+      </button>
+      <button
+        className="p-1 hover:bg-yellow-50 rounded text-yellow-600"
+        data-pr-tooltip="Edit Payment"
+        data-pr-position="top"
+      >
+        <Pencil size={16} />
+      </button>
+      <button
+        className="p-1 hover:bg-red-50 rounded text-red-600"
+        data-pr-tooltip="Delete Payment"
+        data-pr-position="top"
+      >
+        <Trash2 size={16} />
+      </button>
+      <Tooltip target=".p-1" />
+    </div>
+  );
 
   const handleExport = () => {
     if (!data || data.length === 0) {
       alert("No data available to export.");
       return;
     }
-  
     const exportData = data.map((student, index) => ({
       "#": index + 1,
       "Student name": `${student.studentId?.firstName || "N/A"} ${student.studentId?.lastName || "N/A"}`,
@@ -122,52 +110,47 @@ export const Payment = () => {
       "Payment method": student.paymentMethod || "N/A",
       "Payment status": student.paymentStatus || "N/A",
     }));
-  
     exportToExcel(exportData, "Student payment", "Student_payment");
   };
 
   return (
-    <div className="px-1 py-2">
-      <div>
-        <DynamicBreadcrumb />
-      </div>
-      <div className="w-full flex justify-between items-center">
-        <div>
-          <Input
-            type="text"
-            value={globalFilterValue}
-            onChange={onGlobalFilterChange}
-            placeholder="Search ..."
-            className="pl-4 pr-4 py-2 rounded-lg border w-[300px]"
-            prefix={<i className="pi pi-search"></i>}
+    <div className="px-2 md:px-6 py-2 min-h-screen bg-gray-50">
+      <DynamicBreadcrumb />
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+        <Input
+          type="text"
+          value={globalFilterValue}
+          onChange={onGlobalFilterChange}
+          placeholder="Search ..."
+          className="pl-4 pr-4 py-2 rounded-lg border w-full md:w-[300px]"
+          prefix={<i className="pi pi-search"></i>}
+        />
+        <div className="flex gap-3 w-full md:w-auto">
+          <Button
+            className="border border-navy-800 text-navy-800 btn text-sm focus:outline-none focus:ring-0 w-full md:w-auto"
+            icon="pi pi-file-excel"
+            label="Export to Excel"
+            onClick={handleExport}
+          />
+          <Button
+            className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0 w-full md:w-auto"
+            icon="pi pi-plus"
+            label="Record payment"
+            onClick={() => setVisible(true)}
           />
         </div>
-        <div className="flex gap-3">
-        <Button
-          className="border border-navy-800 text-navy-800 btn text-sm focus:outline-none focus:ring-0"
-          icon="pi pi-file-excel"
-          label="Export to Excel"
-          onClick={handleExport}
-        />
-        <Button
-          className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0"
-          icon="pi pi-plus"
-          label="Record payment"
-          onClick={() => setVisible(true)}
-        />
-        </div>
       </div>
-
-      <div className="bg-white mt-2 rounded-md shadow-md overflow-x-auto max-w-6xl" >
+      <div className="bg-white mt-2 rounded-md shadow-md overflow-x-auto max-w-full">
         <DataTable
           value={data}
           globalFilter={filters.global.value}
-          emptytext="No payment found."
+          emptyMessage="No payment found."
           filters={filters}
           tableClassName="text-[14px] bg-white whitespace-nowrap"
           tableStyle={{ minWidth: "40rem" }}
           paginator
           rows={10}
+          responsiveLayout="scroll"
         >
           <Column
             header="#"
@@ -185,7 +168,7 @@ export const Payment = () => {
           />
           <Column
             field="studentId.registrationNumber"
-            header="Terms"
+            header="Reg Number"
             className="whitespace-nowrap"
           />
           <Column
@@ -195,7 +178,7 @@ export const Payment = () => {
           />
           <Column
             field="schoolFees"
-            header="school fee"
+            header="School Fee"
             className="whitespace-nowrap"
             body={(rowData) => (
               <CountUpMotion to={rowData.schoolFees} prefix="$" duration={1.5} />
@@ -203,7 +186,7 @@ export const Payment = () => {
           />
           <Column
             field="termId.name"
-            header="Terms"
+            header="Term"
             className="whitespace-nowrap"
           />
           <Column
@@ -217,10 +200,10 @@ export const Payment = () => {
             className="whitespace-nowrap"
             body={(rowData) => (
               <span
-                className={` capitalize px-4 py-2 rounded-full text-xs font-semibold ${
+                className={`capitalize px-4 py-2 rounded-full text-xs font-semibold ${
                   rowData.status === "paid"
                     ? "text-green-600 bg-green-600/10"
-                    : "text-red-600 :bg-red-600/10"
+                    : "text-red-600 bg-red-600/10"
                 }`}
               >
                 {rowData.status}
@@ -243,7 +226,6 @@ export const Payment = () => {
           <Column header="Actions" body={actionBodyTemplate} />
         </DataTable>
       </div>
-
       {visible && (
         <AddStudentPayment
           onClose={() => setVisible(false)}

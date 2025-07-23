@@ -23,7 +23,7 @@ export const ProfilePage = () => {
         <main className="flex-1 p-4 md:p-8">
           <div className="max-w-6xl mx-auto">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-blue-900">My Profile</h1>
+              <h1 className="text-3xl font-bold text-navy-800">My Profile</h1>
               <p className="text-blue-700 text-lg">View and manage your profile and school information</p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -43,7 +43,7 @@ export const ProfilePage = () => {
                       </span>
                     )}
                   </div>
-                  <h2 className="text-2xl font-bold text-blue-900 mb-1 flex items-center gap-2">
+                  <h2 className="text-2xl font-bold text-navy-800 mb-1 flex items-center gap-2">
                     <User size={20} className="text-blue-400" />
                     {authData.username}
                   </h2>
@@ -71,7 +71,7 @@ export const ProfilePage = () => {
                 <div className="bg-white rounded-2xl shadow-xl border border-blue-100 p-8 animate-fade-in-up delay-200">
                   <div className="mb-6 flex items-center gap-3">
                     <School size={28} className="text-blue-400" />
-                    <h2 className="text-xl font-bold text-blue-900">School Information</h2>
+                    <h2 className="text-xl font-bold text-navy-800">School Information</h2>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col items-center md:items-start">
@@ -90,11 +90,11 @@ export const ProfilePage = () => {
                     </div>
                     <div>
                       <label className="text-sm text-gray-600">School Name</label>
-                      <p className="font-medium text-blue-900">{schoolData?.schoolName || '-'}</p>
+                      <p className="font-medium text-navy-800">{schoolData?.schoolName || '-'}</p>
                       <label className="text-sm text-gray-600 mt-3 block">School Code</label>
-                      <p className="font-medium text-blue-900">{schoolData?.schoolCode || '-'}</p>
+                      <p className="font-medium text-navy-800">{schoolData?.schoolCode || '-'}</p>
                       <label className="text-sm text-gray-600 mt-3 block">Address</label>
-                      <p className="font-medium text-blue-900">{schoolData?.address || '-'}</p>
+                      <p className="font-medium text-navy-800">{schoolData?.address || '-'}</p>
                     </div>
                     <div>
                       <label className="text-sm text-gray-600">Status</label>
@@ -102,18 +102,18 @@ export const ProfilePage = () => {
                         {schoolData?.status || '-'}
                       </p>
                       <label className="text-sm text-gray-600 mt-3 block">Subscription Plan</label>
-                      <p className="font-medium text-blue-900">{schoolData?.subscriptionPlan || '-'}</p>
+                      <p className="font-medium text-navy-800">{schoolData?.subscriptionPlan || '-'}</p>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm text-gray-600">Subscription Start</label>
-                        <p className="font-medium text-blue-900">
+                        <p className="font-medium text-navy-800">
                           {schoolData?.subscriptionStart ? schoolData.subscriptionStart.slice(0, 10) : '-'}
                         </p>
                       </div>
                       <div>
                         <label className="text-sm text-gray-600">Subscription End</label>
-                        <p className="font-medium text-blue-900">
+                        <p className="font-medium text-navy-800">
                           {schoolData?.subscriptionEnd ? schoolData.subscriptionEnd.slice(0, 10) : '-'}
                         </p>
                       </div>

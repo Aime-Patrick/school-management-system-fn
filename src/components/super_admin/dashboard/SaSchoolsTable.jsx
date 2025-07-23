@@ -52,7 +52,7 @@ export const SaSchoolsTable = () => {
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
       <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-blue-900">Recently Joined Schools</h2>
+        <h2 className="text-xl font-bold text-navy-800">Recently Joined Schools</h2>
         <span className="text-xs text-gray-400">{sortedSchools.length} total</span>
       </div>
       <div className="p-4">

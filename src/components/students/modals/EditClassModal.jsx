@@ -66,7 +66,7 @@ export const EditClassModal = ({ classData, onClose, onSubmit }) => {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+            className="w-full bg-navy-800 text-white py-2 rounded-lg hover:bg-blue-700"
           >
             Save Changes
           </button>

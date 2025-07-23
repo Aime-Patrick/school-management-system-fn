@@ -75,7 +75,7 @@ const TestimonialCarousel = () => {
               <button
                 key={index}
                 className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                  currentSlide === index ? 'bg-blue-600' : 'bg-gray-300'
+                  currentSlide === index ? 'bg-navy-800' : 'bg-gray-300'
                 }`}
                 onClick={() => setCurrentSlide(index)}
                 aria-label={`Go to slide ${index + 1}`}

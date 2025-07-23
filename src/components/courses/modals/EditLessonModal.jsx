@@ -88,7 +88,7 @@ export const EditLessonModal = ({ lesson, onClose }) => {
           <div className="mt-6">
           <button
                 type="submit"
-                className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
+                className="w-full px-4 py-2 bg-navy-800 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
                 disabled={updateCourseIsLoading}
               >
                 {updateCourseIsLoading ? (

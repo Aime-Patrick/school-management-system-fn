@@ -109,7 +109,7 @@ const TeacherAccountSettings = () => {
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 shadow"
+            className="p-2 bg-navy-800 text-white rounded-full hover:bg-blue-700 shadow"
             title="Edit"
           >
             <Edit3 size={20} />
@@ -129,7 +129,7 @@ const TeacherAccountSettings = () => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current && fileInputRef.current.click()}
-                  className="absolute bottom-2 right-2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 shadow"
+                  className="absolute bottom-2 right-2 bg-navy-800 text-white p-2 rounded-full hover:bg-blue-700 shadow"
                   title="Change Image"
                 >
                   <Camera size={20} />
@@ -286,7 +286,7 @@ const TeacherAccountSettings = () => {
             </button>
             <button
               type="submit"
-              className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 shadow"
+              className="p-2 bg-navy-800 text-white rounded-full hover:bg-blue-700 shadow"
               title="Save"
               disabled={saving}
             >

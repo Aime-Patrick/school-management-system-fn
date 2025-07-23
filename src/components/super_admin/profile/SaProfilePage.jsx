@@ -19,7 +19,7 @@ export const SaProfilePage = ({ onBack }) => {
       <div className="flex-1">
         <main className="p-6">
           <div className="mb-8 animate-fade-in-down">
-            <h1 className="text-3xl font-bold text-blue-900">My Profile</h1>
+            <h1 className="text-3xl font-bold text-navy-800">My Profile</h1>
             <p className="text-blue-700 text-lg">View and manage your profile information</p>
           </div>
 
@@ -32,7 +32,7 @@ export const SaProfilePage = ({ onBack }) => {
                   alt="Profile"
                   className="w-32 h-32 rounded-full mb-4 border-4 border-blue-100 shadow"
                 />
-                <h2 className="text-2xl font-bold text-blue-900 mb-1">{user.name}</h2>
+                <h2 className="text-2xl font-bold text-navy-800 mb-1">{user.name}</h2>
                 <p className="text-blue-600 mb-4">{user.role}</p>
                 <div className="w-full space-y-4">
                   <div>
@@ -49,7 +49,7 @@ export const SaProfilePage = ({ onBack }) => {
                   </div>
                 </div>
                 <button
-                  className="mt-8 px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold shadow hover:bg-blue-700 transition"
+                  className="mt-8 px-6 py-2 bg-navy-800 text-white rounded-lg font-semibold shadow hover:bg-blue-700 transition"
                   onClick={onBack}
                 >
                   Back
@@ -59,11 +59,11 @@ export const SaProfilePage = ({ onBack }) => {
             {/* Profile Details/Charts */}
             <div className="lg:col-span-2 flex flex-col gap-8">
               <div className="bg-white rounded-2xl shadow-lg p-8 animate-fade-in-up delay-200">
-                <h3 className="text-xl font-semibold text-blue-900 mb-4">Activity Overview</h3>
+                <h3 className="text-xl font-semibold text-navy-800 mb-4">Activity Overview</h3>
                 <SaClaimsChart />
               </div>
               <div className="bg-white rounded-2xl shadow-lg p-8 animate-fade-in-up delay-400">
-                <h3 className="text-xl font-semibold text-blue-900 mb-4">School Stats</h3>
+                <h3 className="text-xl font-semibold text-navy-800 mb-4">School Stats</h3>
                 <SaSchoolsStats />
               </div>
             </div>

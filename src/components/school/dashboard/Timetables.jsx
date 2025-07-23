@@ -7,14 +7,17 @@ import { useClasses } from "../../../hooks/useClasses";
 import { useCourses } from "../../../hooks/useCourses";
 import { Loader } from "lucide-react";
 import Timetable from "./Table";
+import { useClassBySchoolId } from "../../../hooks/useClassesBySchoolId";
+import { useAuth } from "../../../hooks/useAuth";
 export const Timetables = () => {
   const {
-    classes,
-    isLoading,
     updateClass,
     updateClassLoading,
     updateClassSuccess,
   } = useClasses();
+  const { authData } = useAuth();
+  const { classes, isLoading } = useClassBySchoolId(authData?.schoolId);
+  // const { classes, isLoading } = useClasses();
   const { courses } = useCourses();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedclass, setSelectedClass] = useState("");
@@ -143,20 +146,34 @@ export const Timetables = () => {
   onTabChange={(e) => setActiveIndex(e.index)}>
           {classes.map((classItem) => {
             return (
-              <AccordionTab  key={classItem._id} header={classItem.name}>
-                <div className="flex flex-col gap-4">
-                  <div className="flex justify-between items-center">
-                    <Button
-                      label="Add Lesson"
+              <AccordionTab key={classItem._id} header={classItem.name}>
+                {Array.isArray(classItem.combinations) && classItem.combinations.length > 0 ? (
+                  classItem.combinations.map((comb) => (
+                    <div key={comb._id} className="mb-6 p-4 bg-blue-50 rounded-lg shadow">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-semibold text-blue-800">
+                          Combination: {comb.name}
+                        </span>
+                        <Button
+                          abel="Add Lesson"
                       icon="pi pi-plus"
-                      onClick={() => showModal(classItem)}
-                      className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                  <Timetable timetableData={classItem.timetable} classId={classItem._id}/>
-                  </div>
-                </div>
+                          className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0"
+                          onClick={() => showModal({ ...classItem, combination: comb })}
+                        />
+                      </div>
+                      {/* Render timetable for this combination here */}
+                      {comb.timetable && comb.timetable.length > 0 ? (
+                        <div className="flex flex-col gap-2">
+                        <Timetable timetableData={comb.timetable} />
+                        </div>
+                      ) : (
+                        <div className="text-gray-400 text-sm">No timetable set for this combination.</div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-gray-400 text-sm">No combinations found for this class.</div>
+                )}
               </AccordionTab>
             );
           })}
@@ -252,7 +269,7 @@ export const Timetables = () => {
                       </Select.Option>
                     ))
                   : [
-                      ...new Set(selectedclass.timetable.map((row) => row.day)),
+                      ...new Set(selectedclass?.timetable?.map((row) => row.day)),
                     ].map((day) => (
                       <Select.Option key={day} value={day}>
                         {day}
@@ -267,7 +284,7 @@ export const Timetables = () => {
                 className="w-full placeholder:text-gray-600"
               >
                 {[
-                  ...new Set(selectedclass.timetable.map((row) => row.day)),
+                  ...new Set(selectedclass?.timetable?.map((row) => row.day)),
                 ].map((day) => (
                   <Select.Option key={day} value={day}>
                     {day}

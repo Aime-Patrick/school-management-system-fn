@@ -13,7 +13,7 @@ export const EmptyState = ({ onAddStudent }) => (
     </p>
     <button
       onClick={onAddStudent}
-      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+      className="bg-navy-800 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
     >
       Add Students
     </button>

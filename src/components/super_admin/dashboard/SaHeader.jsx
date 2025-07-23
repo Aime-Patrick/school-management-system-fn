@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Search, Bell } from "lucide-react";
+import { Search, Bell, Menu } from "lucide-react";
 import { ProfileDropdown } from "../../reusable/ProfileDropDown";
 
-export const SaHeader = () => {
+export const SaHeader = ({ onSidebarToggle }) => {
   const navigate = useNavigate();
 
   const handleSettingsClick = () => {
@@ -16,7 +16,15 @@ export const SaHeader = () => {
   };
 
   return (
-    <div className="flex items-center justify-between p-4 border-b">
+    <div className="flex items-center justify-between p-4 border-b bg-white sticky top-0 z-30">
+      {/* Mobile Hamburger */}
+      <button
+        className="md:hidden mr-2 p-2 rounded-lg hover:bg-blue-50 text-blue-600"
+        onClick={onSidebarToggle}
+        aria-label="Open sidebar"
+      >
+        <Menu size={24} />
+      </button>
       <div className="flex items-center gap-4 flex-1">
         <div className="relative max-w-md flex-1">
           <Search
@@ -30,10 +38,10 @@ export const SaHeader = () => {
           />
         </div>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4 ml-2">
         <button
           type="button"
-          className="text-blue-600 px-4 py-2 rounded-lg border border-blue-600 hover:bg-blue-50"
+          className="hidden sm:inline-block text-blue-600 px-4 py-2 rounded-lg border border-blue-600 hover:bg-blue-50"
         >
           Add new Admission
         </button>
@@ -57,4 +65,5 @@ export const SaHeader = () => {
 SaHeader.propTypes = {
   onSettingsClick: PropTypes.func,
   onProfileClick: PropTypes.func,
+  onSidebarToggle: PropTypes.func,
 };

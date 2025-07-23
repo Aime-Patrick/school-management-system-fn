@@ -18,7 +18,7 @@ export const TeacherLayout = () => {
         <TeacherHeader />
 
         {/* Scrollable Main Content */}
-        <main className="flex-1 overflow-y-auto container mx-auto p-2">
+        <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>

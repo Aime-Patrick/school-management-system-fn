@@ -5,7 +5,7 @@ export const SaStatsCard = ({ title, value, change, icon }) => {
   const isPositive = change >= 0;
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl shadow-md border border-blue-100 hover:shadow-lg transition-shadow duration-200">
+    <div className="p-6 rounded-2xl shadow-md border border-blue-100 hover:shadow-lg transition-shadow duration-200">
       <div className="flex items-center justify-between mb-4">
         <div className="p-3 bg-white shadow-sm rounded-xl flex items-center justify-center">
           {icon}
@@ -48,7 +48,7 @@ export const SaStatsCard = ({ title, value, change, icon }) => {
           {change}%
         </span>
       </div>
-      <h3 className="text-base font-medium text-blue-900 mb-1">{title}</h3>
+      <h3 className="text-base font-medium text-navy-800 mb-1">{title}</h3>
       <p className="text-3xl font-bold text-blue-800 tracking-tight">{value}</p>
     </div>
   );

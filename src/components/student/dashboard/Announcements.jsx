@@ -43,7 +43,7 @@ export const Announcements = () => {
             <p className="text-sm text-gray-600 mb-4">
               {announcement.description}
             </p>
-            <button className="mt-2 w-full bg-blue-500 text-white text-sm py-2 rounded-lg hover:bg-blue-600 transition-colors">
+            <button className="mt-2 w-full bg-blue-500 text-white text-sm py-2 rounded-lg hover:bg-navy-800 transition-colors">
               Read and Use Opportunity
             </button>
           </div>

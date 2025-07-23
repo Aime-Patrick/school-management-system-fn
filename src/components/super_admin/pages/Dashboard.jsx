@@ -25,16 +25,9 @@ export const SaDashboardHome = () => {
     );
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
-      {/* Sidebar */}
-      <div className="hidden md:block">
-        <SaSidebar />
-      </div>
+    <div className="flex min-h-screen">
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <SaHeader />
-        {/* Dashboard Content */}
         <div className="p-4 md:p-8 w-full">
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

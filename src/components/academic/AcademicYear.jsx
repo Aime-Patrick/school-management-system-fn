@@ -88,7 +88,7 @@ export const AcademicYear = () => {
               setDialogMode("create");
               setIsDialogOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="flex items-center gap-2 px-4 py-2 bg-navy-800 text-white rounded hover:bg-blue-700"
           >
             <Plus className="h-4 w-4" />
             Create Academic Year
@@ -210,7 +210,7 @@ export const AcademicYear = () => {
               </div>
               <button
                 type="submit"
-                className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
+                className="w-full px-4 py-2 bg-navy-800 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

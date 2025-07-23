@@ -40,7 +40,7 @@ export const Appeals = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Appeals</h1>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
+        <button className="bg-navy-800 text-white px-4 py-2 rounded-lg">
           Download excel
         </button>
       </div>

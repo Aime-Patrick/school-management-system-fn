@@ -52,7 +52,7 @@ export const ForgotPassword = ({ onBack }) => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2 rounded-lg flex items-center justify-center gap-2 font-semibold shadow"
+            className="w-full bg-navy-800 hover:bg-blue-700 transition text-white py-2 rounded-lg flex items-center justify-center gap-2 font-semibold shadow"
             disabled={forgotPassword.isPending}
           >
             {forgotPassword.isPending ? (

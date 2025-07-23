@@ -54,34 +54,32 @@ export const TeachersPage = () => {
   }
 
   return (
-    <div className="p-6 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-blue-900">Teachers</h1>
-          <Button
-            label="Add Teacher"
-            icon="pi pi-plus"
-            onClick={() => setShowAddTeacherModal(true)}
-            className="bg-blue-600 text-white btn text-sm focus:outline-none focus:ring-0"
-          />
-        </div>
-        <TeachersList
-          teachers={teachers}
-          onViewProfile={(teacher) => {
-            setSelectedTeacher(teacher);
-            setShowProfile(true);
-          }}
-          onDelete={(teacher) => {
-            setTeacherToDelete(teacher);
-            setShowDeleteTeacherModal(true);
-          }}
-          onResetPassword={handleResetPassword}
-          onEditRole={(teacher) => {
-            setSelectedTeacher(teacher);
-            setShowProfile(true);
-          }
-          }
+    <div className="p-2 md:p-6 min-h-screen">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+        <h1 className="text-2xl font-bold text-navy-800">Teachers</h1>
+        <Button
+          label="Add Teacher"
+          icon="pi pi-plus"
+          onClick={() => setShowAddTeacherModal(true)}
+          className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0 w-full md:w-auto"
         />
-      
+      </div>
+      <TeachersList
+        teachers={teachers}
+        onViewProfile={(teacher) => {
+          setSelectedTeacher(teacher);
+          setShowProfile(true);
+        }}
+        onDelete={(teacher) => {
+          setTeacherToDelete(teacher);
+          setShowDeleteTeacherModal(true);
+        }}
+        onResetPassword={handleResetPassword}
+        onEditRole={(teacher) => {
+          setSelectedTeacher(teacher);
+          setShowProfile(true);
+        }}
+      />
 
       {/* Add Teacher Modal */}
       {showAddTeacherModal && (
@@ -126,7 +124,7 @@ export const TeachersPage = () => {
             />
             <Button
               label={resetPasswordLoading ? "Resetting..." : "Confirm"}
-              className="bg-blue-600 text-white p-2"
+              className="bg-navy-800 text-white p-2"
               onClick={confirmResetPassword}
               disabled={resetPasswordLoading}
             />
@@ -136,8 +134,11 @@ export const TeachersPage = () => {
         closable
       >
         <p>
-          Are you sure you want to reset the password for
-          <span className="font-semibold text-blue-700">{teacherToReset?.lastName} {teacherToReset?.firstName}</span>?
+          Are you sure you want to reset the password for{" "}
+          <span className="font-semibold text-blue-700">
+            {teacherToReset?.lastName} {teacherToReset?.firstName}
+          </span>
+          ?
         </p>
         {resetPasswordSuccess && (
           <div className="mt-4 text-green-600 font-medium">

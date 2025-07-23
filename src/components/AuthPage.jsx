@@ -21,8 +21,8 @@ export const AuthPage = () => {
       rememberMe: false,
     },
     validationSchema: yup.object({
-      email: yup.string().email("Invalid email").required("Email is required"),
-      password: yup.string().required("Password is required"),
+      email: yup.string().required("field is required"),
+      password: yup.string().required("field is required"),
     }),
     onSubmit: (values) => {
       const credentials = {
@@ -37,16 +37,16 @@ export const AuthPage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-blue-100 via-blue-50 to-blue-200 flex items-center justify-center font-sans">
+      <div className="min-h-screen bg-gradient-to-br from-navy-100 via-navy-50 to-navy-200 flex items-center justify-center font-sans">
         {authView === "login" && (
-          <div className="w-full max-w-3xl bg-white rounded-3xl shadow-2xl p-0 md:p-0 flex overflow-hidden border border-blue-100">
+          <div className="w-full max-w-5xl min-h-[600px] bg-white rounded-3xl shadow-2xl p-0 md:p-0 flex overflow-hidden border border-blue-100">
             {/* Left side: Branding/Visual */}
-            <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-600 to-blue-400 w-1/2 p-10">
+            <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-navy-600 to-navy-400 w-1/2 p-12">
               <div className="flex flex-col items-center">
                 <img
                   src="/logo.jpg"
                   alt="School Portal"
-                  className="w-20 h-20 mb-4 rounded-full shadow-lg border-4 border-white"
+                  className="w-24 h-24 mb-4 rounded-full shadow-lg border-4 border-white"
                 />
                 <h2 className="text-3xl font-bold text-white mb-2">
                   Welcome Back!
@@ -57,11 +57,11 @@ export const AuthPage = () => {
               </div>
             </div>
             {/* Right side: Login Form */}
-            <div className="flex-1 p-8 md:p-12 flex flex-col justify-center">
-              <h1 className="text-2xl font-bold text-center text-blue-800 mb-2 capitalize tracking-tight">
+            <div className="flex-1 p-10 md:p-16 flex flex-col justify-center">
+              <h1 className="text-3xl font-bold text-center text-navy-800 mb-2 capitalize tracking-tight">
                 {`Login into account`}
               </h1>
-              <p className="text-center text-gray-500 text-sm mb-6">
+              <p className="text-center text-gray-500 text-base mb-6">
                 Please enter your details below to access your account.
               </p>
               <form onSubmit={loginFormik.handleSubmit} className="space-y-6">
@@ -105,7 +105,7 @@ export const AuthPage = () => {
                   <button
                     type="button"
                     tabIndex={-1}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 hover:text-blue-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-navy-400 hover:text-navy-600"
                     onClick={() => setShowPassword((prev) => !prev)}
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
@@ -124,7 +124,7 @@ export const AuthPage = () => {
                       name="rememberMe"
                       checked={loginFormik.values.rememberMe}
                       onChange={loginFormik.handleChange}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-navy-600 focus:ring-navy-500 border-gray-300 rounded"
                     />
                     <span className="ml-2 text-sm text-gray-600">
                       Remember Me
@@ -132,7 +132,7 @@ export const AuthPage = () => {
                   </label>
                   <button
                     type="button"
-                    className="text-sm text-blue-600 hover:underline font-medium"
+                    className="text-sm text-navy-600 hover:underline font-medium"
                     onClick={() => setAuthView("forgot")}
                   >
                     Forgot password?
@@ -142,7 +142,7 @@ export const AuthPage = () => {
                 <button
                   type="submit"
                   disabled={loginLoading}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow"
+                  className="w-full bg-navy-600 text-white py-3 rounded-lg hover:bg-navy-700 transition-colors font-semibold shadow"
                 >
                   {loginLoading ? (
                     <i
@@ -157,7 +157,7 @@ export const AuthPage = () => {
                   <button
                     type="button"
                     onClick={() => navigate("/")}
-                    className="font-medium text-blue-600 hover:text-blue-500"
+                    className="font-medium text-navy-600 hover:text-navy-500"
                   >
                     Back Home
                   </button>

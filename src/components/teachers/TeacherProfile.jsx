@@ -37,7 +37,7 @@ export const TeacherProfile = ({ onClose }) => {
   return (
     <div className="fixed z-50 right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl p-6 overflow-y-auto animate-fade-in-up">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-blue-900">Teacher Profile</h2>
+        <h2 className="text-xl font-bold text-navy-800">Teacher Profile</h2>
         <button onClick={onClose} className="text-gray-400 hover:text-blue-600 text-2xl font-bold">
           ×
         </button>
@@ -49,7 +49,7 @@ export const TeacherProfile = ({ onClose }) => {
           alt={fullName}
           className="w-24 h-24 rounded-full mx-auto mb-3 border-4 border-blue-100 object-cover"
         />
-        <h2 className="text-2xl font-semibold text-blue-900">{fullName}</h2>
+        <h2 className="text-2xl font-semibold text-navy-800">{fullName}</h2>
         <p className="text-blue-600">{department} Department</p>
         <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold capitalize
           ${status === "active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
@@ -80,29 +80,29 @@ export const TeacherProfile = ({ onClose }) => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <h3 className="text-sm font-medium text-gray-600 mb-1">Gender</h3>
-            <p className="text-blue-900">{gender}</p>
+            <p className="text-navy-800">{gender}</p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-600 mb-1">Age</h3>
-            <p className="text-blue-900">
+            <p className="text-navy-800">
               {dateOfBirth ? Math.max(0, new Date().getFullYear() - new Date(dateOfBirth).getFullYear()) : "N/A"}
             </p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-600 mb-1">Email</h3>
-            <p className="text-blue-900 break-all">{accountCredentails?.email}</p>
+            <p className="text-navy-800 break-all">{accountCredentails?.email}</p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-600 mb-1">Phone</h3>
-            <p className="text-blue-900">{accountCredentails?.phoneNumber}</p>
+            <p className="text-navy-800">{accountCredentails?.phoneNumber}</p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-600 mb-1">Address</h3>
-            <p className="text-blue-900">{city}, {address}</p>
+            <p className="text-navy-800">{city}, {address}</p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-600 mb-1">Hired Date</h3>
-            <p className="text-blue-900">{hiredDate ? format(new Date(hiredDate), "PPP") : "N/A"}</p>
+            <p className="text-navy-800">{hiredDate ? format(new Date(hiredDate), "PPP") : "N/A"}</p>
           </div>
         </div>
 
@@ -131,7 +131,7 @@ export const TeacherProfile = ({ onClose }) => {
           <div className="flex items-center gap-3">
             <img src={school?.schoolLogo} alt={school?.schoolName} className="w-8 h-8 rounded-full border" />
             <div>
-              <div className="font-semibold text-blue-900">{school?.schoolName}</div>
+              <div className="font-semibold text-navy-800">{school?.schoolName}</div>
               <div className="text-xs text-gray-500">{school?.address}</div>
             </div>
           </div>

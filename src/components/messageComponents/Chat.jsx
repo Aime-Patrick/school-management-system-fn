@@ -33,7 +33,7 @@ export function Chat({ messages, onLoadMore }) {
           Load more
         </Button> */}
         <button
-          className="w-50 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center space-x-2"
+          className="w-50 bg-blue-500 hover:bg-navy-800 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center space-x-2"
           onClick={onLoadMore}
         >
           <svg
