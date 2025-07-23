@@ -47,7 +47,7 @@ export const ProfileDropdown = ({
           <img
           src={imageUrl}
           alt="Profile"
-          className="w-8 h-8 rounded-full object-cover border-2 border-blue-200 object-cover"
+          className="w-8 h-8 rounded-full object-cover border-2 border-blue-200"
         />
         ) : (
           <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-base">
