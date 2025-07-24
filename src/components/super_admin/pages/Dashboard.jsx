@@ -1,6 +1,6 @@
 import React from 'react'
 import SaSidebar from '../layout/SaSidebar';
-import { SaHeader } from '../dashboard/SaHeader';
+import { SaHeader } from '../layout/SaHeader';
 import { SaStatsCard } from '../dashboard/SaStatsCard';
 import { SaSchoolsTable } from "../dashboard/SaSchoolsTable";
 import { SaSchoolsStats } from "../dashboard/SaSchoolsStats";

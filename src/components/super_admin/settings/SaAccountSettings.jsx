@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -30,7 +30,7 @@ const options = {
 
 const themeColors = [
   { name: "white", value: "#FFFFFF" },
-  { name: "blue", value: "#4169E1" },
+  { name: "navy", value: "#1a237e" },
   { name: "red", value: "#DC143C" },
   { name: "purple", value: "#663399" },
   { name: "indigo", value: "#4B0082" },
@@ -65,115 +65,147 @@ export function LineChart({ data }) {
   return <Line options={options} data={data} />;
 }
 
+const TABS = [
+  { key: "profile", label: "Profile" },
+  { key: "preferences", label: "Preferences" },
+  { key: "analytics", label: "Analytics" },
+  // Add more tabs as needed
+];
+
 export function SaAccountSettings({ onBack }) {
+  const [activeTab, setActiveTab] = useState("profile");
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(themeColors[0].value);
+
+  // Apply selected theme color to the document root
+  useEffect(() => {
+    document.documentElement.style.setProperty('--system-theme-color', selectedTheme);
+  }, [selectedTheme]);
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-6 space-y-8">
-      <h1 className="text-2xl font-semibold">Account Settings</h1>
-
-      <div className="space-y-6">
-        <section>
-          <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border">
-              <div>
-                <h3 className="font-medium">Name, Location, Role</h3>
-                <p className="text-sm text-gray-500">Update your personal information</p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border">
-              <div>
-                <h3 className="font-medium">Theme mode</h3>
-                <p className="text-sm text-gray-500">Choose your preferred theme</p>
-              </div>
-              <input
-                type="checkbox"
-                checked={isDarkMode}
-                onChange={(e) => setIsDarkMode(e.target.checked)}
-              />
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border">
-              <div>
-                <h3 className="font-medium">Data and Privacy</h3>
-                <p className="text-sm text-gray-500">Manage your data preferences</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-semibold mb-4">General Preferences</h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border">
-              <div>
-                <h3 className="font-medium">Language</h3>
-                <p className="text-sm text-gray-500">Select your preferred language</p>
-              </div>
-              <select defaultValue="en" className="border p-2 rounded">
-                <option value="en">English (US)</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-              </select>
-            </div>
-
-            <div className="p-4 bg-gray-100 rounded-lg border">
-              <h3 className="font-medium mb-4">Theme</h3>
-              <div className="flex flex-wrap gap-2">
-                {themeColors.map((color) => (
-                  <button
-                    key={color.name}
-                    className="w-8 h-8 rounded-full border-2 border-gray-200 focus:outline-none"
-                    style={{ backgroundColor: color.value }}
-                    aria-label={`Select ${color.name} theme`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="space-y-4">
-          <div className="p-6 bg-gray-100 rounded-lg border">
-            <h3 className="text-lg font-semibold mb-4">Claims Over the Years</h3>
-            <div className="h-[300px]">
-              <LineChart data={chartData} />
-            </div>
-          </div>
-
-          <div className="p-6 bg-navy-800 text-white rounded-lg">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-2xl font-bold mb-2">Schools Admin</h3>
-                <div className="text-4xl font-bold mb-4">120</div>
-                <p className="text-sm opacity-90">N. of Admins</p>
-
-                <div className="mt-6">
-                  <div className="text-4xl font-bold mb-1">1.4k</div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm">No. of Schools</span>
-                    <span className="text-sm bg-white/20 px-2 py-0.5 rounded">+15%</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex -space-x-2">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="w-10 h-10 rounded-full border-2 border-white bg-gray-200"
-                  />
-                ))}
-                <div className="w-10 h-10 rounded-full border-2 border-white bg-blue-500 flex items-center justify-center text-sm">
-                  +100
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+    <div className="w-full p-6 md:p-10 space-y-10">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-navy-800">Account Settings</h1>
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="text-navy-600 hover:text-navy-800 px-4 py-2 rounded transition"
+          >
+            Back
+          </button>
+        )}
       </div>
+
+      {/* Tabs */}
+      <div className="border-b mb-8">
+        <nav className="flex gap-6">
+          {TABS.map((tab) => (
+            <button
+              key={tab.key}
+              className={`pb-2 text-lg font-medium transition-colors ${
+                activeTab === tab.key
+                  ? "border-b-2 border-blue-600 text-blue-700"
+                  : "text-gray-500 hover:text-blue-600"
+              }`}
+              onClick={() => setActiveTab(tab.key)}
+              type="button"
+            >
+              {tab.label}
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === "profile" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Profile Information */}
+          <section className="space-y-6">
+            <h2 className="text-xl font-semibold mb-2 text-navy-700">Profile Information</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-5 bg-gray-50 rounded-xl border shadow-sm">
+                <div>
+                  <h3 className="font-medium text-navy-800">Name, Location, Role</h3>
+                  <p className="text-sm text-gray-500">Update your personal information</p>
+                </div>
+                <button className="text-blue-600 hover:underline text-sm font-medium">Edit</button>
+              </div>
+              <div className="flex items-center justify-between p-5 bg-gray-50 rounded-xl border shadow-sm">
+                <div>
+                  <h3 className="font-medium text-navy-800">Theme mode</h3>
+                  <p className="text-sm text-gray-500">Choose your preferred theme</p>
+                </div>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <span className="text-sm text-gray-600">Light</span>
+                  <input
+                    type="checkbox"
+                    checked={isDarkMode}
+                    onChange={(e) => setIsDarkMode(e.target.checked)}
+                    className="toggle toggle-primary"
+                  />
+                  <span className="text-sm text-gray-600">Dark</span>
+                </label>
+              </div>
+              <div className="flex items-center justify-between p-5 bg-gray-50 rounded-xl border shadow-sm">
+                <div>
+                  <h3 className="font-medium text-navy-800">Data and Privacy</h3>
+                  <p className="text-sm text-gray-500">Manage your data preferences</p>
+                </div>
+                <button className="text-blue-600 hover:underline text-sm font-medium">Manage</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      )}
+
+      {activeTab === "preferences" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* General Preferences */}
+          <section className="space-y-6">
+            <h2 className="text-xl font-semibold mb-2 text-navy-700">General Preferences</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-5 bg-gray-50 rounded-xl border shadow-sm">
+                <div>
+                  <h3 className="font-medium text-navy-800">Language</h3>
+                  <p className="text-sm text-gray-500">Select your preferred language</p>
+                </div>
+                <select defaultValue="en" className="border p-2 rounded bg-white">
+                  <option value="en">English (US)</option>
+                  <option value="es">Español</option>
+                  <option value="fr">Français</option>
+                </select>
+              </div>
+              <div className="p-5 bg-gray-50 rounded-xl border shadow-sm">
+                <h3 className="font-medium mb-3 text-navy-800">Theme Color</h3>
+                <div className="flex flex-wrap gap-3">
+                  {themeColors.map((color) => (
+                    <button
+                      key={color.name}
+                      className={`w-8 h-8 rounded-full border-2 transition-all duration-150 ${
+                        selectedTheme === color.value
+                          ? "border-blue-600 ring-2 ring-blue-200"
+                          : "border-gray-200"
+                      }`}
+                      style={{ backgroundColor: color.value }}
+                      aria-label={`Select ${color.name} theme`}
+                      onClick={() => setSelectedTheme(color.value)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      )}
+
+      {activeTab === "analytics" && (
+        <section className="p-6 bg-white rounded-xl border shadow-sm">
+          <h3 className="text-lg font-semibold mb-4 text-navy-800">Claims Over the Years</h3>
+          <div className="h-[300px]">
+            <LineChart data={chartData} />
+          </div>
+        </section>
+      )}
     </div>
   );
 }

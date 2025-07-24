@@ -29,7 +29,7 @@ export default function AddSchool({ visible, onClose }) {
 
   const headerElement = (
     <div className="inline-flex align-items-center justify-content-center gap-2">
-      <span className="font-bold white-space-nowrap">Register your School</span>
+      <span className="font-bold white-space-nowrap">Register new school account</span>
     </div>
   );
 

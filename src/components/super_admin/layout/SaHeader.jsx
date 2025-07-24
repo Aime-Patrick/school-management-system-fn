@@ -1,10 +1,14 @@
-import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Search, Bell, Menu } from "lucide-react";
 import { ProfileDropdown } from "../../reusable/ProfileDropDown";
-
+import AddSchool from "../../school/dashboard/AddSchool";
 export const SaHeader = ({ onSidebarToggle }) => {
+  const [visible, setVisible] = useState(false);
+  const handleAddSchoolClick = () => {
+    setVisible(true);
+  };
   const navigate = useNavigate();
 
   const handleSettingsClick = () => {
@@ -34,16 +38,18 @@ export const SaHeader = ({ onSidebarToggle }) => {
           <input
             type="text"
             placeholder="Search..."
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-navy-500"
           />
         </div>
       </div>
       <div className="flex items-center gap-2 md:gap-4 ml-2">
         <button
           type="button"
-          className="hidden sm:inline-block text-blue-600 px-4 py-2 rounded-lg border border-blue-600 hover:bg-blue-50"
+          onClick={handleAddSchoolClick}
+          aria-label="Add new school"
+          className="hidden sm:inline-block text-navy-600 px-4 py-2 rounded-lg border border-navy-600 hover:bg-navy-50"
         >
-          Add new Admission
+          Add new school account
         </button>
         <button
           type="button"
@@ -58,6 +64,9 @@ export const SaHeader = ({ onSidebarToggle }) => {
           onProfileClick={handleProfileClick}
         />
       </div>
+      {visible && (
+        <AddSchool onClose={() => setVisible(false)} visible={visible} />
+      )}
     </div>
   );
 };

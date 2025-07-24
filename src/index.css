@@ -100,3 +100,18 @@ input[type="number"] {
   border-radius: 10px;
   margin-bottom: 1rem; */
 }
+
+:root {
+  --system-theme-color: #1a237e; /* default navy */
+}
+
+/* Example usage */
+.bg-system-theme {
+  background-color: var(--system-theme-color);
+}
+.text-system-theme {
+  color: var(--system-theme-color);
+}
+.border-system-theme {
+  border-color: var(--system-theme-color);
+}

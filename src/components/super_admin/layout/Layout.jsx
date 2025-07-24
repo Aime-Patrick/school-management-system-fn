@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import SaSidebar from './SaSidebar';
-import { SaHeader } from '../dashboard/SaHeader';
+import { SaHeader } from './SaHeader';
 
 export const SaDashboardLayout = () => (
   <div className="flex !bg-gray-50 h-screen overflow-hidden">

@@ -46,7 +46,7 @@ const SaSidebar = ({ onLogoClick }) => {
     <>
       {/* Mobile Hamburger */}
       <button
-        className="md:hidden fixed top-4 left-4 z-40 bg-navy-800 p-2 rounded-full text-white shadow"
+        className="md:hidden fixed top-4 left-4 z-40 bg-system-theme p-2 rounded-full text-white shadow"
         onClick={() => setOpen(true)}
         aria-label="Open sidebar"
       >
@@ -62,7 +62,7 @@ const SaSidebar = ({ onLogoClick }) => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 z-50 h-screen bg-navy-800 p-4 flex flex-col w-64 min-w-[200px] transition-transform duration-300
+          fixed top-0 left-0 z-50 h-screen bg-system-theme p-4 flex flex-col w-64 min-w-[200px] transition-transform duration-300
           ${open ? 'translate-x-0' : '-translate-x-full'}
           md:translate-x-0 md:static md:block
         `}

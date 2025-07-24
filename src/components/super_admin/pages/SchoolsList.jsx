@@ -64,7 +64,7 @@ const SchoolsList = () => {
   const actionsBody = (rowData) => (
     <div className="flex items-center justify-center gap-2">
       <button
-        className="text-blue-500"
+        className="text-navy-500"
         onClick={() => console.log("Edit", rowData._id)}
       >
         <i className="pi pi-pencil"></i>
@@ -88,7 +88,7 @@ const SchoolsList = () => {
     return (
       <div className="flex justify-center items-center h-64">
         <i
-          className="pi pi-spin pi-spinner text-blue-700"
+          className="pi pi-spin pi-spinner text-navy-800"
           style={{ fontSize: "2rem" }}
         ></i>
       </div>
