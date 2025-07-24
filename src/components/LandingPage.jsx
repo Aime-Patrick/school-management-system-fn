@@ -1,333 +1,528 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GraduationCap, Moon, Star } from "lucide-react";
-import { Features } from "./landingComponents/Features";
-import { FAQ } from "./landingComponents/Faq";
+import { GraduationCap, Users, BookOpen, ShieldCheck, Star, DollarSign } from "lucide-react";
+import { motion } from "framer-motion";
 import dashImage from "../assets/images/dash.png";
-import TestimonialCarousel from "./landingComponents/TestimonialCarousel";
 
 function LandingPage() {
   const navigate = useNavigate();
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [showSupportForm, setShowSupportForm] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    school: "",
+    plan: "",
+    message: "",
+  });
+  const [supportForm, setSupportForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [supportSubmitted, setSupportSubmitted] = useState(false);
+
+  const handleFormChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+  const handleSupportFormChange = (e) => {
+    setSupportForm({ ...supportForm, [e.target.name]: e.target.value });
+  };
+
+  const handleContactSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      setShowContactForm(false);
+      setSubmitted(false);
+      setForm({ name: "", email: "", school: "", plan: "", message: "" });
+    }, 2000);
+  };
+
+  const handleSupportSubmit = (e) => {
+    e.preventDefault();
+    setSupportSubmitted(true);
+    setTimeout(() => {
+      setShowSupportForm(false);
+      setSupportSubmitted(false);
+      setSupportForm({ name: "", email: "", message: "" });
+    }, 2000);
+  };
+
+  // Animation variants
+  const fadeUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1, ease: "easeOut" } },
+  };
+
+  const fadeLeft = {
+    hidden: { opacity: 0, x: -40 },
+    visible: { opacity: 1, x: 0, transition: { duration: 1, ease: "easeOut" } },
+  };
+
+  const fadeRight = {
+    hidden: { opacity: 0, x: 40 },
+    visible: { opacity: 1, x: 0, transition: { duration: 1, ease: "easeOut" } },
+  };
+
   return (
-    <div className="min-h-screen font-quicksand">
+    <div className="min-h-screen font-quicksand bg-gray-50">
       {/* Navbar */}
-      <nav className="hero-gradient px-6 py-4 fixed w-full z-50 bg-opacity-95 backdrop-blur-sm">
+      <nav className="bg-system-theme px-6 py-4 fixed w-full z-50 bg-opacity-95 backdrop-blur-sm shadow">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
             <GraduationCap className="text-white" size={32} />
-            <span className="text-2xl font-bold text-white">Schol</span>
+            <span className="text-2xl font-bold text-white tracking-tight">Schol Portal</span>
           </div>
-
           <div className="hidden md:flex items-center gap-8 text-white">
-            <a href="#" className="hover:text-gray-200 transition-colors">
-              Home
-            </a>
-            <a
-              href="#features"
-              className="hover:text-gray-200 transition-colors"
-            >
-              Features
-            </a>
-            <a
-              href="#pricing"
-              className="hover:text-gray-200 transition-colors"
-            >
-              Pricing
-            </a>
-            <a
-              href="#testimonials"
-              className="hover:text-gray-200 transition-colors"
-            >
-              Testimonials
-            </a>
+            <a href="#" className="hover:text-system-theme/80 transition-colors">Home</a>
+            <a href="#features" className="hover:text-system-theme/80 transition-colors">Features</a>
+            <a href="#solutions" className="hover:text-system-theme/80 transition-colors">Solutions</a>
+            <a href="#contact" className="hover:text-system-theme/80 transition-colors">Contact</a>
           </div>
-
           <button
             onClick={() => navigate("/AuthPage")}
-            className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+            className="px-6 py-2 bg-white text-system-theme rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow"
           >
-            Get Started
+            Login / Register
           </button>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="hero-gradient px-6 pt-32 pb-32 relative overflow-hidden">
-        <div className="absolute top-20 right-20 moon-animation">
-          <Moon className="text-yellow-400" size={48} />
+      <motion.section
+        className="bg-system-theme px-6 pt-32 pb-32 relative overflow-hidden"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.7 }}
+        variants={fadeUp}
+      >
+        <div className="absolute top-24 right-24 opacity-30 pointer-events-none">
+          <Star className="text-white" size={60} />
         </div>
-        <div className="absolute top-40 left-20 animate-float">
-          <Star className="text-yellow-400 opacity-50" size={24} />
-        </div>
-        <div
-          className="absolute bottom-40 right-40 animate-float"
-          style={{ animationDelay: "2s" }}
-        >
-          <Star className="text-yellow-400 opacity-50" size={24} />
-        </div>
-
         <div className="max-w-7xl mx-auto text-center relative z-10">
-          <div className="inline-block px-4 py-1 bg-white/10 rounded-full text-white text-sm mb-6 fade-in">
-            Get Your Free Consultation Now
-          </div>
-          <h1
-            className="text-4xl md:text-6xl font-bold text-white mb-6 fade-in"
-            style={{ animationDelay: "0.2s" }}
+          <motion.div
+            className="inline-block px-4 py-1 bg-white/10 rounded-full text-white text-sm mb-6 tracking-wide"
+            variants={fadeLeft}
           >
-            Manage your school easily
-            <br />
-            with Schol
-          </h1>
-          <p
-            className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto fade-in"
-            style={{ animationDelay: "0.4s" }}
+            Empowering Modern Education
+          </motion.div>
+          <motion.h1
+            className="text-4xl md:text-6xl font-bold text-white mb-6"
+            variants={fadeUp}
           >
-            A school management solution that offers a personalized portal to
-            each type of user
-          </p>
-          <button
+            The All-in-One <span className="text-yellow-300">School Portal</span>
+          </motion.h1>
+          <motion.p
+            className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto"
+            variants={fadeRight}
+          >
+            Streamline administration, connect your community, and unlock student potential with our next-generation school management platform.
+          </motion.p>
+          <motion.button
             onClick={() => navigate("/AuthPage")}
-            className="px-8 py-3 bg-primary text-white rounded-lg text-lg font-medium hover:bg-primary-dark transition-all hover:scale-105 fade-in"
-            style={{ animationDelay: "0.6s" }}
+            className="px-8 py-3 bg-white text-system-theme rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all hover:scale-105 shadow"
+            variants={fadeUp}
           >
-            Get Started
-          </button>
-
-          <div className="mt-16 fade-in" style={{ animationDelay: "0.8s" }}>
+            Get Started Free
+          </motion.button>
+          <motion.div className="mt-16 flex flex-col items-center" variants={fadeUp}>
             <img
               src={dashImage}
               alt="Dashboard Preview"
-              className="rounded-lg shadow-2xl mx-auto hover:scale-105 transition-transform duration-500"
+              className="rounded-xl shadow-2xl border-4 border-system-theme/20 max-w-full md:max-w-3xl transition-all duration-700 animate-fade-in-up"
+              style={{ background: "white" }}
             />
-          </div>
+            <span className="mt-2 text-white/70 text-sm italic">Actual dashboard view</span>
+          </motion.div>
         </div>
-      </section>
-
-      {/* Clients Section */}
-      <div className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-center text-2xl font-semibold mb-12">
-            30K+ Schools use our product
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-1 items-center">
-            <div className="border border-gray-300 p-4 rounded-lg"> {/* Increased padding for a larger box */}
-              <img
-                src="https://shorturl.at/UZJlV"
-                alt="Vant Garde"
-                className="h-12 object-contain transition-all hover:scale-105" // Removed grayscale for less dark effect
-              />
-            </div>
-            <div className="border border-gray-300 p-4 rounded-lg"> {/* Increased padding for a larger box */}
-              <img
-                src="https://shorturl.at/xLwII"
-                alt="Lily's Flowers"
-                className="h-12 object-contain transition-all hover:scale-105" // Removed grayscale for less dark effect
-              />
-            </div>
-            <div className="border border-gray-300 p-4 rounded-lg"> {/* Increased padding for a larger box */}
-              <img
-                src="https://shorturl.at/1e1qH"
-                alt="Cara Indoors"
-                className="h-12 object-contain transition-all hover:scale-105" // Removed grayscale for less dark effect
-              />
-            </div>
-            <div className="border border-gray-300 p-4 rounded-lg"> {/* Increased padding for a larger box */}
-              <img
-                src="https://shorturl.at/yxb1u"
-                alt="Business"
-                className="h-12 object-contain transition-all hover:scale-105" // Removed grayscale for less dark effect
-              />
-            </div>
-            <div className="border border-gray-300 p-4 rounded-lg"> {/* Increased padding for a larger box */}
-              <img
-                src="https://shorturl.at/PgfgM"
-                alt="Some Business"
-                className="h-12 object-contain transition-all hover:scale-105" // Removed grayscale for less dark effect
-              />
-            </div>
-            <div className="border border-gray-300 p-4 rounded-lg"> {/* Increased padding for a larger box */}
-              <img
-                src="https://shorturl.at/1e1qH"
-                alt="Cara Indoors"
-                className="h-12 object-contain transition-all hover:scale-105" // Removed grayscale for less dark effect
-              />
-            </div>
-            <div className="border border-gray-300 p-4 rounded-lg"> {/* Increased padding for a larger box */}
-              <img
-                src="https://tinyurl.com/nm6jz26d"
-                alt="Leaves & co."
-                className="h-12 object-contain transition-all hover:scale-105" // Removed grayscale for less dark effect
-              />
-            </div>
-            <div className="border border-gray-300 p-4 rounded-lg"> {/* Increased padding for a larger box */}
-              <img
-                src="https://tinyurl.com/msvtypv3"
-                alt="Sushi Express"
-                className="h-12 object-contain transition-all hover:scale-105" // Removed grayscale for less dark effect
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      </motion.section>
 
       {/* Features Section */}
-      <Features />
-
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-gray-50">
+      <motion.section
+        id="features"
+        className="py-20 bg-white"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.7 }}
+        variants={fadeUp}
+      >
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-4">
-            Premium Price Packages
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            {[
-              { name: "Basic", price: "50", duration: "3 month" },
-              {
-                name: "Standart",
-                price: "160",
-                duration: "6 month",
-                featured: true,
-              },
-              { name: "Premium", price: "250", duration: "12 month" },
-            ].map((plan) => (
-              <div
-                key={plan.name}
-                className={`p-8 rounded-xl shadow-lg transition-all hover:scale-105 ${
-                  plan.featured
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-black"
-                }`}
-              >
-                <h3 className="text-xl font-bold mb-4">
-                  {plan.name.toUpperCase()} PLAN
-                </h3>
-                <div className="text-4xl font-bold mb-2">${plan.price}</div>
-                <div className="text-base font-medium mb-6">
-                  per {plan.duration}
-                </div>
-                <ul className="space-y-4 mb-8">
-                  {[...Array(4)].map((_, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <span
-                        className={`${
-                          plan.featured ? "text-white" : "text-gray-700"
-                        } text-sm font-medium`}
-                      >
-                        ▶ Sit amet porttitor eget d
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  className={`w-full py-3 rounded-lg font-medium transition-all ${
-                    plan.featured
-                      ? "bg-white text-blue-500"
-                      : "bg-blue-500 text-white"
-                  }`}
-                >
-                  Explore more
-                </button>
-              </div>
-            ))}
+          <motion.h2
+            className="text-3xl font-bold text-center mb-12 text-system-theme"
+            variants={fadeUp}
+          >
+            Why Choose Schol Portal?
+          </motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <motion.div className="bg-gray-50 rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeLeft}>
+              <Users className="text-system-theme mb-4" size={36} />
+              <h3 className="font-semibold text-lg mb-2">Unified Community</h3>
+              <p className="text-gray-600">Connect students, teachers, and parents in one secure, collaborative environment.</p>
+            </motion.div>
+            <motion.div className="bg-gray-50 rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeUp}>
+              <BookOpen className="text-system-theme mb-4" size={36} />
+              <h3 className="font-semibold text-lg mb-2">Smart Academics</h3>
+              <p className="text-gray-600">Automate attendance, grading, and scheduling for a seamless academic experience.</p>
+            </motion.div>
+            <motion.div className="bg-gray-50 rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeRight}>
+              <ShieldCheck className="text-system-theme mb-4" size={36} />
+              <h3 className="font-semibold text-lg mb-2">Data Security</h3>
+              <p className="text-gray-600">Your data is protected with enterprise-grade security and privacy controls.</p>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Testimonials Section */}
-      <TestimonialCarousel />
+      {/* Solutions Section */}
+      <motion.section
+        id="solutions"
+        className="py-20 bg-gray-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.7 }}
+        variants={fadeUp}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.h2
+            className="text-3xl font-bold text-center mb-12 text-system-theme"
+            variants={fadeUp}
+          >
+            Solutions for Every School
+          </motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <motion.div className="bg-white rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeLeft}>
+              <h3 className="font-semibold text-lg mb-2 text-system-theme">For Administrators</h3>
+              <p className="text-gray-600">Manage admissions, staff, and finances with powerful dashboards and reports.</p>
+            </motion.div>
+            <motion.div className="bg-white rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeUp}>
+              <h3 className="font-semibold text-lg mb-2 text-system-theme">For Teachers</h3>
+              <p className="text-gray-600">Plan lessons, track progress, and communicate with parents—all in one place.</p>
+            </motion.div>
+            <motion.div className="bg-white rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeRight}>
+              <h3 className="font-semibold text-lg mb-2 text-system-theme">For Students & Parents</h3>
+              <p className="text-gray-600">Access grades, assignments, and school news anytime, anywhere.</p>
+            </motion.div>
+          </div>
+        </div>
+      </motion.section>
 
-      {/* FAQ Section */}
-      <FAQ />
+      {/* Subscription Plans Section */}
+      <motion.section
+        id="pricing"
+        className="py-20 bg-white"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.7 }}
+        variants={fadeUp}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.h2
+            className="text-3xl font-bold text-center mb-12 text-system-theme"
+            variants={fadeUp}
+          >
+            Subscription Plans
+          </motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {/* Free Plan */}
+            <motion.div className="bg-gray-50 rounded-xl p-8 shadow hover:shadow-lg transition flex flex-col items-center" variants={fadeLeft}>
+              <DollarSign className="text-system-theme mb-4" size={36} />
+              <h3 className="font-semibold text-xl mb-2">Free</h3>
+              <p className="text-3xl font-bold mb-2 text-system-theme">$0</p>
+              <ul className="text-gray-600 mb-6 space-y-2 text-center">
+                <li>Basic school management</li>
+                <li>Unlimited students</li>
+                <li>Email support</li>
+              </ul>
+              <button
+                onClick={() => navigate("/AuthPage")}
+                className="px-6 py-2 bg-system-theme text-white rounded-lg font-semibold hover:bg-system-theme/90 transition-colors shadow"
+              >
+                Get Started
+              </button>
+            </motion.div>
+            {/* Standard Plan */}
+            <motion.div className="bg-yellow-100 border-2 border-yellow-300 rounded-xl p-8 shadow-lg scale-105 flex flex-col items-center" variants={fadeUp}>
+              <DollarSign className="text-yellow-600 mb-4" size={36} />
+              <h3 className="font-semibold text-xl mb-2">Standard</h3>
+              <p className="text-3xl font-bold mb-2 text-yellow-700">$4,999<span className="text-base font-normal text-gray-600">/mo</span></p>
+              <ul className="text-gray-700 mb-6 space-y-2 text-center">
+                <li>All Free features</li>
+                <li>Advanced analytics</li>
+                <li>Priority support</li>
+                <li>Custom branding</li>
+              </ul>
+              <button
+                onClick={() => {
+                  setShowContactForm(true);
+                  setForm({ ...form, plan: "Standard" });
+                }}
+                className="px-6 py-2 bg-yellow-500 text-white rounded-lg font-semibold hover:bg-yellow-600 transition-colors shadow"
+              >
+                Contact Admin to Subscribe
+              </button>
+            </motion.div>
+            {/* Enterprise Plan */}
+            <motion.div className="bg-gray-50 rounded-xl p-8 shadow hover:shadow-lg transition flex flex-col items-center" variants={fadeRight}>
+              <DollarSign className="text-system-theme mb-4" size={36} />
+              <h3 className="font-semibold text-xl mb-2">Enterprise</h3>
+              <p className="text-3xl font-bold mb-2 text-system-theme">Contact Us</p>
+              <ul className="text-gray-600 mb-6 space-y-2 text-center">
+                <li>All Standard features</li>
+                <li>Dedicated account manager</li>
+                <li>Custom integrations</li>
+                <li>Onboarding & training</li>
+              </ul>
+              <button
+                onClick={() => {
+                  setShowContactForm(true);
+                  setForm({ ...form, plan: "Enterprise" });
+                }}
+                className="px-6 py-2 bg-system-theme text-white rounded-lg font-semibold hover:bg-system-theme/90 transition-colors shadow"
+              >
+                Contact Admin to Subscribe
+              </button>
+            </motion.div>
+          </div>
+        </div>
+      </motion.section>
 
-      {/* Newsletter Section */}
-      <section className="w-full min-h-screen bg-white flex items-center justify-center">
-        <div className="max-w-2xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold tracking-tight mb-2">
-            Please Subscribe for Updates
-          </h2>
-          <h3 className="text-2xl font-medium mb-3">and Exclusive Offers!</h3>
-          <p className="text-muted-foreground mb-8">
-            Stay Updated! Subscribe to Our Newsletter for the Latest School
-            Updates and Exclusive Offers - Don't Miss Out, this kinda long
-            please
-          </p>
-          <div className="flex gap-3 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary transition-colors"
-            />
-            <button className="px-8 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-all hover:scale-105">
-              Subscribe
+      {/* Contact Form Modal for Subscription */}
+      {showContactForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-lg relative">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl"
+              onClick={() => setShowContactForm(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <h3 className="text-2xl font-bold mb-4 text-system-theme">Contact Admin to Subscribe</h3>
+            {submitted ? (
+              <div className="text-center py-8">
+                <p className="text-lg text-system-theme font-semibold mb-2">Thank you!</p>
+                <p className="text-gray-600">Your request has been received. The admin will contact you soon with payment instructions.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleContactSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleFormChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-system-theme focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleFormChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-system-theme focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">School Name</label>
+                  <input
+                    type="text"
+                    name="school"
+                    value={form.school}
+                    onChange={handleFormChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-system-theme focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Plan</label>
+                  <select
+                    name="plan"
+                    value={form.plan}
+                    onChange={handleFormChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 text-gray-700 focus:ring-2 focus:ring-system-theme focus:outline-none"
+                  >
+                    <option value="">Select a plan</option>
+                    <option value="Standard">Standard</option>
+                    <option value="Enterprise">Enterprise</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                  <textarea
+                    name="message"
+                    value={form.message}
+                    onChange={handleFormChange}
+                    rows={3}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-system-theme focus:outline-none"
+                    placeholder="Any additional info (optional)"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-system-theme text-white rounded-lg font-semibold hover:bg-system-theme/90 transition-colors shadow"
+                >
+                  Send Request
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Support Form Modal */}
+      {showSupportForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-lg relative">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl"
+              onClick={() => setShowSupportForm(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <h3 className="text-2xl font-bold mb-4 text-system-theme">Contact Support</h3>
+            {supportSubmitted ? (
+              <div className="text-center py-8">
+                <p className="text-lg text-system-theme font-semibold mb-2">Thank you!</p>
+                <p className="text-gray-600">Your message has been received. Our support team will get back to you soon.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSupportSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={supportForm.name}
+                    onChange={handleSupportFormChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-system-theme focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={supportForm.email}
+                    onChange={handleSupportFormChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-system-theme focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                  <textarea
+                    name="message"
+                    value={supportForm.message}
+                    onChange={handleSupportFormChange}
+                    rows={4}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-system-theme focus:outline-none"
+                    placeholder="How can we help you?"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-system-theme text-white rounded-lg font-semibold hover:bg-system-theme/90 transition-colors shadow"
+                >
+                  Send Message
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Call to Action */}
+      <section id="contact" className="py-20 bg-system-theme text-white">
+        <div className=" mx-auto px-6 text-center flex flex-col md:flex-row gap-4 justify-center items-center">
+          <div>
+            <h2 className="text-3xl font-bold mb-4">Ready to Transform Your School?</h2>
+            <p className="mb-8 text-lg">Contact us for a personalized demo or sign up to get started instantly.</p>
+            <button
+              onClick={() => setShowContactForm(true)}
+              className="px-8 py-3 bg-white text-system-theme rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all hover:scale-105 shadow mb-4 md:mb-0 md:mr-4"
+            >
+              Contact Admin
+            </button>
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold mb-4">Need Support?</h2>
+            <p className="mb-8 text-lg">Have questions or need help? Reach out to our support team.</p>
+            <button
+              onClick={() => setShowSupportForm(true)}
+              className="px-8 py-3 bg-yellow-300 text-system-theme rounded-lg text-lg font-semibold hover:bg-yellow-400 transition-all hover:scale-105 shadow"
+            >
+              Contact Support
             </button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="hero-gradient text-white py-12">
+      <footer className="bg-system-theme text-white py-12">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <h3 className="font-bold mb-4">Schol Portal</h3>
+              <p className="text-sm mb-4">
+                The modern platform for smarter, simpler school management.
+              </p>
+            </div>
             <div>
               <h3 className="font-bold mb-4">Quick Links</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="hover:text-gray-200 transition-colors">
-                    Home
-                  </a>
+                  <a href="#" className="hover:text-yellow-300 transition-colors">Home</a>
                 </li>
                 <li>
-                  <a
-                    href="#features"
-                    className="hover:text-gray-200 transition-colors"
-                  >
-                    Features
-                  </a>
+                  <a href="#features" className="hover:text-yellow-300 transition-colors">Features</a>
                 </li>
                 <li>
-                  <a
-                    href="#pricing"
-                    className="hover:text-gray-200 transition-colors"
-                  >
-                    Pricing
-                  </a>
+                  <a href="#solutions" className="hover:text-yellow-300 transition-colors">Solutions</a>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-bold mb-4">Terms & Condition</h3>
+              <h3 className="font-bold mb-4">Contact</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="hover:text-gray-200 transition-colors">
-                    Privacy Policy
+                  <a href="mailto:info@scholportal.com" className="hover:text-yellow-300 transition-colors">
+                    info@scholportal.com
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-gray-200 transition-colors">
-                    Terms of Service
-                  </a>
+                  <span>+1 234 567 890</span>
                 </li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold mb-4">Newsletter</h3>
               <p className="text-sm mb-4">
-                Stay updated with our latest news and updates
+                Subscribe for updates and exclusive offers.
               </p>
               <div className="flex gap-2">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                  className="flex-1 px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition-all"
                 />
-                <button className="px-4 py-2 bg-primary rounded-lg hover:bg-primary-dark transition-all hover:scale-105">
+                <button className="px-4 py-2 bg-yellow-300 text-system-theme rounded-lg hover:bg-yellow-400 transition-all hover:scale-105">
                   Subscribe
                 </button>
               </div>
             </div>
           </div>
           <div className="border-t border-white/10 pt-8 text-center text-sm">
-            <p>©2024 School Management System. All rights reserved.</p>
+            <p>©2024 Schol Portal. All rights reserved.</p>
           </div>
         </div>
       </footer>

@@ -5,6 +5,20 @@ import * as yup from "yup";
 import { useAuth } from "../hooks/useAuth";
 import { ForgotPassword } from "./ForgotPassword";
 import { Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
+
+const fadeLeft = {
+  hidden: { opacity: 0, x: -40 },
+  visible: { opacity: 1, x: 0, transition: { duration: 1, ease: "easeOut" } },
+};
+const fadeRight = {
+  hidden: { opacity: 0, x: 40 },
+  visible: { opacity: 1, x: 0, transition: { duration: 1, ease: "easeOut" } },
+};
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 1, ease: "easeOut" } },
+};
 
 export const AuthPage = () => {
   const navigate = useNavigate();
@@ -37,9 +51,19 @@ export const AuthPage = () => {
     <>
       <div className="min-h-screen bg-gradient-to-br from-navy-100 via-navy-50 to-navy-200 flex items-center justify-center font-sans">
         {authView === "login" && (
-          <div className="w-full max-w-5xl min-h-[600px] bg-white rounded-3xl shadow-2xl p-0 md:p-0 flex overflow-hidden border border-blue-100">
+          <motion.div
+            className="w-full max-w-5xl min-h-[600px] bg-white rounded-3xl shadow-2xl p-0 md:p-0 flex overflow-hidden border border-blue-100"
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+          >
             {/* Left side: Branding/Visual */}
-            <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-navy-600 to-navy-400 w-1/2 p-12">
+            <motion.div
+              className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-navy-600 to-navy-400 w-1/2 p-12"
+              initial="hidden"
+              animate="visible"
+              variants={fadeLeft}
+            >
               <div className="flex flex-col items-center">
                 <img
                   src="/logo.jpg"
@@ -53,9 +77,14 @@ export const AuthPage = () => {
                   School Management Portal
                 </p>
               </div>
-            </div>
+            </motion.div>
             {/* Right side: Login Form */}
-            <div className="flex-1 p-10 md:p-16 flex flex-col justify-center">
+            <motion.div
+              className="flex-1 p-10 md:p-16 flex flex-col justify-center"
+              initial="hidden"
+              animate="visible"
+              variants={fadeRight}
+            >
               <h1 className="text-3xl font-bold text-center text-navy-800 mb-2 capitalize tracking-tight">
                 {`Login into account`}
               </h1>
@@ -165,8 +194,8 @@ export const AuthPage = () => {
               <p className="mt-8 text-sm text-gray-500 leading-relaxed text-center">
                 If you encounter issues logging in, please contact support.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
       </div>
       {authView === "forgot" && (
