@@ -20,7 +20,7 @@ export const SaDashboardHome = () => {
   if (isLoading || studentsLoading || usersLoading || paymentLoading)
     return (
       <div className='p-6 flex justify-center items-center h-screen'>
-        <i className="pi pi-spin pi-spinner text-blue-700" style={{ fontSize: '2rem' }}></i>
+        <i className="pi pi-spin pi-spinner text-navy-700" style={{ fontSize: '2rem' }}></i>
       </div>
     );
 
@@ -35,25 +35,25 @@ export const SaDashboardHome = () => {
               title="Total Schools"
               value={`${schools?.length}`}
               change={15}
-              icon={<School className="text-blue-600" />}
+              icon={<School className="text-navy-600" />}
             />
             <SaStatsCard
               title="Total Students"
               value={`${students?.length}`}
               change={-1.9}
-              icon={<Users className="text-blue-600" />}
+              icon={<Users className="text-navy-600" />}
             />
             <SaStatsCard
               title="Total Income"
               value={`$${payments?.totalPayment || 0}`}
               change={15}
-              icon={<DollarSign className="text-blue-600" />}
+              icon={<DollarSign className="text-navy-600" />}
             />
             <SaStatsCard
               title="Total Users"
               value={`${users?.length}`}
               change={15}
-              icon={<UserCircle className="text-blue-600" />}
+              icon={<UserCircle className="text-navy-600" />}
             />
           </div>
           {/* Analytics Section */}

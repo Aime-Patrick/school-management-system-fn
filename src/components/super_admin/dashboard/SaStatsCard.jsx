@@ -49,7 +49,7 @@ export const SaStatsCard = ({ title, value, change, icon }) => {
         </span>
       </div>
       <h3 className="text-base font-medium text-navy-800 mb-1">{title}</h3>
-      <p className="text-3xl font-bold text-blue-800 tracking-tight">{value}</p>
+      <p className="text-3xl font-bold text-navy-800 tracking-tight">{value}</p>
     </div>
   );
 };
