@@ -30,23 +30,23 @@ axiosInstance.interceptors.request.use(
 );
 
 
-// axiosInstance.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     if (error.response) {
-//       const { status } = error.response;
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      const { status } = error.response;
 
-//       if (status === 403) {
-//         handleLogout();
-//       }
-//     } else if (error.request) {
-//       console.error("No response from server. Check your network.");
-//     } else {
-//       console.error("Request Error:", error.message);
-//     }
+      if (status === 403) {
+        handleLogout();
+      }
+    } else if (error.request) {
+      console.error("No response from server. Check your network.");
+    } else {
+      console.error("Request Error:", error.message);
+    }
 
-//     return Promise.reject(error);
-//   }
-// );
+    return Promise.reject(error);
+  }
+);
 
 export default axiosInstance;
