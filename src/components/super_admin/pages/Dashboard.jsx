@@ -16,6 +16,7 @@ export const SaDashboardHome = () => {
   const { students, isLoading: studentsLoading } = useStudents();
   const { users, isLoading: usersLoading } = useUsers();
   const { payments, isLoading: paymentLoading } = usePayment();
+  console.log("Payments:", payments);
 
   if (isLoading || studentsLoading || usersLoading || paymentLoading)
     return (

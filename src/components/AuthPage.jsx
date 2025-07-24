@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "tailwindcss/tailwind.css";
-import "../styles/global.css";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useAuth } from "../hooks/useAuth";

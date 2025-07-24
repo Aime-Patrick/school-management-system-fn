@@ -125,7 +125,7 @@ export const SuperPayments = () => {
 
       <div className="bg-white mt-2 rounded-md shadow-md overflow-x-auto">
         <DataTable
-          value={payments}
+          value={payments.payment}
           globalFilter={filters.global.value}
           emptyMessage="No payment found."
           filters={filters}
