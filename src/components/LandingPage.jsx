@@ -69,13 +69,13 @@ function LandingPage() {
   return (
     <div className="min-h-screen font-quicksand bg-gray-50">
       {/* Navbar */}
-      <nav className="bg-system-theme px-6 py-4 fixed w-full z-50 bg-opacity-95 backdrop-blur-sm shadow">
+      <nav className="bg-system-theme px-4 md:px-6 py-4 fixed w-full z-50 bg-opacity-95 backdrop-blur-sm shadow">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-            <GraduationCap className="text-white" size={32} />
-            <span className="text-2xl font-bold text-white tracking-tight">Schol Portal</span>
+            <GraduationCap className="text-white" size={28} />
+            <span className="text-xl md:text-2xl font-bold text-white tracking-tight">Schol Portal</span>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-white">
+          <div className="hidden md:flex items-center gap-6 md:gap-8 text-white">
             <a href="#" className="hover:text-system-theme/80 transition-colors">Home</a>
             <a href="#features" className="hover:text-system-theme/80 transition-colors">Features</a>
             <a href="#solutions" className="hover:text-system-theme/80 transition-colors">Solutions</a>
@@ -83,7 +83,7 @@ function LandingPage() {
           </div>
           <button
             onClick={() => navigate("/AuthPage")}
-            className="px-6 py-2 bg-white text-system-theme rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow"
+            className="px-4 md:px-6 py-2 bg-white text-system-theme rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow text-sm md:text-base"
           >
             Login / Register
           </button>
@@ -92,49 +92,49 @@ function LandingPage() {
 
       {/* Hero Section */}
       <motion.section
-        className="bg-system-theme px-6 pt-32 pb-32 relative overflow-hidden"
+        className="bg-system-theme px-4 md:px-6 pt-28 md:pt-32 pb-20 md:pb-32 relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.7 }}
         variants={fadeUp}
       >
-        <div className="absolute top-24 right-24 opacity-30 pointer-events-none">
-          <Star className="text-white" size={60} />
+        <div className="absolute top-16 md:top-24 right-4 md:right-24 opacity-30 pointer-events-none">
+          <Star className="text-white" size={40} />
         </div>
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <motion.div
-            className="inline-block px-4 py-1 bg-white/10 rounded-full text-white text-sm mb-6 tracking-wide"
+            className="inline-block px-3 md:px-4 py-1 bg-white/10 rounded-full text-white text-xs md:text-sm mb-4 md:mb-6 tracking-wide"
             variants={fadeLeft}
           >
             Empowering Modern Education
           </motion.div>
           <motion.h1
-            className="text-4xl md:text-6xl font-bold text-white mb-6"
+            className="text-2xl md:text-6xl font-bold text-white mb-4 md:mb-6"
             variants={fadeUp}
           >
             The All-in-One <span className="text-yellow-300">School Portal</span>
           </motion.h1>
           <motion.p
-            className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto"
+            className="text-base md:text-xl text-blue-100 mb-6 md:mb-8 max-w-xl md:max-w-2xl mx-auto"
             variants={fadeRight}
           >
             Streamline administration, connect your community, and unlock student potential with our next-generation school management platform.
           </motion.p>
           <motion.button
             onClick={() => navigate("/AuthPage")}
-            className="px-8 py-3 bg-white text-system-theme rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all hover:scale-105 shadow"
+            className="px-6 md:px-8 py-2 md:py-3 bg-white text-system-theme rounded-lg text-base md:text-lg font-semibold hover:bg-gray-100 transition-all hover:scale-105 shadow"
             variants={fadeUp}
           >
             Get Started Free
           </motion.button>
-          <motion.div className="mt-16 flex flex-col items-center" variants={fadeUp}>
+          <motion.div className="mt-10 md:mt-16 flex flex-col items-center" variants={fadeUp}>
             <img
               src={dashImage}
               alt="Dashboard Preview"
-              className="rounded-xl shadow-2xl border-4 border-system-theme/20 max-w-full md:max-w-3xl transition-all duration-700 animate-fade-in-up"
+              className="rounded-xl shadow-2xl border-4 border-system-theme/20 w-full max-w-xs md:max-w-3xl transition-all duration-700 animate-fade-in-up"
               style={{ background: "white" }}
             />
-            <span className="mt-2 text-white/70 text-sm italic">Actual dashboard view</span>
+            <span className="mt-2 text-white/70 text-xs md:text-sm italic">Actual dashboard view</span>
           </motion.div>
         </div>
       </motion.section>
@@ -142,34 +142,34 @@ function LandingPage() {
       {/* Features Section */}
       <motion.section
         id="features"
-        className="py-20 bg-white"
+        className="py-12 md:py-20 bg-white"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.7 }}
         variants={fadeUp}
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
           <motion.h2
-            className="text-3xl font-bold text-center mb-12 text-system-theme"
+            className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12 text-system-theme"
             variants={fadeUp}
           >
             Why Choose Schol Portal?
           </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <motion.div className="bg-gray-50 rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeLeft}>
-              <Users className="text-system-theme mb-4" size={36} />
-              <h3 className="font-semibold text-lg mb-2">Unified Community</h3>
-              <p className="text-gray-600">Connect students, teachers, and parents in one secure, collaborative environment.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
+            <motion.div className="bg-gray-50 rounded-xl p-6 md:p-8 shadow hover:shadow-lg transition" variants={fadeLeft}>
+              <Users className="text-system-theme mb-4" size={32} />
+              <h3 className="font-semibold text-base md:text-lg mb-2">Unified Community</h3>
+              <p className="text-gray-600 text-sm md:text-base">Connect students, teachers, and parents in one secure, collaborative environment.</p>
             </motion.div>
-            <motion.div className="bg-gray-50 rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeUp}>
-              <BookOpen className="text-system-theme mb-4" size={36} />
-              <h3 className="font-semibold text-lg mb-2">Smart Academics</h3>
-              <p className="text-gray-600">Automate attendance, grading, and scheduling for a seamless academic experience.</p>
+            <motion.div className="bg-gray-50 rounded-xl p-6 md:p-8 shadow hover:shadow-lg transition" variants={fadeUp}>
+              <BookOpen className="text-system-theme mb-4" size={32} />
+              <h3 className="font-semibold text-base md:text-lg mb-2">Smart Academics</h3>
+              <p className="text-gray-600 text-sm md:text-base">Automate attendance, grading, and scheduling for a seamless academic experience.</p>
             </motion.div>
-            <motion.div className="bg-gray-50 rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeRight}>
-              <ShieldCheck className="text-system-theme mb-4" size={36} />
-              <h3 className="font-semibold text-lg mb-2">Data Security</h3>
-              <p className="text-gray-600">Your data is protected with enterprise-grade security and privacy controls.</p>
+            <motion.div className="bg-gray-50 rounded-xl p-6 md:p-8 shadow hover:shadow-lg transition" variants={fadeRight}>
+              <ShieldCheck className="text-system-theme mb-4" size={32} />
+              <h3 className="font-semibold text-base md:text-lg mb-2">Data Security</h3>
+              <p className="text-gray-600 text-sm md:text-base">Your data is protected with enterprise-grade security and privacy controls.</p>
             </motion.div>
           </div>
         </div>
@@ -178,31 +178,31 @@ function LandingPage() {
       {/* Solutions Section */}
       <motion.section
         id="solutions"
-        className="py-20 bg-gray-50"
+        className="py-12 md:py-20 bg-gray-50"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.7 }}
         variants={fadeUp}
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
           <motion.h2
-            className="text-3xl font-bold text-center mb-12 text-system-theme"
+            className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12 text-system-theme"
             variants={fadeUp}
           >
             Solutions for Every School
           </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <motion.div className="bg-white rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeLeft}>
-              <h3 className="font-semibold text-lg mb-2 text-system-theme">For Administrators</h3>
-              <p className="text-gray-600">Manage admissions, staff, and finances with powerful dashboards and reports.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
+            <motion.div className="bg-white rounded-xl p-6 md:p-8 shadow hover:shadow-lg transition" variants={fadeLeft}>
+              <h3 className="font-semibold text-base md:text-lg mb-2 text-system-theme">For Administrators</h3>
+              <p className="text-gray-600 text-sm md:text-base">Manage admissions, staff, and finances with powerful dashboards and reports.</p>
             </motion.div>
-            <motion.div className="bg-white rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeUp}>
-              <h3 className="font-semibold text-lg mb-2 text-system-theme">For Teachers</h3>
-              <p className="text-gray-600">Plan lessons, track progress, and communicate with parents—all in one place.</p>
+            <motion.div className="bg-white rounded-xl p-6 md:p-8 shadow hover:shadow-lg transition" variants={fadeUp}>
+              <h3 className="font-semibold text-base md:text-lg mb-2 text-system-theme">For Teachers</h3>
+              <p className="text-gray-600 text-sm md:text-base">Plan lessons, track progress, and communicate with parents—all in one place.</p>
             </motion.div>
-            <motion.div className="bg-white rounded-xl p-8 shadow hover:shadow-lg transition" variants={fadeRight}>
-              <h3 className="font-semibold text-lg mb-2 text-system-theme">For Students & Parents</h3>
-              <p className="text-gray-600">Access grades, assignments, and school news anytime, anywhere.</p>
+            <motion.div className="bg-white rounded-xl p-6 md:p-8 shadow hover:shadow-lg transition" variants={fadeRight}>
+              <h3 className="font-semibold text-base md:text-lg mb-2 text-system-theme">For Students & Parents</h3>
+              <p className="text-gray-600 text-sm md:text-base">Access grades, assignments, and school news anytime, anywhere.</p>
             </motion.div>
           </div>
         </div>
@@ -211,43 +211,43 @@ function LandingPage() {
       {/* Subscription Plans Section */}
       <motion.section
         id="pricing"
-        className="py-20 bg-white"
+        className="py-12 md:py-20 bg-white"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.7 }}
         variants={fadeUp}
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
           <motion.h2
-            className="text-3xl font-bold text-center mb-12 text-system-theme"
+            className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12 text-system-theme"
             variants={fadeUp}
           >
             Subscription Plans
           </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
             {/* Free Plan */}
-            <motion.div className="bg-gray-50 rounded-xl p-8 shadow hover:shadow-lg transition flex flex-col items-center" variants={fadeLeft}>
-              <DollarSign className="text-system-theme mb-4" size={36} />
-              <h3 className="font-semibold text-xl mb-2">Free</h3>
-              <p className="text-3xl font-bold mb-2 text-system-theme">$0</p>
-              <ul className="text-gray-600 mb-6 space-y-2 text-center">
+            <motion.div className="bg-gray-50 rounded-xl p-6 md:p-8 shadow hover:shadow-lg transition flex flex-col items-center" variants={fadeLeft}>
+              <DollarSign className="text-system-theme mb-4" size={32} />
+              <h3 className="font-semibold text-base md:text-xl mb-2">Free</h3>
+              <p className="text-2xl md:text-3xl font-bold mb-2 text-system-theme">$0</p>
+              <ul className="text-gray-600 mb-6 space-y-2 text-center text-sm md:text-base">
                 <li>Basic school management</li>
                 <li>Unlimited students</li>
                 <li>Email support</li>
               </ul>
               <button
                 onClick={() => navigate("/AuthPage")}
-                className="px-6 py-2 bg-system-theme text-white rounded-lg font-semibold hover:bg-system-theme/90 transition-colors shadow"
+                className="px-4 md:px-6 py-2 bg-system-theme text-white rounded-lg font-semibold hover:bg-system-theme/90 transition-colors shadow text-sm md:text-base"
               >
                 Get Started
               </button>
             </motion.div>
             {/* Standard Plan */}
-            <motion.div className="bg-yellow-100 border-2 border-yellow-300 rounded-xl p-8 shadow-lg scale-105 flex flex-col items-center" variants={fadeUp}>
-              <DollarSign className="text-yellow-600 mb-4" size={36} />
-              <h3 className="font-semibold text-xl mb-2">Standard</h3>
-              <p className="text-3xl font-bold mb-2 text-yellow-700">$4,999<span className="text-base font-normal text-gray-600">/mo</span></p>
-              <ul className="text-gray-700 mb-6 space-y-2 text-center">
+            <motion.div className="bg-yellow-100 border-2 border-yellow-300 rounded-xl p-6 md:p-8 shadow-lg scale-105 flex flex-col items-center" variants={fadeUp}>
+              <DollarSign className="text-yellow-600 mb-4" size={32} />
+              <h3 className="font-semibold text-base md:text-xl mb-2">Standard</h3>
+              <p className="text-2xl md:text-3xl font-bold mb-2 text-yellow-700">$4,999<span className="text-base font-normal text-gray-600">/mo</span></p>
+              <ul className="text-gray-700 mb-6 space-y-2 text-center text-sm md:text-base">
                 <li>All Free features</li>
                 <li>Advanced analytics</li>
                 <li>Priority support</li>
@@ -258,17 +258,17 @@ function LandingPage() {
                   setShowContactForm(true);
                   setForm({ ...form, plan: "Standard" });
                 }}
-                className="px-6 py-2 bg-yellow-500 text-white rounded-lg font-semibold hover:bg-yellow-600 transition-colors shadow"
+                className="px-4 md:px-6 py-2 bg-yellow-500 text-white rounded-lg font-semibold hover:bg-yellow-600 transition-colors shadow text-sm md:text-base"
               >
                 Contact Admin to Subscribe
               </button>
             </motion.div>
             {/* Enterprise Plan */}
-            <motion.div className="bg-gray-50 rounded-xl p-8 shadow hover:shadow-lg transition flex flex-col items-center" variants={fadeRight}>
-              <DollarSign className="text-system-theme mb-4" size={36} />
-              <h3 className="font-semibold text-xl mb-2">Enterprise</h3>
-              <p className="text-3xl font-bold mb-2 text-system-theme">Contact Us</p>
-              <ul className="text-gray-600 mb-6 space-y-2 text-center">
+            <motion.div className="bg-gray-50 rounded-xl p-6 md:p-8 shadow hover:shadow-lg transition flex flex-col items-center" variants={fadeRight}>
+              <DollarSign className="text-system-theme mb-4" size={32} />
+              <h3 className="font-semibold text-base md:text-xl mb-2">Enterprise</h3>
+              <p className="text-2xl md:text-3xl font-bold mb-2 text-system-theme">Contact Us</p>
+              <ul className="text-gray-600 mb-6 space-y-2 text-center text-sm md:text-base">
                 <li>All Standard features</li>
                 <li>Dedicated account manager</li>
                 <li>Custom integrations</li>
@@ -279,7 +279,7 @@ function LandingPage() {
                   setShowContactForm(true);
                   setForm({ ...form, plan: "Enterprise" });
                 }}
-                className="px-6 py-2 bg-system-theme text-white rounded-lg font-semibold hover:bg-system-theme/90 transition-colors shadow"
+                className="px-4 md:px-6 py-2 bg-system-theme text-white rounded-lg font-semibold hover:bg-system-theme/90 transition-colors shadow text-sm md:text-base"
               >
                 Contact Admin to Subscribe
               </button>
@@ -290,8 +290,8 @@ function LandingPage() {
 
       {/* Contact Form Modal for Subscription */}
       {showContactForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-lg relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-2">
+          <div className="bg-white rounded-xl shadow-xl p-4 md:p-8 w-full max-w-lg relative">
             <button
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl"
               onClick={() => setShowContactForm(false)}
@@ -379,8 +379,8 @@ function LandingPage() {
 
       {/* Support Form Modal */}
       {showSupportForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-lg relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-2">
+          <div className="bg-white rounded-xl shadow-xl p-4 md:p-8 w-full max-w-lg relative">
             <button
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl"
               onClick={() => setShowSupportForm(false)}
@@ -442,24 +442,24 @@ function LandingPage() {
       )}
 
       {/* Call to Action */}
-      <section id="contact" className="py-20 bg-system-theme text-white">
-        <div className=" mx-auto px-6 text-center flex flex-col md:flex-row gap-4 justify-center items-center">
-          <div>
-            <h2 className="text-3xl font-bold mb-4">Ready to Transform Your School?</h2>
-            <p className="mb-8 text-lg">Contact us for a personalized demo or sign up to get started instantly.</p>
+      <section id="contact" className="py-12 md:py-20 bg-system-theme text-white">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 text-center flex flex-col md:flex-row gap-6 md:gap-4 justify-center items-center">
+          <div className="flex-1">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Transform Your School?</h2>
+            <p className="mb-6 md:mb-8 text-base md:text-lg">Contact us for a personalized demo or sign up to get started instantly.</p>
             <button
               onClick={() => setShowContactForm(true)}
-              className="px-8 py-3 bg-white text-system-theme rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all hover:scale-105 shadow mb-4 md:mb-0 md:mr-4"
+              className="px-6 md:px-8 py-2 md:py-3 bg-white text-system-theme rounded-lg text-base md:text-lg font-semibold hover:bg-gray-100 transition-all hover:scale-105 shadow mb-4 md:mb-0 md:mr-4 w-full md:w-auto"
             >
               Contact Admin
             </button>
           </div>
-          <div>
-            <h2 className="text-3xl font-bold mb-4">Need Support?</h2>
-            <p className="mb-8 text-lg">Have questions or need help? Reach out to our support team.</p>
+          <div className="flex-1">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">Need Support?</h2>
+            <p className="mb-6 md:mb-8 text-base md:text-lg">Have questions or need help? Reach out to our support team.</p>
             <button
               onClick={() => setShowSupportForm(true)}
-              className="px-8 py-3 bg-yellow-300 text-system-theme rounded-lg text-lg font-semibold hover:bg-yellow-400 transition-all hover:scale-105 shadow"
+              className="px-6 md:px-8 py-2 md:py-3 bg-yellow-300 text-system-theme rounded-lg text-base md:text-lg font-semibold hover:bg-yellow-400 transition-all hover:scale-105 shadow w-full md:w-auto"
             >
               Contact Support
             </button>
@@ -468,9 +468,9 @@ function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-system-theme text-white py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <footer className="bg-system-theme text-white py-8 md:py-12">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 mb-8">
             <div>
               <h3 className="font-bold mb-4">Schol Portal</h3>
               <p className="text-sm mb-4">
