@@ -34,11 +34,11 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      const { status } = error.response;
+      // const { status } = error.response;
 
-      if (status === 403) {
-        handleLogout();
-      }
+      // if (status === 403) {
+      //   handleLogout();
+      // }
     } else if (error.request) {
       console.error("No response from server. Check your network.");
     } else {

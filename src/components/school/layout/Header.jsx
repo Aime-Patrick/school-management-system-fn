@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { Search, Bell, Menu as MenuIcon } from "lucide-react";
 import { ProfileDropdown } from "../../reusable/ProfileDropDown";
 import AddSchool from '../dashboard/AddSchool';
-import { useCheckIfAdminHasSchool } from "../../../hooks/useCheckIfAdminHasSchool";
+import { useCheckSchool } from "../../../hooks/useCheckSchool";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { useAuth } from '../../../hooks/useAuth';
@@ -12,7 +12,7 @@ import { useAuth } from '../../../hooks/useAuth';
 export const Header = ({ onSidebarToggle }) => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
-  const { data: isSchoolAdminHasSchool } = useCheckIfAdminHasSchool();
+  const { data: isSchoolAdminHasSchool } = useCheckSchool();
 
   const handleSettingsClick = () => {
     navigate("settings");

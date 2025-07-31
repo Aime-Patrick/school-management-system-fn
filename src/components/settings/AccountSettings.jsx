@@ -2,11 +2,11 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useProfile } from '../../hooks/useProfile';
 import { Camera, X, Save, Edit3, ShieldCheck, School } from 'lucide-react';
-import { useCheckIfAdminHasSchool } from '../../hooks/useCheckIfAdminHasSchool';
+import { useCheckSchool } from '../../hooks/useCheckSchool';
 
 export const AccountSettings = () => {
   const { authData } = useAuth();
-  const { data: schoolData, isLoading: schoolLoading } = useCheckIfAdminHasSchool();
+  const { data: schoolData, isLoading: schoolLoading } = useCheckSchool();
   const { updateProfile, updateProfileLoading, changePassword, changePasswordLoading } = useProfile();
 
   // User fields

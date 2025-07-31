@@ -1,11 +1,11 @@
 import React from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { useCheckIfAdminHasSchool } from '../../hooks/useCheckIfAdminHasSchool';
+import { useCheckSchool } from '../../hooks/useCheckSchool';
 import { Mail, Phone, User, School, ShieldCheck } from 'lucide-react';
 
 export const ProfilePage = () => {
   const { authData } = useAuth();
-  const { data: schoolData, isLoading: schoolLoading } = useCheckIfAdminHasSchool();
+  const { data: schoolData, isLoading: schoolLoading } = useCheckSchool();
 
   const getProfileImage = () => {
     if (authData.profilePicture) return authData.profilePicture;

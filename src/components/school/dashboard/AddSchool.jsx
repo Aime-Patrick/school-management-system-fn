@@ -5,11 +5,11 @@ import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import * as Yup from "yup";
-import { useCheckIfAdminHasSchool } from "../../../hooks/useCheckIfAdminHasSchool";
+import { useAdminAddSchool } from "../../../hooks/useCheckIfAdminHasSchool";
 import FileUploader from "../../reusable/FileUploader";
 export default function AddSchool({ visible, onClose }) {
   const { createSchool, createSchoolLoading, createSchoolSuccess } =
-    useCheckIfAdminHasSchool();
+  useAdminAddSchool();
   const createSchoolFormik = useFormik({
     initialValues: {
       schoolCode: "",

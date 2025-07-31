@@ -1,15 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {  useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import {  isSchoolAdminRegisteredSchool, registerSchool } from "../services/api/schoolApi";
-import { useState, useEffect } from "react";
+import {   registerSchool } from "../services/api/schoolApi";
 
-export const useCheckIfAdminHasSchool = () => {
-    const [schoolId,setSchoolId] = useState()
+export const useAdminAddSchool = () => {
     const queryClient = useQueryClient();
-    const {data, isLoading, error} = useQuery({
-        queryKey: ["school-admin", "has-school"],
-        queryFn: isSchoolAdminRegisteredSchool,
-    });
 
     const registerSchoolMutation = useMutation({
         mutationFn: registerSchool,
@@ -21,23 +15,8 @@ export const useCheckIfAdminHasSchool = () => {
             toast.error(error.response?.data?.message || "Failed to create user");
         }
     })
-    useEffect(() => {
-        if (data?.schoolId) {
-          setSchoolId(data.schoolId);
-        }
-      }, [data]);
-    
-      useEffect(() => {
-        if (error) {
-          toast.error(error?.response?.data?.message || "Server error");
-        }
-      }, [error]);
 
     return {
-        data,
-        isLoading,
-        error,
-        schoolId,
         createSchool:registerSchoolMutation.mutate,
         createSchoolLoading:registerSchoolMutation.isPending,
         createSchoolSuccess: registerSchoolMutation.isSuccess
