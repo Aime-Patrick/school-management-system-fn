@@ -115,7 +115,7 @@ export const AdminDashboard = () => {
         <Line
           options={{
             responsive: true,
-            maintainAspectRatio: false, // <-- Add this!
+            maintainAspectRatio: false,
             plugins: {
               legend: { position: 'top' },
               title: { display: true, text: 'Student Enrollment Over Time' }

@@ -31,13 +31,13 @@ export const SaDashboardHome = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <SaStatsCard
               title="Total Schools"
-              value={`${schools?.length}`}
+              value={schools?.length}
               change={15}
               icon={<School className="text-navy-600" />}
             />
             <SaStatsCard
               title="Total Students"
-              value={`${students?.length}`}
+              value={students?.length}
               change={-1.9}
               icon={<Users className="text-navy-600" />}
             />
@@ -49,7 +49,7 @@ export const SaDashboardHome = () => {
             />
             <SaStatsCard
               title="Total Users"
-              value={`${users?.length}`}
+              value={users?.length}
               change={15}
               icon={<UserCircle className="text-navy-600" />}
             />

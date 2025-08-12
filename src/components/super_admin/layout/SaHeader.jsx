@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Search, Bell, Menu } from "lucide-react";
 import { ProfileDropdown } from "../../reusable/ProfileDropDown";
-import AddSchool from "../../school/dashboard/AddSchool";
+import { CreateUser } from "../dashboard/createUser";
 export const SaHeader = ({ onSidebarToggle }) => {
   const [visible, setVisible] = useState(false);
   const handleAddSchoolClick = () => {
@@ -65,7 +65,7 @@ export const SaHeader = ({ onSidebarToggle }) => {
         />
       </div>
       {visible && (
-        <AddSchool onClose={() => setVisible(false)} visible={visible} />
+        <CreateUser onClose={() => setVisible(false)} visible={visible} />
       )}
     </div>
   );
