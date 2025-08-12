@@ -16,6 +16,7 @@ import { Tooltip } from "primereact/tooltip";
 export const SuperPayments = () => {
   const [visible, setVisible] = useState();
   const { payments } = usePayment();
+  console.log(payments);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -124,9 +125,9 @@ export const SuperPayments = () => {
       </div>
 
       <div className="bg-white mt-2 rounded-md shadow-md overflow-x-auto">
-        {payments && Array.isArray(payments) ? (
+        {payments && Array.isArray(payments.payment) ? (
           <DataTable
-            value={payments}
+            value={payments.payment}
             globalFilter={filters.global.value}
             emptyMessage="No payment found."
             filters={filters}
