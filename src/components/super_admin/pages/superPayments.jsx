@@ -124,46 +124,50 @@ export const SuperPayments = () => {
       </div>
 
       <div className="bg-white mt-2 rounded-md shadow-md overflow-x-auto">
-        <DataTable
-          value={payments.payment}
-          globalFilter={filters.global.value}
-          emptyMessage="No payment found."
-          filters={filters}
-          tableClassName="text-[14px] bg-white whitespace-nowrap"
-          tableStyle={{ minWidth: "60rem" }}
-          paginator
-          rows={10}
-          responsiveLayout="scroll"
-        >
-          <Column
-            header="#"
-            body={(rowData, { rowIndex }) => rowIndex + 1}
-            style={{ width: '3rem' }}
-          />
-          <Column
-            className="whitespace-nowrap"
-            header="School name"
-            field="schoolId.schoolName"
-          />
-          <Column
-            field="amount"
-            header="Amount"
-            className="whitespace-nowrap"
-            body={(rowData) => (
-                <CountUpMotion to={rowData.amount} prefix="$" duration={1.5} />
-              )}                           
-          />
-          <Column field="plan" header="Plan" className="whitespace-nowrap" />
-          <Column field="date" header="Date" className="whitespace-nowrap"  body={(rowData) => convertDate(rowData.date)}/>
-          <Column
-            field="proof"
-            header="Proof"
-            className="whitespace-nowrap"
-            style={{ width: "10rem" }}
-            body={imageBodyTemplate}
-          />
-          <Column header="Actions" body={actionBodyTemplate} />
-        </DataTable>
+        {payments && Array.isArray(payments) ? (
+          <DataTable
+            value={payments}
+            globalFilter={filters.global.value}
+            emptyMessage="No payment found."
+            filters={filters}
+            tableClassName="text-[14px] bg-white whitespace-nowrap"
+            tableStyle={{ minWidth: "60rem" }}
+            paginator
+            rows={10}
+            responsiveLayout="scroll"
+          >
+            <Column
+              header="#"
+              body={(rowData, { rowIndex }) => rowIndex + 1}
+              style={{ width: '3rem' }}
+            />
+            <Column
+              className="whitespace-nowrap"
+              header="School name"
+              field="schoolId.schoolName"
+            />
+            <Column
+              field="amount"
+              header="Amount"
+              className="whitespace-nowrap"
+              body={(rowData) => (
+                  <CountUpMotion to={rowData.amount} prefix="$" duration={1.5} />
+                )}                           
+            />
+            <Column field="plan" header="Plan" className="whitespace-nowrap" />
+            <Column field="date" header="Date" className="whitespace-nowrap"  body={(rowData) => convertDate(rowData.date)}/>
+            <Column
+              field="proof"
+              header="Proof"
+              className="whitespace-nowrap"
+              style={{ width: "10rem" }}
+              body={imageBodyTemplate}
+            />
+            <Column header="Actions" body={actionBodyTemplate} />
+          </DataTable>
+        ) : (
+          <p className="p-4 text-center text-gray-500">Loading payments...</p>
+        )}
       </div>
 
       {visible && (
