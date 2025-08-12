@@ -102,13 +102,13 @@ const SchoolsList = () => {
         <h2 className="text-xl md:text-2xl font-bold text-navy-800">
           Schools List
         </h2>
-        <button
+        {/* <button
           onClick={() => setVisible(true)}
           className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0 w-full md:w-auto flex items-center gap-2 px-4 py-2 rounded-lg shadow transition-all duration-150"
         >
           <i className="pi pi-plus text-base"></i>
           <span>Add School</span>
-        </button>
+        </button> */}
       </div>
       <div className="animate-fade-in-up overflow-x-auto bg-white rounded-2xl shadow border border-blue-100">
         <DataTable
@@ -167,9 +167,9 @@ const SchoolsList = () => {
           </div>
         </div>
       )}
-      {visible && (
+      {/* {visible && (
         <AddSchool onClose={() => setVisible(false)} visible={visible} />
-      )}
+      )} */}
 
       <style>{`
         .animate-fade-in-up {
