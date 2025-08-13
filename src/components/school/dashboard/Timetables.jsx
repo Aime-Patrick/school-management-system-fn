@@ -68,14 +68,17 @@ export const Timetables = () => {
       endTime: endTime.format("h:mm A"),
       teacher: selectedTeacher,
     };
-    const existingDay = selectedclass.timetable.find(
+
+    const currentCombinationTimetable = selectedclass.combination?.timetable || [];
+
+    const existingDay = currentCombinationTimetable.find(
       (entry) => entry.day === (isNewDay ? newDay : selectedDay)
     );
 
-    let updatedTimetable;
+    let updatedCombinationTimetable;
 
     if (existingDay) {
-      updatedTimetable = selectedclass.timetable.map((entry) => {
+      updatedCombinationTimetable = currentCombinationTimetable.map((entry) => {
         if (entry.day === (isNewDay ? newDay : selectedDay)) {
           return {
             ...entry,
@@ -85,8 +88,8 @@ export const Timetables = () => {
         return entry;
       });
     } else {
-      updatedTimetable = [
-        ...selectedclass.timetable,
+      updatedCombinationTimetable = [
+        ...currentCombinationTimetable,
         {
           day: isNewDay ? newDay : selectedDay,
           schedule: [newLesson],
@@ -94,9 +97,20 @@ export const Timetables = () => {
       ];
     }
 
+    // Update the specific combination within the classItem's combinations array
+    const updatedCombinations = selectedclass.combinations.map((comb) => {
+      if (comb._id === selectedclass.combination._id) {
+        return {
+          ...comb,
+          timetable: updatedCombinationTimetable,
+        };
+      }
+      return comb;
+    });
+
     updateClass({
       id: selectedclass._id,
-      classData: { timetable: updatedTimetable },
+      classData: { combinations: updatedCombinations }, // Update the combinations array
     });
   };
 
