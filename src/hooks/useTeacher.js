@@ -1,7 +1,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { addTeacher, deleteTeacher, resetTeacherPassword } from "../services/api/teacherApi";
+import { addTeacher, deleteTeacher, resetTeacherPassword, updateTeacher } from "../services/api/teacherApi";
 
 export const isArr = (val) => Array.isArray(val) ? val[0] : val;
 export const useTeacher = () => {
@@ -41,6 +41,17 @@ export const useTeacher = () => {
         }
     })
 
+    const updateTeacherMutation = useMutation({
+        mutationFn: updateTeacher,
+        onSuccess: (data) => {
+            toast.success(data.message || "Updated successfully");
+            queryClient.invalidateQueries("teacher");
+        },
+        onError: (error) => {
+            toast.error(isArr(error.response.data.message) || "Failed to update teacher");
+        }
+    })
+
     return {
         deleteTeacher: deleteTeacherMutation.mutate,
         deleteTeacherLoading: deleteTeacherMutation.isPending,
@@ -51,6 +62,9 @@ export const useTeacher = () => {
         resetTeacherPassword: resetTeacherPasswordMutation.mutate,
         resetPasswordLoading: resetTeacherPasswordMutation.isPending,
         resetPasswordSuccess: resetTeacherPasswordMutation.isSuccess,
+        updateTeacher: updateTeacherMutation.mutate,
+        updateTeacherLoading: updateTeacherMutation.isPending,
+        updateTeacherSuccess: updateTeacherMutation.isSuccess,
     }
 
 }

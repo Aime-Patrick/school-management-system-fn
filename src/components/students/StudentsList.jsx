@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { Search, Eye, Pencil, Trash2, Loader } from 'lucide-react';
 import { useSchoolStudent } from '../../hooks/useSchoolStudent';
+import { DeleteStudentModal } from './modals/DeleteStudentModal';
+import { EditStudentModal } from './modals/EditStudentModal';
 
 export const StudentsList = ({ students = [], onSelectStudent }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [deletingStudentId, setDeletingStudentId] = useState(null);
-  const { deleteStudentLoading, deleteStudentMutation } = useSchoolStudent();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [studentToDelete, setStudentToDelete] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [studentToEdit, setStudentToEdit] = useState(null);
+  const { deleteStudentLoading, deleteStudentMutation, updateStudentLoading, updateStudentMutation } = useSchoolStudent();
 
   const filteredStudents = students.filter((student) => {
     const firstName = student.firstName?.toLowerCase() || '';
@@ -18,15 +24,45 @@ export const StudentsList = ({ students = [], onSelectStudent }) => {
     );
   });
 
-  const handleDeleteStudent = (studentId) => {
-    if (window.confirm('Are you sure you want to delete this student?')) {
-      setDeletingStudentId(studentId);
-      deleteStudentMutation.mutate(studentId, {
+  const handleDeleteStudent = (student) => {
+    setStudentToDelete(student);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteStudent = () => {
+    if (studentToDelete) {
+      setDeletingStudentId(studentToDelete._id);
+      deleteStudentMutation.mutate(studentToDelete._id, {
         onSettled: () => {
           setDeletingStudentId(null);
+          setIsDeleteModalOpen(false);
+          setStudentToDelete(null);
         },
       });
     }
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setStudentToDelete(null);
+  };
+
+  const handleEditStudent = (student) => {
+    setStudentToEdit(student);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setStudentToEdit(null);
+  };
+
+  const saveEditedStudent = (studentReg, updatedData) => {
+    updateStudentMutation.mutate({ regNumber: studentReg, data: updatedData }, {
+      onSettled: () => {
+        closeEditModal();
+      },
+    });
   };
 
   return (
@@ -83,14 +119,18 @@ export const StudentsList = ({ students = [], onSelectStudent }) => {
                         <Eye onClick={() => onSelectStudent(student)} size={16} className="text-gray-600" />
                       </button>
                       <button className="p-1 hover:bg-gray-100 rounded">
-                        <Pencil size={16} className="text-gray-600" />
+                        {updateStudentLoading && studentToEdit?._id === student._id ? (
+                          <Loader size={16} className="text-gray-600 animate-spin" />
+                        ) : (
+                          <Pencil onClick={() => handleEditStudent(student)} size={16} className="text-gray-600" />
+                        )}
                       </button>
                       <button className="p-1 hover:bg-gray-100 rounded">
                         {deleteStudentLoading && deletingStudentId === student._id ? (
                           <Loader size={16} className="text-red-600 animate-spin" />
                         ) : (
                           <Trash2
-                            onClick={() => handleDeleteStudent(student._id)}
+                            onClick={() => handleDeleteStudent(student)}
                             size={16}
                             className="text-red-600"
                           />
@@ -110,6 +150,20 @@ export const StudentsList = ({ students = [], onSelectStudent }) => {
           </tbody>
         </table>
       </div>
+
+      <DeleteStudentModal
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        onConfirm={confirmDeleteStudent}
+        student={studentToDelete}
+      />
+
+      <EditStudentModal
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
+        student={studentToEdit}
+        onSave={saveEditedStudent}
+      />
     </div>
   );
 };

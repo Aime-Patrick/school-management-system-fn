@@ -98,7 +98,7 @@ export const TeachersList = ({
           <Column
             header="Name"
             body={(rowData) => (
-              <div className="flex items-center border-b border-gray-200 md:border-none pb-2 md:pb-0 mb-2 md:mb-0">
+              <div className="flex items-center">
                 {rowData.profilePicture && rowData.profilePicture !== "null" ? (
                   <img
                     src={rowData.profilePicture}
@@ -121,7 +121,7 @@ export const TeachersList = ({
             field="coursesTaught"
             header="Subject"
             body={(rowData) => (
-              <div className="flex flex-wrap items-center gap-1 border-b border-gray-200 md:border-none pb-2 md:pb-0 mb-2 md:mb-0">
+              <div className="flex flex-wrap items-center gap-1">
                 {rowData.coursesTaught.length > 0 ? (
                   rowData.coursesTaught.map((course, index) => (
                     <span
@@ -141,7 +141,7 @@ export const TeachersList = ({
             field="accountCredentails.email"
             header="Email"
             body={(rowData) => (
-              <div className="border-b border-gray-200 md:border-none pb-2 md:pb-0 mb-2 md:mb-0">
+              <div>
                 {rowData.accountCredentails?.email}
               </div>
             )}
@@ -150,7 +150,7 @@ export const TeachersList = ({
             field="address"
             header="Address"
             body={(rowData) => (
-              <div className="border-b border-gray-200 md:border-none pb-2 md:pb-0 mb-2 md:mb-0">
+              <div>
                 {rowData.city}, {rowData.address}
               </div>
             )}
@@ -159,7 +159,7 @@ export const TeachersList = ({
             field="hiredDate"
             header="Hired Date"
             body={(rowData) => (
-              <div className="border-b border-gray-200 md:border-none pb-2 md:pb-0 mb-2 md:mb-0">
+              <div>
                 {convertDate(rowData.hiredDate)}
               </div>
             )}
@@ -168,7 +168,7 @@ export const TeachersList = ({
             field="status"
             header="Status"
             body={(rowData) => (
-              <div className="border-b border-gray-200 md:border-none pb-2 md:pb-0 mb-2 md:mb-0">
+              <div>
                 <span
                   className={`capitalize px-4 py-2 rounded-full text-xs font-semibold ${
                     rowData.status === "active"
@@ -185,7 +185,7 @@ export const TeachersList = ({
             field="gender"
             header="Gender"
             body={(rowData) => (
-              <div className="border-b border-gray-200 md:border-none pb-2 md:pb-0 mb-2 md:mb-0">
+              <div>
                 {rowData.gender}
               </div>
             )}
@@ -193,7 +193,7 @@ export const TeachersList = ({
           <Column
             header="Actions"
             body={(rowData) => (
-              <div className="pb-2 md:pb-0 mb-2 md:mb-0">
+              <div>
                 {actionTemplate(rowData)}
               </div>
             )}

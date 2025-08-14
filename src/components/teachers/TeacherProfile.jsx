@@ -1,16 +1,12 @@
 import React from 'react';
 import { Mail, Phone, MessageCircle, BookOpen, School } from 'lucide-react';
 import { format } from "date-fns";
-import { useAuth } from '../../hooks/useAuth';
-import { useTeacherById } from '../../hooks/useTeacherById';
-export const TeacherProfile = ({ onClose }) => {
-  const { authData } = useAuth();
-  const { teacher, isLoading } = useTeacherById(authData?.userId);
+export const TeacherProfile = ({ onClose, teacher }) => {
 
-  if (isLoading || !teacher) {
+  if (!teacher) {
     return (
       <div className="fixed z-50 right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex items-center justify-center animate-fade-in-up">
-        <span className="text-blue-700 font-semibold">Loading...</span>
+        <span className="text-navy-600 font-semibold">Loading...</span>
       </div>
     );
   }

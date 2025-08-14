@@ -167,6 +167,10 @@ export const ClassManagement = () => {
     );
   };
 
+  const handleSubmit = (data) => {
+    
+  };
+
   if (isLoading) {
     return (
       <div className="flex h-screen justify-center items-center">
@@ -389,25 +393,17 @@ export const ClassManagement = () => {
 
       {showEditModal && selectedClass && (
         <EditClassModal
-          classData={{
-            name: selectedClass.name,
-            headTeacher: selectedClass.headTeacher,
-            studentCount: selectedClass.studentCount,
-          }}
+          // Pass the full class object so combinations/students are available
+          classData={selectedClass}
+          // Control visibility via isOpen
+          isOpen={showEditModal}
           onClose={() => {
             setShowEditModal(false);
             setSelectedClass(null);
           }}
+          // If your modal supports submit, keep it; otherwise remove
           onSubmit={(data) => {
-            setClasses(
-              classes.map((c) =>
-                c.id === selectedClass.id
-                  ? { ...c, ...data }
-                  : c
-              )
-            );
-            setShowEditModal(false);
-            setSelectedClass(null);
+            handleSubmit(data);
           }}
         />
       )}

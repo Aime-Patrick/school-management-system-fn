@@ -3,6 +3,7 @@ import { TeachersList } from "./TeachersList";
 import { TeacherProfile } from "./TeacherProfile";
 import AddTeacher from "../school/dashboard/AddTeacher";
 import DeleteTeacherModal from "./modals/DeleteTeacherModal";
+import EditTeacherModal from "./modals/EditTeacherModal";
 import { useTeacherBySchoolId } from "../../hooks/useTeacherBySchool";
 import { useCheckSchool } from "../../hooks/useCheckSchool";
 import { Button } from "primereact/button";
@@ -20,6 +21,7 @@ export const TeachersPage = () => {
   const [teacherToDelete, setTeacherToDelete] = useState(null);
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const [teacherToReset, setTeacherToReset] = useState(null);
+  const [showEditTeacherModal, setShowEditTeacherModal] = useState(false);
 
   const handleDeleteTeacher = (teacher) => {
     deleteTeacher({ id: teacher._id });
@@ -54,14 +56,14 @@ export const TeachersPage = () => {
   }
 
   return (
-    <div className="p-2 md:p-6 min-h-screen">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-navy-800">Teachers</h1>
+    <div className="p-4 sm:p-6 md:p-8 lg:p-10 min-h-screen bg-gray-50">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Teachers</h1>
         <Button
           label="Add Teacher"
           icon="pi pi-plus"
           onClick={() => setShowAddTeacherModal(true)}
-          className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0 w-full md:w-auto"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out w-full sm:w-auto"
         />
       </div>
       <TeachersList
@@ -77,7 +79,7 @@ export const TeachersPage = () => {
         onResetPassword={handleResetPassword}
         onEditRole={(teacher) => {
           setSelectedTeacher(teacher);
-          setShowProfile(true);
+          setShowEditTeacherModal(true);
         }}
       />
 
@@ -86,6 +88,18 @@ export const TeachersPage = () => {
         <AddTeacher
           visible={showAddTeacherModal}
           onClose={() => setShowAddTeacherModal(false)}
+        />
+      )}
+
+      {/* Edit Teacher Modal */}
+      {showEditTeacherModal && selectedTeacher && (
+        <EditTeacherModal
+          visible={showEditTeacherModal}
+          onClose={() => {
+            setShowEditTeacherModal(false);
+            setSelectedTeacher(null);
+          }}
+          teacher={selectedTeacher}
         />
       )}
 
@@ -116,15 +130,15 @@ export const TeachersPage = () => {
         visible={showResetPasswordModal}
         onHide={() => setShowResetPasswordModal(false)}
         footer={
-          <div>
+          <div className="flex flex-col sm:flex-row justify-end gap-2 p-4 border-t border-gray-200">
             <Button
               label="Cancel"
-              className="p-button-text p-2"
+              className="p-button-text text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition duration-300 ease-in-out"
               onClick={() => setShowResetPasswordModal(false)}
             />
             <Button
               label={resetPasswordLoading ? "Resetting..." : "Confirm"}
-              className="bg-navy-800 text-white p-2"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out"
               onClick={confirmResetPassword}
               disabled={resetPasswordLoading}
             />
@@ -132,8 +146,9 @@ export const TeachersPage = () => {
         }
         modal
         closable
+        className="w-11/12 sm:w-3/4 md:w-1/2 lg:w-1/3"
       >
-        <p>
+        <p className="text-base text-gray-700 mb-4">
           Are you sure you want to reset the password for{" "}
           <span className="font-semibold text-blue-700">
             {teacherToReset?.lastName} {teacherToReset?.firstName}
@@ -141,7 +156,7 @@ export const TeachersPage = () => {
           ?
         </p>
         {resetPasswordSuccess && (
-          <div className="mt-4 text-green-600 font-medium">
+          <div className="mt-4 p-3 bg-green-100 text-green-700 rounded-md font-medium">
             Password reset link sent to teacher's email!
           </div>
         )}
