@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
-  FileText,
-  Bell,
+  BookOpen,
   Users,
-  Calendar,
-  TrendingUp,
-  MessageSquare,
+  CreditCard,
+  FileText,
+  BarChart3,
   Settings,
   Menu as MenuIcon,
   X as CloseIcon,
-  BookOpen,
+  Library,
+  Calendar,
+  DollarSign,
 } from 'lucide-react';
 import { Logo } from '../../layout/Logo';
 
@@ -19,46 +20,41 @@ const navItems = [
   {
     icon: <LayoutDashboard size={20} />,
     label: 'Dashboard',
-    path: '/teacher'
-  },
-  {
-    icon: <FileText size={20} />,
-    label: 'Classes',
-    path: '/teacher/classes'
-  },
-  {
-    icon: <MessageSquare size={20} />,
-    label: 'Appeals',
-    path: '/teacher/appeals'
-  },
-  {
-    icon: <TrendingUp size={20} />,
-    label: 'Performance',
-    path: '/teacher/performance'
-  },
-  {
-    icon: <Bell size={20} />,
-    label: 'Announcements',
-    path: '/teacher/announcements'
-  },
-  {
-    icon: <Users size={20} />,
-    label: 'Parent Meetings',
-    path: '/teacher/parent-meetings'
-  },
-  {
-    icon: <Bell size={20} />,
-    label: 'Notifications',
-    path: '/teacher/notifications'
+    path: '/librarian'
   },
   {
     icon: <BookOpen size={20} />,
-    label: 'Library',
-    path: '/teacher/library'
+    label: 'Books',
+    path: '/librarian/books'
+  },
+  {
+    icon: <Users size={20} />,
+    label: 'Members',
+    path: '/librarian/members'
+  },
+  {
+    icon: <Library size={20} />,
+    label: 'Borrowing',
+    path: '/librarian/borrow'
+  },
+  {
+    icon: <Calendar size={20} />,
+    label: 'Reservations',
+    path: '/librarian/reservations'
+  },
+  {
+    icon: <DollarSign size={20} />,
+    label: 'Fines',
+    path: '/librarian/fines'
+  },
+  {
+    icon: <BarChart3 size={20} />,
+    label: 'Reports',
+    path: '/librarian/reports'
   }
 ];
 
-export const TeacherSidebar = ({ onLogoClick }) => {
+export const LibrarianSidebar = ({ onLogoClick }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(window.innerWidth < 1024);
@@ -108,7 +104,8 @@ export const TeacherSidebar = ({ onLogoClick }) => {
             </button>
           </div>
 
-          <nav className="space-y-1 flex-1">
+          {/* Navigation */}
+          <nav className="flex-1 space-y-1">
             {navItems.map((item) => (
               <button
                 key={item.path}
@@ -117,29 +114,33 @@ export const TeacherSidebar = ({ onLogoClick }) => {
                   if (window.innerWidth < 1024) setCollapsed(true);
                 }}
                 className={`flex items-center gap-3 px-4 py-3 text-white w-full rounded-lg transition-colors
-                  ${isActive(item.path)
-                    ? 'bg-white/10 font-semibold'
-                    : 'hover:bg-white/5'
+                  ${
+                    isActive(item.path)
+                      ? "bg-white bg-opacity-10 text-white"
+                      : "text-white/70 hover:bg-white/5"
                   }`}
               >
                 {item.icon}
-                <span className="text-sm">{item.label}</span>
+                <span className="text-sm font-medium">{item.label}</span>
               </button>
             ))}
           </nav>
 
+          {/* Settings */}
           <button
             onClick={() => {
-              navigate('/teacher/settings');
+              navigate("/librarian/settings");
               if (window.innerWidth < 1024) setCollapsed(true);
             }}
-            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 rounded-lg mt-4"
+            className={`flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 rounded-lg mt-4
+              ${isActive('/librarian/settings') ? 'bg-white/10' : ''}`}
           >
             <Settings size={20} />
-            <span className="text-sm">Account Settings</span>
+            <span className="text-sm">Settings</span>
           </button>
         </div>
       </aside>
+
       {/* Overlay for mobile */}
       {!collapsed && (
         <div

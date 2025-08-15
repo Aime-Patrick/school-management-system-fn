@@ -46,6 +46,23 @@ import { Timetables } from "./components/school/dashboard/Timetables";
 import ResetPassword from "./components/ResetPassword";
 import TeacherDashboard from "./components/teacher/dashboard/TeacherDashboard";
 import { SaDashboardLayout } from "./components/super_admin/layout/Layout";
+import FeesManagementPage from "./components/fees/FeesManagementPage";
+import FeeCategoriesPage from "./components/fees/FeeCategoriesPage";
+import FeeStructuresPage from "./components/fees/FeeStructuresPage";
+import FeeAssignmentsPage from "./components/fees/FeeAssignmentsPage";
+import FeePaymentsPage from "./components/fees/FeePaymentsPage";
+import FeeReportsPage from "./components/fees/FeeReportsPage";
+import { 
+  BooksPage, 
+  MembersPage, 
+  BorrowPage, 
+  ReservationsPage, 
+  FinesPage, 
+  ReportsPage 
+} from "./pages/library";
+import LibrarianLayout from "./components/librarian/layout/LibrarianLayout";
+import LibrarianDashboard from "./components/librarian/dashboard/LibrarianDashboard";
+import { SchoolStaffPage } from "./modules/users";
 const App = () => {
   return (
     <Router>
@@ -62,6 +79,7 @@ const App = () => {
             <Route path="appeals" element={<Appeals />} />
             <Route path="performance" element={<Performance />} />
             <Route path="timetable" element={<Timetable />} />
+            <Route path="library" element={<BooksPage />} />
             <Route path="notifications" element={<Notifications />} />
             <Route path="settings" element={<AccountSettings />} />
             <Route path="profile" element={<ProfilePage />} />
@@ -73,8 +91,25 @@ const App = () => {
               <Route index element={<TeacherDashboard />} />
               <Route path="classes" element={<Classes />} />
               <Route path="appeals" element={<AppealsTeacher />} />
+              <Route path="library" element={<BooksPage />} />
               <Route path="settings" element={<AccountSettings />} />
             <Route path="profile" element={<ProfilePage />} />
+            </Route>
+          </Route>
+        </Route>
+
+        <Route>
+          <Route path="/librarian" element={<LibrarianLayout />}>
+            <Route element={<ProtectedRoute allowedRoles={["librarian"]} />}>
+              <Route index element={<LibrarianDashboard />} />
+              <Route path="books" element={<BooksPage />} />
+              <Route path="members" element={<MembersPage />} />
+              <Route path="borrow" element={<BorrowPage />} />
+              <Route path="reservations" element={<ReservationsPage />} />
+              <Route path="fines" element={<FinesPage />} />
+              <Route path="reports" element={<ReportsPage />} />
+              <Route path="settings" element={<AccountSettings />} />
+              <Route path="profile" element={<ProfilePage />} />
             </Route>
           </Route>
         </Route>
@@ -104,7 +139,20 @@ const App = () => {
               <Route path="academic-term" element={<AcademicTerm />} />
               <Route path="teachers" element={<TeachersPage />} />
               <Route path="messages" element={<Messaging />} />
-              <Route path="payment" element={<Payment />} />
+              <Route path="fees" element={<FeesManagementPage />} />
+              <Route path="fees/categories" element={<FeeCategoriesPage />} />
+              <Route path="fees/structures" element={<FeeStructuresPage />} />
+              <Route path="fees/assignments" element={<FeeAssignmentsPage />} />
+              <Route path="fees/payments" element={<FeePaymentsPage />} />
+              <Route path="fees/reports" element={<FeeReportsPage />} />
+              <Route path="staff" element={<SchoolStaffPage />} />
+              <Route path="library" element={<BooksPage />} />
+              <Route path="library/books" element={<BooksPage />} />
+              <Route path="library/members" element={<MembersPage />} />
+              <Route path="library/borrow" element={<BorrowPage />} />
+              <Route path="library/reservations" element={<ReservationsPage />} />
+              <Route path="library/fines" element={<FinesPage />} />
+              <Route path="library/reports" element={<ReportsPage />} />
               <Route path="timetables" element={<Timetables />} />
               <Route path="settings" element={<AccountSettings />} />
             <Route path="profile" element={<ProfilePage />} />

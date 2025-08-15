@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MessageCircle, BookOpen, School } from 'lucide-react';
-import { format } from "date-fns";
+
 export const TeacherProfile = ({ onClose, teacher }) => {
 
   if (!teacher) {

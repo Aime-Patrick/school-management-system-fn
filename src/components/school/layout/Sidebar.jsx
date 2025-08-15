@@ -10,7 +10,8 @@ import {
   Settings,
   ChevronDown,
   MessageSquare,
-  Calendar
+  Calendar,
+  DollarSign
 } from 'lucide-react';
 import { Logo } from '../../layout/Logo';
 import { useAuth } from '../../../hooks/useAuth';
@@ -63,6 +64,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const [isStudentsOpen, setIsStudentsOpen] = useState(false);
   const [isClassOpen, setIsClassOpen] = useState(false);
   const [isAcademicOpen, setIsAcademicOpen] = useState(false);
+  const [isFeesOpen, setIsFeesOpen] = useState(false);
+  const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [activeItem, setActiveItem] = useState('');
   const { authData } = useAuth();
   const [collapsed, setCollapsed] = useState(window.innerWidth < 1024);
@@ -194,11 +197,135 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               </div>
             </SidebarItem>
             <SidebarItem 
-              icon={<CreditCard size={20} />} 
-              label="Payment" 
-              active={isActive('/school-admin/payment')}
-              onClick={() => {navigate('/school-admin/payment'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              icon={<DollarSign size={20} />} 
+              label="Fees Management" 
+              hasDropdown
+              isOpen={isFeesOpen}
+              active={isActive('/school-admin/fees') || isActive('/school-admin/fees/categories') || isActive('/school-admin/fees/structures') || isActive('/school-admin/fees/assignments') || isActive('/school-admin/fees/payments') || isActive('/school-admin/fees/reports')}
+              onClick={() => setIsFeesOpen(!isFeesOpen)}
+            >
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/fees') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/fees'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Overview
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/fees/categories') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/fees/categories'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Categories
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/fees/structures') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/fees/structures'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Structures
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/fees/assignments') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/fees/assignments'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Assignments
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/fees/payments') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/fees/payments'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Payments
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/fees/reports') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/fees/reports'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Reports
+              </div>
+            </SidebarItem>
+
+            <SidebarItem 
+              icon={<Users size={20} />} 
+              label="Staff Management" 
+              active={isActive('/school-admin/staff')}
+              onClick={() => {navigate('/school-admin/staff'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
             />
+
+            <SidebarItem 
+              icon={<BookOpen size={20} />} 
+              label="Library Management" 
+              hasDropdown
+              isOpen={isLibraryOpen}
+              active={isActive('/school-admin/library') || isActive('/school-admin/library/books') || isActive('/school-admin/library/members') || isActive('/school-admin/library/borrow') || isActive('/school-admin/library/reservations') || isActive('/school-admin/library/fines') || isActive('/school-admin/library/reports')}
+              onClick={() => setIsLibraryOpen(!isLibraryOpen)}
+            >
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/library') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/library'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Overview
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/library/books') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/library/books'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Books
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/library/members') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/library/members'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Members
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/library/borrow') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/library/borrow'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Borrowing
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/library/reservations') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/library/reservations'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Reservations
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/library/fines') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/library/fines'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Fines
+              </div>
+              <div 
+                className={`py-2 px-4 rounded-lg cursor-pointer text-sm ${
+                  isActive('/school-admin/library/reports') ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'
+                }`}
+                onClick={() => {navigate('/school-admin/library/reports'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+              >
+                Reports
+              </div>
+            </SidebarItem>
             <SidebarItem 
               icon={<BookOpen size={20} />} 
               label="Courses" 

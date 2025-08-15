@@ -9,6 +9,7 @@ import {
   TrendingUp,
   MessageSquare,
   Settings,
+  BookOpen,
 } from "lucide-react";
 import { Logo } from "../../layout/Logo";
 import { Notifications } from "../pages/Notification";
@@ -48,6 +49,11 @@ const navItems = [
     icon: <Users size={20} />,
     label: "Parent Meetings",
     path: "/student/parent-meetings",
+  },
+  {
+    icon: <BookOpen size={20} />,
+    label: "Library",
+    path: "/student/library",
   },
   {
     icon: <Bell size={20} />,
