@@ -29,6 +29,7 @@ export const createBook = async (bookData) => {
 
 export const updateBook = async (bookData) => {
   try {
+    console.log(bookData);
     const { id, ...data } = bookData;
     const response = await axiosInstance.put(`/library/books/${id}`, data);
     return response.data;

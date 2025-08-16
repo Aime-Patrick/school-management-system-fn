@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
   authors: Yup.array()
     .of(Yup.string().required('Author name is required'))
     .min(1, 'At least one author is required'),
-  isbn: Yup.string()
+    isbn: Yup.string()
     .required('ISBN is required')
     .test('isbn-format', 'Invalid ISBN format. Examples: 978-0-7475-3269-9, 0-7475-3269-9, 9780747532699', function(value) {
       if (!value) return false;
@@ -41,7 +41,7 @@ const validationSchema = Yup.object().shape({
     .max(new Date().getFullYear(), 'Publication year cannot be in the future'),
   publisher: Yup.string().max(100, 'Publisher name too long'),
   description: Yup.string().max(1000, 'Description too long'),
-  copies: Yup.number()
+  totalCopies: Yup.number()
     .required('Number of copies is required')
     .min(1, 'Must have at least 1 copy')
     .max(1000, 'Cannot have more than 1000 copies'),
@@ -63,13 +63,13 @@ const BookForm = ({
     publicationYear: book?.publicationYear || undefined,
     publisher: book?.publisher || '',
     description: book?.description || '',
-    copies: book?.copies || 1,
+    totalCopies: book?.totalCopies || 1,
     location: book?.location || '',
   };
 
   const handleSubmit = (values) => {
     if (book) {
-      onSubmit({ ...values, id: book.id });
+      onSubmit({ ...values, id: book._id });
     } else {
       onSubmit(values);
     }
@@ -226,14 +226,14 @@ const BookForm = ({
               <Form.Item
                 label="Number of Copies"
                 required
-                validateStatus={errors.copies && touched.copies ? 'error' : ''}
-                help={errors.copies && touched.copies ? errors.copies : ''}
+                validateStatus={errors.totalCopies && touched.totalCopies ? 'error' : ''}
+                help={errors.totalCopies && touched.totalCopies ? errors.totalCopies : ''}
               >
                 <InputNumber
-                  name="copies"
-                  value={values.copies}
-                  onChange={(value) => setFieldValue('copies', value)}
-                  placeholder="Copies"
+                  name="totalCopies"
+                  value={values.totalCopies}
+                  onChange={(value) => setFieldValue('totalCopies', value)}
+                  placeholder="Number of copies"
                   min={1}
                   max={1000}
                   style={{ width: '100%' }}
@@ -295,7 +295,7 @@ const BookForm = ({
               <Button
                 type="primary"
                 htmlType="submit"
-                loading={loading || isSubmitting}
+                loading={isSubmitting}
                 size="large"
                 className="w-full sm:w-auto"
               >

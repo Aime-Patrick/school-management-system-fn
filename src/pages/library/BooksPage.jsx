@@ -65,11 +65,10 @@ const BooksPage = () => {
   };
 
   // Filter books based on search and filters
-  const filteredBooks = Array.isArray(books) ? books.filter(book => {
+  const filteredBooks = Array.isArray(books?.data) ? books.data.filter(book => {
     const matchesSearch = !searchQuery || 
       book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      book.authors.some(author => author.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      book.isbn.toLowerCase().includes(searchQuery.toLowerCase());
+      book.authors.some(author => author.toLowerCase().includes(searchQuery.toLowerCase()));
     
     const matchesCategory = categoryFilter === 'all' || book.category === categoryFilter;
     const matchesStatus = statusFilter === 'all' || book.status === statusFilter;
@@ -102,7 +101,7 @@ const BooksPage = () => {
   const copiesBodyTemplate = (rowData) => (
     <div className="text-center">
       <div className="font-medium">{rowData.availableCopies}</div>
-      <div className="text-xs text-gray-500">of {rowData.copies}</div>
+      <div className="text-xs text-gray-500">of {rowData.totalCopies}</div>
     </div>
   );
 
@@ -116,7 +115,7 @@ const BooksPage = () => {
       />
       <Popconfirm
         title="Are you sure you want to delete this book?"
-        onConfirm={() => handleDelete(rowData.id)}
+        onConfirm={() => handleDelete(rowData._id)}
         okText="Yes"
         cancelText="No"
       >
@@ -197,7 +196,7 @@ const BooksPage = () => {
       <div className="bg-white rounded-lg shadow p-4 mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 library-filters">
           <Search
-            placeholder="Search by title, author, or ISBN"
+            placeholder="Search by title or author"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             allowClear
@@ -259,7 +258,7 @@ const BooksPage = () => {
           <Column field="isbn" header="ISBN" sortable style={{ minWidth: '80px', maxWidth: '120px' }} />
           <Column field="category" header="Category" sortable style={{ minWidth: '80px', maxWidth: '120px' }} />
           <Column field="status" header="Status" body={statusBodyTemplate} sortable style={{ minWidth: '80px', maxWidth: '100px' }} />
-          <Column field="copies" header="Copies" body={copiesBodyTemplate} sortable style={{ minWidth: '60px', maxWidth: '80px' }} />
+          <Column field="totalCopies" header="Total Copies" body={copiesBodyTemplate} sortable style={{ minWidth: '60px', maxWidth: '80px' }} />
           <Column field="location" header="Location" sortable style={{ minWidth: '80px', maxWidth: '120px' }} />
           <Column 
             header="Actions" 
