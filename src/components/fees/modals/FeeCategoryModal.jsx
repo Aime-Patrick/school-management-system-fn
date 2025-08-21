@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
     .max(500, 'Description must not exceed 500 characters'),
   frequency: Yup.string()
     .required('Frequency is required'),
-  status: Yup.string()
+  isActive: Yup.boolean()
     .required('Status is required'),
 });
 
@@ -26,12 +26,12 @@ const FeeCategoryModal = ({ visible, onCancel, onSubmit, category, loading }) =>
     name: category.name,
     description: category.description,
     frequency: category.frequency,
-    status: category.status,
+    isActive: category.isActive,
   } : {
     name: '',
     description: '',
     frequency: '',
-    status: 'active',
+    isActive: true,
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
@@ -110,19 +110,19 @@ const FeeCategoryModal = ({ visible, onCancel, onSubmit, category, loading }) =>
 
             <Form.Item
               label="Status"
-              validateStatus={errors.status && touched.status ? 'error' : ''}
-              help={errors.status && touched.status ? errors.status : ''}
+              validateStatus={errors.isActive && touched.isActive ? 'error' : ''}
+              help={errors.isActive && touched.isActive ? errors.isActive : ''}
             >
               <Select
-                name="status"
-                value={values.status}
-                onChange={(value) => setFieldValue('status', value)}
+                name="isActive"
+                value={values.isActive}
+                onChange={(value) => setFieldValue('isActive', value)}
                 placeholder="Select status"
                 size="large"
                 style={{ width: '100%' }}
               >
-                <Option value="active">Active</Option>
-                <Option value="inactive">Inactive</Option>
+                <Option value={true}>Active</Option>
+                <Option value={false}>Inactive</Option>
               </Select>
             </Form.Item>
 

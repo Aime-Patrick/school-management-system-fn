@@ -21,7 +21,7 @@ export const getFeeCategories = async () => {
 
 export const updateFeeCategory = async ({ id, ...categoryData }) => {
   try {
-    const response = await axiosInstance.put(`/fees/categories/${id}`, categoryData);
+    const response = await axiosInstance.patch(`/fees/categories/${id}`, categoryData);
     return response.data;
   } catch (error) {
     throw error;

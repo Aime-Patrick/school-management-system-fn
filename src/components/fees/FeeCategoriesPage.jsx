@@ -7,11 +7,14 @@ import { Spin, Tag, Space, Popconfirm } from 'antd';
 import { useFeeCategories, useCreateFeeCategory, useUpdateFeeCategory, useDeleteFeeCategory } from '../../hooks/useFees';
 import FeeCategoryModal from './modals/FeeCategoryModal';
 import { useAuth } from '../../hooks/useAuth';
+import { getResourceUIConfig } from '../../utils/permissions';
+import PermissionGuard from '../reusable/PermissionGuard';
 
 const FeeCategoriesPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const { authData } = useAuth();
+  const uiConfig = getResourceUIConfig(authData.role, 'FEE_CATEGORIES');
   
   const { data: categoriesResponse, isLoading } = useFeeCategories();
   
@@ -20,9 +23,6 @@ const FeeCategoriesPage = () => {
     ? categoriesResponse 
     : categoriesResponse?.data || [];
   
-  // Debug logging to help identify data structure issues
-  console.log('FeeCategoriesPage - categoriesResponse:', categoriesResponse);
-  console.log('FeeCategoriesPage - processed categories:', categories);
   const createMutation = useCreateFeeCategory();
   const updateMutation = useUpdateFeeCategory();
   const deleteMutation = useDeleteFeeCategory();
@@ -43,7 +43,7 @@ const FeeCategoriesPage = () => {
 
   const handleModalSubmit = (values) => {
     if (editingCategory) {
-      updateMutation.mutate({ id: editingCategory.id, ...values });
+      updateMutation.mutate({ id: editingCategory._id, ...values });
     } else {
       createMutation.mutate(values);
     }
@@ -57,37 +57,44 @@ const FeeCategoriesPage = () => {
   };
 
   const statusBodyTemplate = (rowData) => {
-    const status = rowData.status;
-    const color = status === 'active' ? 'green' : 'red';
-    return <Tag color={color}>{status.toUpperCase()}</Tag>;
+    const isActive = rowData?.isActive;
+    if (isActive === undefined || isActive === null) {
+      return <Tag color="default">N/A</Tag>;
+    }
+    const color = isActive ? 'green' : 'red';
+    const statusText = isActive ? 'ACTIVE' : 'INACTIVE';
+    return <Tag color={color}>{statusText}</Tag>;
   };
 
   const actionsBodyTemplate = (rowData) => {
-    if (authData.role !== 'school-admin' && authData.role !== 'system-admin') {
+    if (!uiConfig.hasManagementAccess) {
       return null;
     }
-
     return (
       <Space>
-        <Button
-          type="text"
-          icon={<EditOutlined />}
-          onClick={() => handleEdit(rowData)}
-          size="small"
-        />
-        <Popconfirm
-          title="Are you sure you want to delete this category?"
-          onConfirm={() => handleDelete(rowData.id)}
-          okText="Yes"
-          cancelText="No"
-        >
+        {uiConfig.canUpdate && (
           <Button
             type="text"
-            danger
-            icon={<DeleteOutlined />}
+            icon={<EditOutlined />}
+            onClick={() => handleEdit(rowData)}
             size="small"
           />
-        </Popconfirm>
+        )}
+        {uiConfig.canDelete && (
+          <Popconfirm
+            title="Are you sure you want to delete this category?"
+            onConfirm={() => handleDelete(rowData.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button
+              type="text"
+              danger
+              icon={<DeleteOutlined />}
+              size="small"
+            />
+          </Popconfirm>
+        )}
       </Space>
     );
   };
@@ -107,7 +114,7 @@ const FeeCategoriesPage = () => {
           <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Fee Categories</h1>
           <p className="text-sm sm:text-base text-gray-600">Manage fee categories and their configurations</p>
         </div>
-        {(authData.role === 'school-admin' || authData.role === 'system-admin') && (
+        <PermissionGuard userRole={authData.role} resource="FEE_CATEGORIES" action="CREATE">
           <Button
             type="primary"
             icon={<PlusOutlined />}
@@ -117,7 +124,7 @@ const FeeCategoriesPage = () => {
           >
             Add Category
           </Button>
-        )}
+        </PermissionGuard>
       </div>
 
             <div className="bg-white rounded-lg shadow overflow-hidden">
