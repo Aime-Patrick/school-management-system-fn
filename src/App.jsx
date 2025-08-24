@@ -52,6 +52,9 @@ import FeeStructuresPage from "./components/fees/FeeStructuresPage";
 import FeeAssignmentsPage from "./components/fees/FeeAssignmentsPage";
 import FeePaymentsPage from "./components/fees/FeePaymentsPage";
 import FeeReportsPage from "./components/fees/FeeReportsPage";
+import PermissionsManagementPage from "./components/permissions/PermissionsManagementPage";
+import SystemAdminDashboard from "./components/permissions/UserPermissionsPage";
+import SchoolAdminDashboard from "./components/permissions/SchoolAdminDashboard";
 import { 
   BooksPage, 
   MembersPage, 
@@ -120,6 +123,8 @@ const App = () => {
               <Route index element={<SaDashboardHome />} />
               <Route path="schools" element={<SchoolsList />} />
               <Route path="users" element={<Users />} />
+              <Route path="permissions" element={<PermissionsManagementPage />} />
+              <Route path="user-permissions" element={<SystemAdminDashboard />} />
               <Route path="payment" element={<SuperPayments />} />
               <Route path="subscription" element={<SubscriptionPlan />} />
               <Route path="settings" element={<SaAccountSettings />} />
@@ -146,6 +151,7 @@ const App = () => {
               <Route path="fees/payments" element={<FeePaymentsPage />} />
               <Route path="fees/reports" element={<FeeReportsPage />} />
               <Route path="staff" element={<SchoolStaffPage />} />
+              <Route path="user-permissions" element={<SchoolAdminDashboard />} />
               <Route path="library" element={<BooksPage />} />
               <Route path="library/books" element={<BooksPage />} />
               <Route path="library/members" element={<MembersPage />} />

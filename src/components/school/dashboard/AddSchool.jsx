@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import { FloatLabel } from "primereact/floatlabel";
@@ -12,18 +12,16 @@ export default function AddSchool({ visible, onClose }) {
   useAdminAddSchool();
   const createSchoolFormik = useFormik({
     initialValues: {
-      schoolCode: "",
       schoolName: "",
       address: "",
       file:null
     },
     validationSchema: Yup.object({
-      schoolCode: Yup.string().required("School code is required"),
       schoolName: Yup.string().required("School name is required"),
       address: Yup.string().required("Address is required"),
     }),
     onSubmit: (values) => {
-      createSchool({schoolCode:values.schoolCode, schoolName:values.schoolCode, address:values.address, file: values.file})
+      createSchool({schoolName:values.schoolName, address:values.address, file: values.file})
     },
   });
 
@@ -37,6 +35,12 @@ export default function AddSchool({ visible, onClose }) {
     if (!file) return;
     createSchoolFormik.setFieldValue("file", file);
 };
+
+  useEffect(() => {
+    if (createSchoolSuccess) {
+      onClose();
+    }
+  }, [createSchoolSuccess]);
 
   return (
     <div className="card flex justify-content-center">
@@ -91,28 +95,6 @@ export default function AddSchool({ visible, onClose }) {
             createSchoolFormik.errors.address && (
               <div className="text-[#BA1500] text-sm" aria-live="polite">
                 {createSchoolFormik.errors.address}
-              </div>
-            )}
-        </div>
-        <div className="py-2 my-2">
-          <FloatLabel>
-            <InputText
-              id="schoolCode"
-              name="schoolCode"
-              type="text"
-              className="w-full border border-gray-500 p-2 rounded-md placeholder:text-sm focus:outline-none focus:ring-1 focus:ring-gray-100"
-              onChange={createSchoolFormik.handleChange}
-              onBlur={createSchoolFormik.handleBlur}
-              value={createSchoolFormik.values.schoolCode}
-            />
-            <label htmlFor="schoolCode" className="text-sm">
-              School code
-            </label>
-          </FloatLabel>
-          {createSchoolFormik.touched.schoolCode &&
-            createSchoolFormik.errors.schoolCode && (
-              <div className="text-[#BA1500] text-sm" aria-live="polite">
-                {createSchoolFormik.errors.schoolCode}
               </div>
             )}
         </div>

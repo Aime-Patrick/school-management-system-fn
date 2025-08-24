@@ -11,7 +11,8 @@ import {
   ChevronDown,
   MessageSquare,
   Calendar,
-  DollarSign
+  DollarSign,
+  Shield
 } from 'lucide-react';
 import { Logo } from '../../layout/Logo';
 import { useAuth } from '../../../hooks/useAuth';
@@ -259,6 +260,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               label="Staff Management" 
               active={isActive('/school-admin/staff')}
               onClick={() => {navigate('/school-admin/staff'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
+            />
+
+            <SidebarItem 
+              icon={<Shield size={20} />} 
+              label="User Permissions" 
+              active={isActive('/school-admin/user-permissions')}
+              onClick={() => {navigate('/school-admin/user-permissions'); if(window.innerWidth < 1024) setSidebarOpen(false);}}
             />
 
             <SidebarItem 

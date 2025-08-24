@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
 import AddSchool from "../../school/dashboard/AddSchool";
-import { useSchools } from "../../../hooks/useSchool";
+import { useSchools, useSuspendSchool, useActivateSchool } from "../../../hooks/useSchool";
 import { convertDate } from "../../../utils";
 import { DynamicBreadcrumb } from "../../Breadcrumb/DynamicBreadcrumb";
 
@@ -10,7 +13,14 @@ const SchoolsList = () => {
   const { schools, isLoading } = useSchools();
   const [visible, setVisible] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showSuspendModal, setShowSuspendModal] = useState(false);
+  const [showActivateModal, setShowActivateModal] = useState(false);
   const [selectedSchool, setSelectedSchool] = useState(null);
+  const [suspendReason, setSuspendReason] = useState("");
+  const [activateReason, setActivateReason] = useState("");
+  
+  const suspendSchoolMutation = useSuspendSchool();
+  const activateSchoolMutation = useActivateSchool();
 
   const handleDeleteClick = (school) => {
     setSelectedSchool(school);
@@ -28,9 +38,57 @@ const SchoolsList = () => {
     setSelectedSchool(null);
   };
 
-  const handleLockClick = (school) => {
-    // Implement lock functionality here
-    console.log(`Locking school: ${school.name}`);
+  const handleSuspendClick = (school) => {
+    setSelectedSchool(school);
+    setShowSuspendModal(true);
+  };
+
+  const handleActivateClick = (school) => {
+    setSelectedSchool(school);
+    setShowActivateModal(true);
+  };
+
+  const confirmSuspend = () => {
+    if (!suspendReason.trim()) {
+      // You might want to show an error message here
+      return;
+    }
+    
+    suspendSchoolMutation.mutate(
+      { schoolId: selectedSchool._id, reason: suspendReason },
+      {
+        onSuccess: () => {
+          setShowSuspendModal(false);
+          setSelectedSchool(null);
+          setSuspendReason("");
+        },
+      }
+    );
+  };
+
+  const confirmActivate = () => {
+    activateSchoolMutation.mutate(
+      { schoolId: selectedSchool._id, reason: activateReason },
+      {
+        onSuccess: () => {
+          setShowActivateModal(false);
+          setSelectedSchool(null);
+          setActivateReason("");
+        },
+      }
+    );
+  };
+
+  const cancelSuspend = () => {
+    setShowSuspendModal(false);
+    setSelectedSchool(null);
+    setSuspendReason("");
+  };
+
+  const cancelActivate = () => {
+    setShowActivateModal(false);
+    setSelectedSchool(null);
+    setActivateReason("");
   };
 
   // Custom body templates for DataTable
@@ -66,21 +124,34 @@ const SchoolsList = () => {
       <button
         className="text-navy-500"
         onClick={() => console.log("Edit", rowData._id)}
+        title="Edit School"
       >
         <i className="pi pi-pencil"></i>
       </button>
       <button
         className="text-red-500"
         onClick={() => handleDeleteClick(rowData)}
+        title="Delete School"
       >
-        <i className="pi pi-trash"></i>
+        <i className="pi pi-trash text-lg"></i>
       </button>
-      <button
-        className="text-yellow-500"
-        onClick={() => handleLockClick(rowData)}
-      >
-        <i className="pi pi-lock"></i>
-      </button>
+      {rowData.status === "active" ? (
+        <button
+          className="text-yellow-500"
+          onClick={() => handleSuspendClick(rowData)}
+          title="Suspend School"
+        >
+          <i className="pi pi-pause text-lg"></i>
+        </button>
+      ) : (
+        <button
+          className="text-green-500"
+          onClick={() => handleActivateClick(rowData)}
+          title="Activate School"
+        >
+          <i className="pi pi-play text-lg"></i>
+        </button>
+      )}
     </div>
   );
 
@@ -102,13 +173,13 @@ const SchoolsList = () => {
         <h2 className="text-xl md:text-2xl font-bold text-navy-800">
           Schools List
         </h2>
-        {/* <button
+        <button
           onClick={() => setVisible(true)}
           className="bg-navy-800 text-white btn text-sm focus:outline-none focus:ring-0 w-full md:w-auto flex items-center gap-2 px-4 py-2 rounded-lg shadow transition-all duration-150"
         >
           <i className="pi pi-plus text-base"></i>
           <span>Add School</span>
-        </button> */}
+        </button>
       </div>
       <div className="animate-fade-in-up overflow-x-auto bg-white rounded-2xl shadow border border-blue-100">
         <DataTable
@@ -167,9 +238,89 @@ const SchoolsList = () => {
           </div>
         </div>
       )}
-      {/* {visible && (
+
+      {/* Suspend School Modal */}
+      <Dialog
+        visible={showSuspendModal}
+        onHide={cancelSuspend}
+        header="Suspend School"
+        style={{ width: "400px" }}
+        footer={
+          <div className="flex gap-2 justify-end">
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              onClick={cancelSuspend}
+              className="p-button-text"
+            />
+            <Button
+              label="Suspend"
+              icon="pi pi-pause"
+              onClick={confirmSuspend}
+              className="p-button-warning"
+              loading={suspendSchoolMutation.isPending}
+            />
+          </div>
+        }
+      >
+        <div className="p-4">
+          <p className="mb-4">
+            Are you sure you want to suspend <strong>{selectedSchool?.schoolName}</strong>?
+          </p>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Reason for suspension:</label>
+            <InputText
+              value={suspendReason}
+              onChange={(e) => setSuspendReason(e.target.value)}
+              placeholder="Enter reason for suspension..."
+              className="w-full"
+            />
+          </div>
+        </div>
+      </Dialog>
+
+      {/* Activate School Modal */}
+      <Dialog
+        visible={showActivateModal}
+        onHide={cancelActivate}
+        header="Activate School"
+        style={{ width: "400px" }}
+        footer={
+          <div className="flex gap-2 justify-end">
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              onClick={cancelActivate}
+              className="p-button-text"
+            />
+            <Button
+              label="Activate"
+              icon="pi pi-play"
+              onClick={confirmActivate}
+              className="p-button-success"
+              loading={activateSchoolMutation.isPending}
+            />
+          </div>
+        }
+      >
+        <div className="p-4">
+          <p className="mb-4">
+            Are you sure you want to activate <strong>{selectedSchool?.schoolName}</strong>?
+          </p>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Reason for activation:</label>
+            <InputText
+              value={activateReason}
+              onChange={(e) => setActivateReason(e.target.value)}
+              placeholder="Enter reason for activation..."
+              className="w-full"
+            />
+          </div>
+        </div>
+      </Dialog>
+      {visible && (
         <AddSchool onClose={() => setVisible(false)} visible={visible} />
-      )} */}
+      )}
 
       <style>{`
         .animate-fade-in-up {

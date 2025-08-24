@@ -24,7 +24,6 @@ export const registerSchool = async(schoolData)=>{
         const formData = new FormData();
         formData.append("schoolName", schoolData.schoolName);
         formData.append("address", schoolData.address);
-        formData.append("schoolCode", schoolData.schoolCode);
     if (schoolData.file) {
       formData.append("schoolLogo", schoolData.file);
     }
@@ -34,3 +33,33 @@ export const registerSchool = async(schoolData)=>{
         throw error
     }
 }
+
+// Suspend school
+export const suspendSchool = async (schoolId, reason) => {
+    try {
+        const response = await axiosInstance.patch(`/school/${schoolId}/suspend`, { reason });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Activate school
+export const activateSchool = async (schoolId, reason) => {
+    try {
+        const response = await axiosInstance.patch(`/school/${schoolId}/activate`, { reason });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Check school status
+export const checkSchoolStatus = async (schoolId) => {
+    try {
+        const response = await axiosInstance.get(`/school/${schoolId}/status`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

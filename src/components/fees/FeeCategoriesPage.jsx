@@ -7,14 +7,13 @@ import { Spin, Tag, Space, Popconfirm } from 'antd';
 import { useFeeCategories, useCreateFeeCategory, useUpdateFeeCategory, useDeleteFeeCategory } from '../../hooks/useFees';
 import FeeCategoryModal from './modals/FeeCategoryModal';
 import { useAuth } from '../../hooks/useAuth';
-import { getResourceUIConfig } from '../../utils/permissions';
-import PermissionGuard from '../reusable/PermissionGuard';
+import { usePermissions } from '../../hooks/usePermissions';
+import PermissionWrapper from '../reusable/PermissionWrapper';
 
 const FeeCategoriesPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const { authData } = useAuth();
-  const uiConfig = getResourceUIConfig(authData.role, 'FEE_CATEGORIES');
   
   const { data: categoriesResponse, isLoading } = useFeeCategories();
   
@@ -67,20 +66,17 @@ const FeeCategoriesPage = () => {
   };
 
   const actionsBodyTemplate = (rowData) => {
-    if (!uiConfig.hasManagementAccess) {
-      return null;
-    }
     return (
       <Space>
-        {uiConfig.canUpdate && (
+        <PermissionWrapper resource="FEE_CATEGORIES" action="UPDATE">
           <Button
             type="text"
             icon={<EditOutlined />}
             onClick={() => handleEdit(rowData)}
             size="small"
           />
-        )}
-        {uiConfig.canDelete && (
+        </PermissionWrapper>
+        <PermissionWrapper resource="FEE_CATEGORIES" action="DELETE">
           <Popconfirm
             title="Are you sure you want to delete this category?"
             onConfirm={() => handleDelete(rowData.id)}
@@ -94,7 +90,7 @@ const FeeCategoriesPage = () => {
               size="small"
             />
           </Popconfirm>
-        )}
+        </PermissionWrapper>
       </Space>
     );
   };
@@ -114,7 +110,7 @@ const FeeCategoriesPage = () => {
           <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Fee Categories</h1>
           <p className="text-sm sm:text-base text-gray-600">Manage fee categories and their configurations</p>
         </div>
-        <PermissionGuard userRole={authData.role} resource="FEE_CATEGORIES" action="CREATE">
+        <PermissionWrapper resource="FEE_CATEGORIES" action="CREATE">
           <Button
             type="primary"
             icon={<PlusOutlined />}
@@ -124,7 +120,7 @@ const FeeCategoriesPage = () => {
           >
             Add Category
           </Button>
-        </PermissionGuard>
+        </PermissionWrapper>
       </div>
 
             <div className="bg-white rounded-lg shadow overflow-hidden">

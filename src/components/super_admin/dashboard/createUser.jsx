@@ -3,11 +3,14 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { FloatLabel } from 'primereact/floatlabel';
 import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { useUsers } from '../../../hooks/useUsers';
+import { useSchools } from '../../../hooks/useSchool';
 export const CreateUser = ({visible, onClose}) => {
     const { createUsers, createUserLoading, createUserIsSuccess } = useUsers()
+    const { schools, isLoading: schoolsLoading } = useSchools()
     const [isPassword, setIsPassword] = useState(true)
     const [isConPassword, setIsConPassword] = useState(true)
   const createUserFormik = useFormik({
@@ -17,18 +20,26 @@ export const CreateUser = ({visible, onClose}) => {
               phoneNumber: '',
               password: '',
               confirmPassword: '',
+              schoolId: null,
           },
           validationSchema: Yup.object({
-              name: Yup.string().required('School name is required'),
+              name: Yup.string().required('Username is required'),
               email: Yup.string().email('Invalid email address').required('Email is required'),
               phoneNumber: Yup.string().required('Phone number is required'),
               password: Yup.string().required('Password is required'),
               confirmPassword: Yup.string()
                  .required('Confirm Password is required')
                  .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+              schoolId: Yup.string().required('School is required'),
           }),
           onSubmit: (values) => {
-              createUsers({email: values.email, password: values.password, phoneNumber:String(values.phoneNumber), username: values.name})
+              createUsers({
+                email: values.email, 
+                password: values.password, 
+                phoneNumber: String(values.phoneNumber), 
+                username: values.name,
+                schoolId: values.schoolId
+              })
           },
       })
 
@@ -55,6 +66,8 @@ export const CreateUser = ({visible, onClose}) => {
                         id="name"
                         name="name"
                         type="text"
+                        autoComplete='off'
+                        
                         className="w-full border border-gray-500 p-2 rounded-md placeholder:text-sm focus:outline-none focus:ring-1 focus:ring-gray-100 "
                         onChange={createUserFormik.handleChange}
                         onBlur={createUserFormik.handleBlur}
@@ -76,6 +89,7 @@ export const CreateUser = ({visible, onClose}) => {
                         id="email"
                         name="email"
                         type="email"
+                        autoComplete='off'
                         className="w-full border border-gray-500 p-2 rounded-md placeholder:text-sm focus:outline-none focus:ring-1 focus:ring-gray-100"
                         onChange={createUserFormik.handleChange}
                         onBlur={createUserFormik.handleBlur}
@@ -101,6 +115,7 @@ export const CreateUser = ({visible, onClose}) => {
                         id="phoneNumber"
                         name="phoneNumber"
                         type="number"
+                        autoComplete='off'
                         className="w-full border border-gray-500 p-2 rounded-md placeholder:text-sm focus:outline-none focus:ring-1 focus:ring-gray-100"
                         onChange={createUserFormik.handleChange}
                         onBlur={createUserFormik.handleBlur}
@@ -118,11 +133,40 @@ export const CreateUser = ({visible, onClose}) => {
                   </div>
                   <div className="py-2 my-2">
                     <FloatLabel>
+                      <Dropdown
+                        id="schoolId"
+                        name="schoolId"
+                        value={createUserFormik.values.schoolId}
+                        options={schools?.map(school => ({
+                          label: school.schoolName,
+                          value: school._id
+                        })) || []}
+                        onChange={(e) => createUserFormik.setFieldValue('schoolId', e.value)}
+                        onBlur={createUserFormik.handleBlur}
+                        placeholder="Select a school"
+                        className="w-full border border-gray-500 p-2 rounded-md placeholder:text-sm focus:outline-none focus:ring-1 focus:ring-gray-100"
+                        loading={schoolsLoading}
+                        disabled={schoolsLoading}
+                        autoComplete="off"
+                      />
+                      <label htmlFor="schoolId" className="text-sm">
+                        School
+                      </label>
+                    </FloatLabel>
+                    {createUserFormik.touched.schoolId && createUserFormik.errors.schoolId && (
+                      <div className="text-[#BA1500] text-sm" aria-live="polite">
+                        {createUserFormik.errors.schoolId}
+                      </div>
+                    )}
+                  </div>
+                  <div className="py-2 my-2">
+                    <FloatLabel>
                     <div className='relative'>
                       <InputText
                         id="password"
                         name="password"
                         type={`${isPassword ? "password" : "text"}`}
+                        autoComplete='off'
                         className="w-full border border-gray-500 p-2 rounded-md placeholder:text-sm focus:outline-none focus:ring-1 focus:ring-gray-100"
                         onChange={createUserFormik.handleChange}
                         onBlur={createUserFormik.handleBlur}
@@ -148,6 +192,7 @@ export const CreateUser = ({visible, onClose}) => {
                         id="confirmPassword"
                         name="confirmPassword"
                         type={`${isConPassword ? "password" : "text"}`}
+                        autoComplete='off'
                         className="w-full border border-gray-500 p-2 rounded-md placeholder:text-sm focus:outline-none focus:ring-1 focus:ring-gray-100"
                         onChange={createUserFormik.handleChange}
                         onBlur={createUserFormik.handleBlur}

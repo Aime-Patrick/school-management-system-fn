@@ -9,9 +9,9 @@ export const getAllUsersInSystem = async () => {
     }
 };
 
-export const createUser = async ({username,email,password,phoneNumber}) => {
+export const createUser = async ({username,email,password,phoneNumber,schoolId}) => {
     try {
-        const response = await axiosInstance.post(`/users/school-admin`, {username, email, password, phoneNumber});
+        const response = await axiosInstance.post(`/users/school-admin`, {username, email, password, phoneNumber, schoolId});
         return response.data;
     } catch (error) {
         throw error;

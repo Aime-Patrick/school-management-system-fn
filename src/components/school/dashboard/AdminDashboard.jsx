@@ -42,29 +42,29 @@ export const AdminDashboard = () => {
   // Revenue
  const { data: payments, isLoading: paymentsLoading } = useStudentPayment();
 
-  // Use real data if available, otherwise dumbdata
-  const studentsData = students && students.length > 0 ? students : 0;
-  const teachersData = teachers && teachers.length > 0 ? teachers : 0;
-  const classesData = classes && classes.length > 0 ? classes : 0;
-  const paymentsData = payments && payments.length > 0 ? payments : 0;
+  // Use real data if available, otherwise use empty arrays
+  const studentsData = students && Array.isArray(students) ? students : [];
+  const teachersData = teachers && Array.isArray(teachers) ? teachers : [];
+  const classesData = classes && Array.isArray(classes) ? classes : [];
+  const paymentsData = payments && Array.isArray(payments) ? payments : [];
 
   // Stats array
   const stats = [
     {
       title: 'Total Students',
-      value: studentsLoading ? <span className="animate-spin">...</span> : (students ? students.length : dumbStudents.length),
+      value: studentsLoading ? <span className="animate-spin">...</span> : (students ? students.length : 0),
       change: 0,
       icon: <Users className="text-navy-600" />,
     },
     {
       title: 'Total Teachers',
-      value: teachersLoading ? <span className="animate-spin">...</span> : (teachers ? teachers.length : dumbTeachers.length),
+      value: teachersLoading ? <span className="animate-spin">...</span> : (teachers ? teachers.length : 0),
       change: 0,
       icon: <UserCog className="text-navy-600" />,
     },
     {
       title: 'Total Classes',
-      value: classesLoading ? <span className="animate-spin">...</span> : (classes ? classes.length : dumbClasses.length),
+      value: classesLoading ? <span className="animate-spin">...</span> : (classes ? classes.length : 0),
       change: 0,
       icon: <BookOpen className="text-navy-600" />,
     },
@@ -78,18 +78,26 @@ export const AdminDashboard = () => {
 
   // Helper for chart data by year
   const getChartDataByYear = (items, dateField, label, color, sumField) => {
-    if (!items || items.length === 0 || !items[0][dateField]) return null;
+    if (!items || !Array.isArray(items) || items.length === 0) return null;
+    
+    // Check if the first item has the dateField
+    if (!items[0] || !items[0][dateField]) return null;
+    
     const countsByYear = {};
     items.forEach(item => {
-      const year = new Date(item[dateField]).getFullYear();
-      if (sumField) {
-        countsByYear[year] = (countsByYear[year] || 0) + (item[sumField] || 0);
-      } else {
-        countsByYear[year] = (countsByYear[year] || 0) + 1;
+      if (item && item[dateField]) {
+        const year = new Date(item[dateField]).getFullYear();
+        if (sumField) {
+          countsByYear[year] = (countsByYear[year] || 0) + (item[sumField] || 0);
+        } else {
+          countsByYear[year] = (countsByYear[year] || 0) + 1;
+        }
       }
     });
+    
     const labels = Object.keys(countsByYear).sort();
     const data = labels.map(year => countsByYear[year]);
+    
     return {
       labels,
       datasets: [
@@ -158,7 +166,7 @@ export const AdminDashboard = () => {
   let studentsTableContent;
   if (studentsLoading) {
     studentsTableContent = <div className="flex items-center justify-center h-48 text-gray-400">Loading table...</div>;
-  } else {
+  } else if (studentsData && studentsData.length > 0) {
     studentsTableContent = (
       <div className="overflow-x-auto w-full">
         <div className="font-semibold text-navy-800 mb-1 sticky top-0 bg-white z-10">Students</div>
@@ -186,13 +194,15 @@ export const AdminDashboard = () => {
         </table>
       </div>
     );
+  } else {
+    studentsTableContent = <div className="flex items-center justify-center h-48 text-gray-400">No students data available.</div>;
   }
 
   // Table data: teachers list
   let teachersTableContent;
   if (teachersLoading) {
     teachersTableContent = <div className="flex items-center justify-center h-48 text-gray-400">Loading table...</div>;
-  } else {
+  } else if (teachersData && teachersData.length > 0) {
     teachersTableContent = (
       <div className="overflow-x-auto w-full">
         <div className="font-semibold text-navy-800 mb-1 sticky top-0 bg-white z-10">Teachers</div>
@@ -220,13 +230,15 @@ export const AdminDashboard = () => {
         </table>
       </div>
     );
+  } else {
+    teachersTableContent = <div className="flex items-center justify-center h-48 text-gray-400">No teachers data available.</div>;
   }
 
   // Table data: classes list
   let classesTableContent;
   if (classesLoading) {
     classesTableContent = <div className="flex items-center justify-center h-48 text-gray-400">Loading table...</div>;
-  } else if (Array.isArray(classes) && classes.length > 0) {
+  } else if (classesData && classesData.length > 0) {
     classesTableContent = (
       <div className="overflow-x-auto w-full">
         <div className="font-semibold text-navy-800 mb-1 sticky top-0 bg-white z-10">Classes</div>
@@ -239,7 +251,7 @@ export const AdminDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {classes.map((cls, idx) => (
+            {classesData.map((cls, idx) => (
               <tr key={cls._id || idx} className="border-t border-gray-100">
                 <td className="px-4 py-2">{cls.name || 'N/A'}</td>
                 <td className="px-4 py-2">
@@ -267,7 +279,7 @@ export const AdminDashboard = () => {
   let revenueTableContent;
   if (paymentsLoading) {
     revenueTableContent = <div className="flex items-center justify-center h-48 text-gray-400">Loading table...</div>;
-  } else if (paymentsData && Array.isArray(paymentsData.payments) && paymentsData.payments.length > 0) {
+  } else if (paymentsData && paymentsData.payments && Array.isArray(paymentsData.payments) && paymentsData.payments.length > 0) {
     revenueTableContent = (
       <div className="overflow-x-auto w-full">
         <div className="font-semibold text-navy-800 mb-1 sticky top-0 bg-white z-10">Payments</div>

@@ -7,7 +7,8 @@ import {
   CreditCard,
   Settings,
   CircleDollarSign,
-  Menu
+  Menu,
+  Shield
 } from 'lucide-react';
 import { Logo } from '../layout/Logo';
 
@@ -90,6 +91,20 @@ const SaSidebar = ({ onLogoClick }) => {
             label="Users"
             to="/sadmin/users"
             active="/sadmin/users"
+            onClick={() => setOpen(false)}
+          />
+          <SaSidebarItem
+            icon={<Shield size={20} />}
+            label="Permissions"
+            to="/sadmin/permissions"
+            active="/sadmin/permissions"
+            onClick={() => setOpen(false)}
+          />
+          <SaSidebarItem
+            icon={<Users size={20} />}
+            label="User Permissions"
+            to="/sadmin/user-permissions"
+            active="/sadmin/user-permissions"
             onClick={() => setOpen(false)}
           />
           <SaSidebarItem
