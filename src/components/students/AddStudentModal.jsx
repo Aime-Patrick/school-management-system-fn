@@ -12,7 +12,6 @@ export const AddStudentModal = ({ onClose }) => {
   const { classes, isLoading } = useClassBySchoolId(authData.schoolId);
   const { registerStudentMutation, isSubmitting } = useSchoolStudent();
   const [selectedClassId, setSelectedClassId] = React.useState("");
-  const [generatedPassword, setGeneratedPassword] = useState("");
   const [showAccountInfoModal, setShowAccountInfoModal] = useState(false);
   const [accountCredentials, setAccountCredentials] = useState({ username: "", password: "" });
 

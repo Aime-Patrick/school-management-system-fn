@@ -1,19 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Search, Bell, Menu as MenuIcon } from "lucide-react";
 import { ProfileDropdown } from "../../reusable/ProfileDropDown";
-import AddSchool from '../dashboard/AddSchool';
-import { useCheckSchool } from "../../../hooks/useCheckSchool";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { useAuth } from '../../../hooks/useAuth';
 
 export const Header = ({ onSidebarToggle }) => {
   const navigate = useNavigate();
-  const [visible, setVisible] = useState(false);
-  const { data: isSchoolAdminHasSchool } = useCheckSchool();
-
   const handleSettingsClick = () => {
     navigate("settings");
   };
@@ -48,15 +42,6 @@ export const Header = ({ onSidebarToggle }) => {
       </div>
       {/* Actions */}
       <div className="flex items-center gap-4 ml-4">
-        {!isSchoolAdminHasSchool?.isSchoolExist && (
-          <button
-            type="button"
-            onClick={() => setVisible(true)}
-            className="text-blue-700 bg-white px-4 py-2 rounded-lg border border-blue-600 hover:bg-blue-50 font-semibold transition"
-          >
-            Register School
-          </button>
-        )}
         <motion.button
           type="button"
           className="p-2 rounded-lg hover:bg-blue-700 transition relative"
@@ -82,9 +67,6 @@ export const Header = ({ onSidebarToggle }) => {
           />
         </AnimatePresence>
       </div>
-      {visible && (
-        <AddSchool visible={visible} onClose={() => setVisible(false)} />
-      )}
     </header>
   );
 };
