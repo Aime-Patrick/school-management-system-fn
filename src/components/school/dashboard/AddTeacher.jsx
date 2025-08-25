@@ -306,8 +306,8 @@ const AddTeacher = ({ visible, onClose }) => {
                 className="w-full border border-gray-500 p-2 rounded-md placeholder:text-sm focus:outline-none focus:ring-1 focus:ring-gray-100"
               >
                 <option value="">Select gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
               </select>
               {addTeacherFormik.touched.gender &&
                 addTeacherFormik.errors.gender && (

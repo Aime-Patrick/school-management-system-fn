@@ -18,7 +18,7 @@ export const Timetable = () => {
       </h1>
 
       <div className="bg-white rounded-lg shadow-md overflow-x-auto">
-      <TimetableTable timetableData={classData.timetable} />
+      <TimetableTable timetableData={classData?.timetable} />
       </div>
     </div>
   );

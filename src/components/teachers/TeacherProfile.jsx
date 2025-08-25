@@ -1,5 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MessageCircle, BookOpen, School } from 'lucide-react';
+import dayjs from 'dayjs';
 
 export const TeacherProfile = ({ onClose, teacher }) => {
 
@@ -31,7 +32,7 @@ export const TeacherProfile = ({ onClose, teacher }) => {
     `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=2563eb&color=fff`;
 
   return (
-    <div className="fixed z-50 right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl p-6 overflow-y-auto animate-fade-in-up">
+    <div className="fixed z-50 right-0 top-0 h-full w-full max-w-lg bg-white shadow-2xl p-6 overflow-y-auto animate-fade-in-up">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold text-navy-800">Teacher Profile</h2>
         <button onClick={onClose} className="text-gray-400 hover:text-blue-600 text-2xl font-bold">
@@ -98,7 +99,7 @@ export const TeacherProfile = ({ onClose, teacher }) => {
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-600 mb-1">Hired Date</h3>
-            <p className="text-navy-800">{hiredDate ? format(new Date(hiredDate), "PPP") : "N/A"}</p>
+            <p className="text-navy-800">{hiredDate ? dayjs(hiredDate).format("MMMM D, YYYY") : "N/A"}</p>
           </div>
         </div>
 

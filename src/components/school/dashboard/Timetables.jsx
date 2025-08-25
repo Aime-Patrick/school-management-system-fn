@@ -315,9 +315,9 @@ export const Timetables = () => {
               showSearch
               allowClear
             >
-              {courses.map((course) => (
+              {courses && courses.length > 0 && courses.map((course) => (
                 <Select.Option key={course._id} value={course.name}>
-                  {course.name}
+                  {course?.name}
                 </Select.Option>
               ))}
             </Select>
@@ -329,17 +329,18 @@ export const Timetables = () => {
               showSearch
               allowClear
             >
-              {courses
-                .find((course) => course.name === selectedCourse)
-                ?.teacherIds.map((teacher) => (
-                  <Select.Option
-                    key={teacher._id}
-                    value={teacher._id}
-                    className="capitalize"
-                  >
-                    {`${teacher.firstName} ${teacher.lastName}`}
-                  </Select.Option>
-                ))}
+              {courses && courses.length > 0 && selectedCourse &&
+                courses
+                  .find((course) => course?.name === selectedCourse)
+                  ?.teacherIds?.map((teacher) => (
+                    <Select.Option
+                      key={teacher._id}
+                      value={teacher._id}
+                      className="capitalize"
+                    >
+                      {`${teacher.firstName} ${teacher.lastName}`}
+                    </Select.Option>
+                  ))}
             </Select>
             <div className="flex gap-4">
               <TimePicker

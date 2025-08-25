@@ -9,6 +9,8 @@ import { useTeacher } from "../../../hooks/useTeacher";
 import { useCourses } from "../../../hooks/useCourses";
 import { useCheckSchool } from "../../../hooks/useCheckSchool";
 import  FileUploader  from "../../reusable/FileUploader";
+import { Select } from "antd";
+
 
 const EditTeacherModal = ({ visible, onClose, teacher }) => {
   const { schoolId } = useCheckSchool();
@@ -19,7 +21,7 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
     firstName: "",
     lastName: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     address: "",
     city: "",
     gender: "",
@@ -37,7 +39,7 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
         firstName: teacher.firstName || "",
         lastName: teacher.lastName || "",
         email: teacher.accountCredentails?.email || "",
-        phone: teacher.phone || "",
+        phoneNumber: teacher.accountCredentails?.phoneNumber || "",
         address: teacher.address || "",
         city: teacher.city || "",
         gender: teacher.gender || "",
@@ -64,7 +66,6 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
   // PrimeReact Dropdown returns e.value (not e.target.value)
   const handleDropdownChange = (name) => (e) =>
     setFormData((prev) => ({ ...prev, [name]: e.value }));
-
   const handleDateChange = (e) =>
     setFormData((prev) => ({ ...prev, hiredDate: e.value }));
 
@@ -84,19 +85,18 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
   };
 
   const handleSubmit = () => {
-    console.log("Submitting form data:", formData);
     updateTeacher({ id: teacher._id, data: formData });
   };
 
   const genderOptions = [
-    { label: "Male", value: "Male" },
-    { label: "Female", value: "Female" },
-    { label: "Other", value: "Other" },
+    { value: "Male", label: "Male" },
+    { value: "Female", label: "Female" },
+    { value: "Other", label: "Other" },
   ];
 
   const statusOptions = [
-    { label: "Active", value: "active" },
-    { label: "Inactive", value: "inactive" },
+    { value: "active", label: "Active" },
+    { value: "inactive", label: "Inactive" },
   ];
 
   const courseOptions = Array.isArray(courses)
@@ -118,7 +118,7 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
           <InputText
             id="firstName"
             name="firstName"
-            value={formData.firstName}
+            value={formData.firstName || ""}
             onChange={handleChange}
             required
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -129,7 +129,7 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
           <InputText
             id="lastName"
             name="lastName"
-            value={formData.lastName}
+            value={formData.lastName || ""}
             onChange={handleChange}
             required
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -140,7 +140,7 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
           <InputText
             id="email"
             name="email"
-            value={formData.email}
+            value={formData.email || ""}
             onChange={handleChange}
             type="email"
             required
@@ -148,11 +148,11 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
           />
         </div>
         <div className="field">
-          <label htmlFor="phone" className="mb-2 block text-sm font-medium text-gray-700">Phone</label>
+          <label htmlFor="phoneNumber" className="mb-2 block text-sm font-medium text-gray-700">Phone</label>
           <InputText
-            id="phone"
-            name="phone"
-            value={formData.phone}
+            id="phoneNumber"
+            name="phoneNumber"
+            value={formData.phoneNumber || ""}
             onChange={handleChange}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -162,7 +162,7 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
           <InputText
             id="address"
             name="address"
-            value={formData.address}
+            value={formData.address || ""}
             onChange={handleChange}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -172,19 +172,21 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
           <InputText
             id="city"
             name="city"
-            value={formData.city}
+            value={formData.city || ""}
             onChange={handleChange}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="field">
           <label htmlFor="gender" className="mb-2 block text-sm font-medium text-gray-700">Gender</label>
-          <Dropdown
+          <Select
             id="gender"
-            value={formData.gender}
-            options={genderOptions}
-            optionLabel="label"
-            optionValue="value"
+            value={formData.gender || ""}
+            options={[
+              { value: "Male", label: "Male" },
+              { value: "Female", label: "Female" },
+              { value: "Other", label: "Other" },
+            ]}
             onChange={handleDropdownChange("gender")}
             placeholder="Select a Gender"
             className="w-full"
@@ -205,12 +207,10 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
         </div>
         <div className="field">
           <label htmlFor="status" className="mb-2 block text-sm font-medium text-gray-700">Status</label>
-          <Dropdown
+          <Select
             id="status"
-            value={formData.status}
+            value={formData.status || ""}
             options={statusOptions}
-            optionLabel="label"
-            optionValue="value"
             onChange={handleDropdownChange("status")}
             placeholder="Select Status"
             className="w-full"

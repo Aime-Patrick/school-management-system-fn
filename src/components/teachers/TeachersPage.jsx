@@ -5,14 +5,13 @@ import AddTeacher from "../school/dashboard/AddTeacher";
 import DeleteTeacherModal from "./modals/DeleteTeacherModal";
 import EditTeacherModal from "./modals/EditTeacherModal";
 import { useTeacherBySchoolId } from "../../hooks/useTeacherBySchool";
-import { useCheckSchool } from "../../hooks/useCheckSchool";
 import { Button } from "primereact/button";
 import { useTeacher } from "../../hooks/useTeacher";
 import { Dialog } from "primereact/dialog";
-
+import { useAuth } from "../../hooks/useAuth";
 export const TeachersPage = () => {
-  const { schoolId } = useCheckSchool();
-  const { teachers = [], isLoading } = useTeacherBySchoolId(schoolId);
+  const { authData } = useAuth();
+  const { teachers = [], isLoading } = useTeacherBySchoolId(authData?.schoolId);
   const { deleteTeacher, deleteTeacherLoading, deleteTeacherSuccess, resetTeacherPassword, resetPasswordLoading, resetPasswordSuccess } = useTeacher();
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [showProfile, setShowProfile] = useState(false);

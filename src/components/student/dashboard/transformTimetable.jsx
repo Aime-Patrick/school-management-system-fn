@@ -40,7 +40,7 @@ const TimetableTable = ({ timetableData }) => {
             <th className="px-4 py-3 text-left border border-gray-200">
               Time
             </th>
-            {weekdays.map((day) => (
+            {weekdays?.map((day) => (
               <th
                 key={day}
                 className="px-4 py-3 text-left border border-gray-200"
@@ -51,7 +51,7 @@ const TimetableTable = ({ timetableData }) => {
           </tr>
         </thead>
         <tbody>
-          {transformed.map((slot, index) => (
+          {transformed?.map((slot, index) => (
             <tr
               key={index}
               className={`${
@@ -61,7 +61,7 @@ const TimetableTable = ({ timetableData }) => {
               <td className="px-4 py-3 font-medium border border-gray-200">
                 {slot.time}
               </td>
-              {slot.subjects.map((subject, idx) => (
+              {slot?.subjects?.map((subject, idx) => (
                 <td
                   key={idx}
                   className="px-4 py-3 text-sm border border-gray-200"
@@ -71,7 +71,7 @@ const TimetableTable = ({ timetableData }) => {
                       <div className="font-semibold text-blue-700">
                         {subject.subject}
                       </div>
-                      <div className="text-gray-500">{subject.teacher}</div>
+                      <div className="text-gray-500">{subject?.teacher}</div>
                     </div>
                   ) : (
                     <div className="text-gray-400 italic">—</div>
