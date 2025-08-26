@@ -137,7 +137,7 @@ export const AcademicTerm = () => {
                     {term.name}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">
-                    {term.academicYear.name}
+                    {term.academicYear?.name || 'N/A'}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">
                     {handleConvertDate(term.startDate)}
@@ -198,7 +198,7 @@ export const AcademicTerm = () => {
                   name="academicYear"
                   required
                   defaultValue={
-                    dialogMode === "edit" && selectedTerm ? selectedTerm.academicYear._id : ""
+                    dialogMode === "edit" && selectedTerm && selectedTerm.academicYear ? selectedTerm.academicYear._id : ""
                   }
                   className="w-full p-2 border border-gray-200 rounded focus:border-blue-500 focus:ring-blue-500"
                 >

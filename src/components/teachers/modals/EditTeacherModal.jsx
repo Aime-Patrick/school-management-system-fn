@@ -9,10 +9,19 @@ import { useTeacher } from "../../../hooks/useTeacher";
 import { useCourses } from "../../../hooks/useCourses";
 import { useCheckSchool } from "../../../hooks/useCheckSchool";
 import  FileUploader  from "../../reusable/FileUploader";
-import { Select } from "antd";
+
 
 
 const EditTeacherModal = ({ visible, onClose, teacher }) => {
+  // Add CSS to remove focus border
+  const customStyles = `
+    .no-focus-border .p-dropdown:focus,
+    .no-focus-border .p-dropdown:focus-within,
+    .no-focus-border .p-dropdown.p-focus {
+      box-shadow: none !important;
+      border-color: #e0e0e0 !important;
+    }
+  `;
   const { schoolId } = useCheckSchool();
   const { courses } = useCourses(schoolId);
   const { updateTeacher, updateTeacherLoading, updateTeacherSuccess } = useTeacher();
@@ -27,14 +36,11 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
     gender: "",
     hiredDate: null,
     status: "",
-    coursesTaught: [],
     profilePicture: "",
   });
-  const [selectedCourses, setSelectedCourses] = useState([]);
 
   useEffect(() => {
     if (teacher) {
-      const initialCoursesTaught = Array.isArray(teacher.coursesTaught) ? teacher.coursesTaught : [];
       setFormData({
         firstName: teacher.firstName || "",
         lastName: teacher.lastName || "",
@@ -45,10 +51,8 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
         gender: teacher.gender || "",
         hiredDate: teacher.hiredDate ? new Date(teacher.hiredDate) : null,
         status: teacher.status || "",
-        coursesTaught: initialCoursesTaught.map(c => c._id) || [],
         profilePicture: teacher.profilePicture || "",
       });
-      setSelectedCourses(initialCoursesTaught);
     }
   }, [teacher]);
 
@@ -58,45 +62,42 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
     }
   }, [updateTeacherSuccess, onClose]);
 
+  // Debug: Log formData changes
+  useEffect(() => {
+    console.log('formData updated:', formData);
+  }, [formData]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // PrimeReact Dropdown returns e.value (not e.target.value)
-  const handleDropdownChange = (name) => (e) =>
+  const handleDropdownChange = (name) => (e) => {
+    console.log('Dropdown change:', name, e.value);
     setFormData((prev) => ({ ...prev, [name]: e.value }));
+  };
   const handleDateChange = (e) =>
     setFormData((prev) => ({ ...prev, hiredDate: e.value }));
-
-  // MultiSelect returns an array in e.value
-  const handleCourseChange = (e) => {
-    const selected = Array.isArray(e.value) ? e.value : e.value ? [e.value] : [];
-    const ids = selected
-      .filter((c) => c && typeof c === "object" && "_id" in c)
-      .map((c) => c._id);
-
-    setSelectedCourses(selected);
-    setFormData((prev) => ({ ...prev, coursesTaught: ids }));
-  };
 
   const handleFileChange = (url) => {
     setFormData((prev) => ({ ...prev, profilePicture: url }));
   };
 
   const handleSubmit = () => {
-    updateTeacher({ id: teacher._id, data: formData });
+    console.log('Submitting formData:', formData);
+    updateTeacher({ id: teacher._id, teacherData: formData });
   };
 
   const genderOptions = [
-    { value: "Male", label: "Male" },
-    { value: "Female", label: "Female" },
-    { value: "Other", label: "Other" },
+    { label: "Male", value: "Male" },
+    { label: "Female", value: "Female" },
+    { label: "Other", value: "Other" },
   ];
 
   const statusOptions = [
-    { value: "active", label: "Active" },
-    { value: "inactive", label: "Inactive" },
+    { label: "Active", value: "active" },
+    { label: "Inactive", value: "inactive" },
   ];
 
   const courseOptions = Array.isArray(courses)
@@ -104,7 +105,9 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
     : []; // pass course objects directly
 
   return (
-    <Dialog
+    <>
+      <style>{customStyles}</style>
+      <Dialog
       header="Edit Teacher Information"
       visible={visible}
       onHide={onClose}
@@ -179,17 +182,16 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
         </div>
         <div className="field">
           <label htmlFor="gender" className="mb-2 block text-sm font-medium text-gray-700">Gender</label>
-          <Select
+          <Dropdown
             id="gender"
             value={formData.gender || ""}
-            options={[
-              { value: "Male", label: "Male" },
-              { value: "Female", label: "Female" },
-              { value: "Other", label: "Other" },
-            ]}
+            options={genderOptions}
+            optionLabel="label"
+            optionValue="value"
             onChange={handleDropdownChange("gender")}
             placeholder="Select a Gender"
-            className="w-full"
+            className="w-full no-focus-border"
+            style={{ width: '100%', border: '1px solid #e0e0e0', outline: 'none' }}
           />
         </div>
         <div className="field">
@@ -207,28 +209,16 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
         </div>
         <div className="field">
           <label htmlFor="status" className="mb-2 block text-sm font-medium text-gray-700">Status</label>
-          <Select
+          <Dropdown
             id="status"
             value={formData.status || ""}
             options={statusOptions}
+            optionLabel="label"
+            optionValue="value"
             onChange={handleDropdownChange("status")}
             placeholder="Select Status"
-            className="w-full"
-          />
-        </div>
-        {/* Courses: use MultiSelect */}
-        <div className="field md:col-span-2">
-          <label htmlFor="coursesTaught" className="mb-2 block text-sm font-medium text-gray-700">Courses Taught</label>
-          <MultiSelect
-            id="coursesTaught"
-            value={selectedCourses}
-            options={courseOptions}
-            optionLabel="name"
-            onChange={handleCourseChange}
-            placeholder="Select Courses"
-            filter
-            display="chip"
-            className="w-full"
+            className="w-full no-focus-border"
+            style={{ width: '100%', border: '1px solid #e0e0e0', outline: 'none' }}
           />
         </div>
         <div className="field md:col-span-2">
@@ -252,7 +242,8 @@ const EditTeacherModal = ({ visible, onClose, teacher }) => {
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition duration-300 ease-in-out"
         />
       </div>
-    </Dialog>
+      </Dialog>
+    </>
   );
 };
 

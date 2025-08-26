@@ -93,7 +93,7 @@ export const EditClassModal = ({ classData = {}, onClose, isOpen }) => {
       role="dialog"
       aria-modal="true"
     >
-      <div className="bg-white rounded-xl w-full max-w-5xl shadow-xl overflow-hidden">
+      <div className="bg-white rounded-xl w-full max-w-7xl shadow-xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <div>
