@@ -101,10 +101,10 @@ const FeeCategoryModal = ({ visible, onCancel, onSubmit, category, loading }) =>
                 style={{ width: '100%' }}
               >
                 <Option value="monthly">Monthly</Option>
-                <Option value="quarterly">Quarterly</Option>
+                <Option value="term">Term</Option>
                 <Option value="semester">Semester</Option>
-                <Option value="annually">Annually</Option>
-                <Option value="one-time">One Time</Option>
+                <Option value="yearly">Yearly</Option>
+                <Option value="one_time">One Time</Option>
               </Select>
             </Form.Item>
 

@@ -819,11 +819,11 @@ const SchoolAdminDashboard = () => {
                           <div className="flex justify-between items-center mb-2">
                             <Text strong>{resource}</Text>
                           </div>
-                          <CheckboxGroup>
+                          <Checkbox.Group>
                             {actions.map(action => (
                               <Checkbox key={action} value={action}>{action}</Checkbox>
                             ))}
-                          </CheckboxGroup>
+                          </Checkbox.Group>
                         </Card>
                       ))}
                     </div>

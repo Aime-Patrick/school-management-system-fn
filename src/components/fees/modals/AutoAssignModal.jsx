@@ -3,7 +3,7 @@ import { Modal, Form, Select, Button, DatePicker, InputNumber, Checkbox, Spin } 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useAutoAssignData } from '../../../hooks/useAutoAssignData';
-
+import { useAuth } from '../../../hooks/useAuth';
 
 const { Option } = Select;
 
@@ -43,24 +43,57 @@ const AutoAssignModal = ({ visible, onCancel, onSubmit, loading }) => {
     setSubmitting(false);
   };
 
-  // Mock data - in real app, these would come from API calls
-  const feeStructures = [
-    { id: '1', name: 'Tuition Fee - Class 1 - Term 1', category: 'Tuition Fee', amount: 500 },
-    { id: '2', name: 'Library Fee - Class 1 - Term 1', category: 'Library Fee', amount: 50 },
-    { id: '3', name: 'Laboratory Fee - Class 1 - Term 1', category: 'Laboratory Fee', amount: 75 },
-  ];
+  // Use real API data instead of mock data
+  const { authData } = useAuth();
+  const { feeStructures, classes, students, isLoading: dataLoading, error } = useAutoAssignData(authData?.schoolId);
 
-  const classes = [
-    { id: '1', name: 'Class 1' },
-    { id: '2', name: 'Class 2' },
-    { id: '3', name: 'Class 3' },
-  ];
+  // Debug: Log the data to see its structure
+  console.log('Classes data:', classes);
+  console.log('Students data:', students);
 
-  const students = [
-    { id: '1', name: 'John Doe', class: 'Class 1' },
-    { id: '2', name: 'Jane Smith', class: 'Class 1' },
-    { id: '3', name: 'Mike Johnson', class: 'Class 2' },
-  ];
+  // Show loading spinner while data is being fetched
+  if (dataLoading) {
+    return (
+      <Modal
+        title="Auto Assign Fees"
+        open={visible}
+        onCancel={onCancel}
+        footer={null}
+        width="90vw"
+        style={{ maxWidth: '600px' }}
+        centered
+        className="fees-modal"
+      >
+        <div className="flex justify-center items-center py-8">
+          <Spin size="large" />
+          <span className="ml-3">Loading data...</span>
+        </div>
+      </Modal>
+    );
+  }
+
+  // Show error message if data fetching failed
+  if (error) {
+    return (
+      <Modal
+        title="Auto Assign Fees"
+        open={visible}
+        onCancel={onCancel}
+        footer={null}
+        width="90vw"
+        style={{ maxWidth: '600px' }}
+        centered
+        className="fees-modal"
+      >
+        <div className="text-center py-8 text-red-500">
+          <p>Error loading data. Please try again.</p>
+          <Button onClick={onCancel} className="mt-4">
+            Close
+          </Button>
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <Modal
@@ -95,8 +128,8 @@ const AutoAssignModal = ({ visible, onCancel, onSubmit, loading }) => {
                 optionFilterProp="children"
               >
                 {feeStructures.map(structure => (
-                  <Option key={structure.id} value={structure.id}>
-                    {structure.name} - ${structure.amount}
+                  <Option key={structure._id || structure.id} value={structure._id || structure.id}>
+                    {structure.categoryId?.name || 'Unnamed Category'} - {structure.classId?.name || 'Unknown Class'} - {structure.termId?.name || 'Unknown Term'} - ${structure.amount || 0}
                   </Option>
                 ))}
               </Select>
@@ -113,7 +146,7 @@ const AutoAssignModal = ({ visible, onCancel, onSubmit, loading }) => {
                   onChange={(e) => {
                     setFieldValue('assignToAllClasses', e.target.checked);
                     if (e.target.checked) {
-                      setFieldValue('classIds', classes.map(c => c.id));
+                      setFieldValue('classIds', classes.map(c => c._id || c.id));
                     } else {
                       setFieldValue('classIds', []);
                     }
@@ -133,7 +166,7 @@ const AutoAssignModal = ({ visible, onCancel, onSubmit, loading }) => {
                   onChange={(e) => {
                     setFieldValue('assignToAllStudents', e.target.checked);
                     if (e.target.checked) {
-                      setFieldValue('studentIds', students.map(s => s.id));
+                      setFieldValue('studentIds', students.map(s => s._id || s.id));
                     } else {
                       setFieldValue('studentIds', []);
                     }
@@ -158,9 +191,14 @@ const AutoAssignModal = ({ visible, onCancel, onSubmit, loading }) => {
                   size="large"
                   disabled={values.assignToAllClasses}
                 >
-                  {classes.map(cls => (
-                    <Option key={cls.id} value={cls.id}>{cls.name}</Option>
-                  ))}
+                  {classes.filter(cls => cls && typeof cls === 'object').map(cls => {
+                    const className = cls.name || cls.className || 'Unnamed Class';
+                    return (
+                      <Option key={cls._id || cls.id} value={cls._id || cls.id}>
+                        {className}
+                      </Option>
+                    );
+                  })}
                 </Select>
               </Form.Item>
             )}
@@ -181,11 +219,15 @@ const AutoAssignModal = ({ visible, onCancel, onSubmit, loading }) => {
                   optionFilterProp="children"
                   disabled={values.assignToAllStudents}
                 >
-                  {students.map(student => (
-                    <Option key={student.id} value={student.id}>
-                      {student.name} ({student.class})
-                    </Option>
-                  ))}
+                  {students.filter(student => student && typeof student === 'object').map(student => {
+                    const studentName = `${student.firstName || ''} ${student.lastName || ''}`.trim() || 'Unnamed Student';
+                    const studentClass = student.class?.name || 'N/A';
+                    return (
+                      <Option key={student._id || student.id} value={student._id || student.id}>
+                        {studentName} ({studentClass})
+                      </Option>
+                    );
+                  })}
                 </Select>
               </Form.Item>
             )}

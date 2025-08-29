@@ -1,19 +1,61 @@
 import React from 'react';
-import { Card, Row, Col, Button, Space, Statistic } from 'antd';
+import { Card, Row, Col, Button, Space, Statistic, Spin } from 'antd';
 import { 
   DollarOutlined, 
   FileTextOutlined, 
   UserOutlined, 
   CreditCardOutlined,
   BarChartOutlined,
-  SettingOutlined
+  SettingOutlined,
+  ExclamationCircleOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { useFeeCategories, useFeeAssignments, useFeePayments, useOutstandingFeesReport } from '../../hooks/useFees';
+import { useSchoolStudent } from '../../hooks/useSchoolStudent';
 
 const FeesManagementPage = () => {
   const navigate = useNavigate();
   const { authData } = useAuth();
+  
+  // Get schoolId from auth context
+  const schoolId = authData?.schoolId || authData?.school?.id;
+  
+  // Fetch real data using hooks
+  const { data: feeCategories, isLoading: categoriesLoading } = useFeeCategories();
+  const { data: feeAssignments, isLoading: assignmentsLoading } = useFeeAssignments();
+  const { data: feePayments, isLoading: paymentsLoading } = useFeePayments();
+  const { data: outstandingFeesResponse, isLoading: outstandingLoading } = useOutstandingFeesReport(schoolId);
+  const { data: students, isLoading: studentsLoading } = useSchoolStudent();
+  
+  // Calculate real statistics
+  const totalOutstandingAmount = outstandingFeesResponse?.totalOutstandingAmount || 0;
+  const pendingPayments = feePayments?.data?.filter(payment => payment.status === 'pending')?.length || 0;
+  const totalStudents = students?.length || 0;
+  const activeFeeCategories = feeCategories?.data?.filter(category => category.isActive === true)?.length || 0;
+  
+  // New calculations for feeAssignments
+  const totalAssignedAmount = feeAssignments?.data?.reduce((sum, assignment) => sum + (assignment.assignedAmount || 0), 0) || 0;
+  const activeFeeAssignments = feeAssignments?.data?.filter(assignment => assignment.status === 'active')?.length || 0;
+  const overdueAssignments = feeAssignments?.data?.filter(assignment => {
+    if (!assignment.dueDate) return false;
+    const dueDate = new Date(assignment.dueDate);
+    const today = new Date();
+    return dueDate < today && assignment.status === 'active';
+  })?.length || 0;
+  
+  // Additional useful metrics
+  const totalFeeAssignments = feeAssignments?.total || 0;
+  const upcomingDueAssignments = feeAssignments?.data?.filter(assignment => {
+    if (!assignment.dueDate) return false;
+    const dueDate = new Date(assignment.dueDate);
+    const today = new Date();
+    const ninetyDaysFromNow = new Date(today.getTime() + (90 * 24 * 60 * 60 * 1000));
+return dueDate > today && dueDate <= ninetyDaysFromNow && assignment.status === 'active';
+  })?.length || 0;
+  
+  // Check if any data is loading
+  const isLoading = categoriesLoading || assignmentsLoading || paymentsLoading || outstandingLoading || studentsLoading;
 
   const feeModules = [
     {
@@ -76,52 +118,108 @@ const FeesManagementPage = () => {
       </div>
 
       {/* Quick Stats */}
-      <Row gutter={[16, 16]} className="mb-8">
-        <Col xs={24} sm={12} lg={6}>
-          <Card className="h-full">
-            <Statistic
-              title="Total Outstanding Fees"
-              value={0}
-              prefix={<DollarOutlined />}
-              valueStyle={{ color: '#cf1322' }}
-              formatter={(value) => new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD'
-              }).format(value)}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <Card className="h-full">
-            <Statistic
-              title="Pending Payments"
-              value={0}
-              prefix={<CreditCardOutlined />}
-              valueStyle={{ color: '#fa8c16' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <Card className="h-full">
-            <Statistic
-              title="Total Students"
-              value={0}
-              prefix={<UserOutlined />}
-              valueStyle={{ color: '#1890ff' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <Card className="h-full">
-            <Statistic
-              title="Active Fee Categories"
-              value={0}
-              prefix={<FileTextOutlined />}
-              valueStyle={{ color: '#52c41a' }}
-            />
-          </Card>
-        </Col>
-      </Row>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-32 mb-8">
+          <Spin size="large" />
+        </div>
+      ) : (
+        <>
+          <Row gutter={[16, 16]} className="mb-8">
+            <Col xs={24} sm={12} lg={6}>
+              <Card className="h-full">
+                <Statistic
+                  title="Total Outstanding Fees"
+                  value={totalOutstandingAmount}
+                  prefix={<DollarOutlined />}
+                  valueStyle={{ color: '#cf1322' }}
+                  formatter={(value) => new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                  }).format(value)}
+                />
+              </Card>
+            </Col>
+            <Col xs={24} sm={12} lg={6}>
+              <Card className="h-full">
+                <Statistic
+                  title="Total Assigned Amount"
+                  value={totalAssignedAmount}
+                  prefix={<DollarOutlined />}
+                  valueStyle={{ color: '#1890ff' }}
+                  formatter={(value) => new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                  }).format(value)}
+                />
+              </Card>
+            </Col>
+            <Col xs={24} sm={12} lg={6}>
+              <Card className="h-full">
+                <Statistic
+                  title="Total Fee Assignments"
+                  value={totalFeeAssignments}
+                  prefix={<FileTextOutlined />}
+                  valueStyle={{ color: '#52c41a' }}
+                />
+              </Card>
+            </Col>
+            <Col xs={24} sm={12} lg={6}>
+              <Card className="h-full">
+                <Statistic
+                  title="Overdue Assignments"
+                  value={overdueAssignments}
+                  prefix={<ExclamationCircleOutlined />}
+                  valueStyle={{ color: '#fa8c16' }}
+                />
+              </Card>
+            </Col>
+          </Row>
+          
+          {/* Second row of statistics */}
+          <Row gutter={[16, 16]} className="mb-8">
+            <Col xs={24} sm={12} lg={6}>
+              <Card className="h-full">
+                <Statistic
+                  title="Active Fee Assignments"
+                  value={activeFeeAssignments}
+                  prefix={<FileTextOutlined />}
+                  valueStyle={{ color: '#52c41a' }}
+                />
+              </Card>
+            </Col>
+            <Col xs={24} sm={12} lg={6}>
+              <Card className="h-full">
+                <Statistic
+                  title="Upcoming Due (90 days)"
+                  value={upcomingDueAssignments}
+                  prefix={<ExclamationCircleOutlined />}
+                  valueStyle={{ color: '#1890ff' }}
+                />
+              </Card>
+            </Col>
+            <Col xs={24} sm={12} lg={6}>
+              <Card className="h-full">
+                <Statistic
+                  title="Pending Payments"
+                  value={pendingPayments}
+                  prefix={<CreditCardOutlined />}
+                  valueStyle={{ color: '#fa8c16' }}
+                />
+              </Card>
+            </Col>
+            <Col xs={24} sm={12} lg={6}>
+              <Card className="h-full">
+                <Statistic
+                  title="Active Fee Categories"
+                  value={activeFeeCategories}
+                  prefix={<SettingOutlined />}
+                  valueStyle={{ color: '#722ed1' }}
+                />
+              </Card>
+            </Col>
+          </Row>
+        </>
+      )}
 
             {/* Fee Management Modules */}
       <div className="mb-8">

@@ -4,8 +4,9 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import dayjs from 'dayjs';
 import { useFeeCategories } from '../../../hooks/useFees';
-import { useClasses } from '../../../hooks/useClasses';
 import { useAcademic } from '../../../hooks/useAcademic';
+import { useClassBySchoolId } from '../../../hooks/useClassesBySchoolId';
+import { useAuth } from '../../../hooks/useAuth';
 
 const { Option } = Select;
 
@@ -102,34 +103,25 @@ const FeeStructureModal = ({ visible, onCancel, onSubmit, structure, loading }) 
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log('Form values before submit:', values);
-    console.log('Due date type:', typeof values.dueDate, 'value:', values.dueDate);
-    
     const submitData = {
       ...values,
       dueDate: values.dueDate ? values.dueDate.toISOString() : null,
     };
-    
-    console.log('Submit data:', submitData);
     onSubmit(submitData);
     setSubmitting(false);
   };
 
-  // Real API data
   const { data: categoriesResponse, isLoading: categoriesLoading, error: categoriesError } = useFeeCategories();
-  const { classes, isLoading: classesLoading, error: classesError } = useClasses();
   const { academicYears, academicTerms, isLoading: academicLoading, error: academicError } = useAcademic();
+  const { authData } = useAuth();
+  const { classes: classesBySchoolId, isLoading: classesBySchoolIdLoading, error: classesBySchoolIdError } = useClassBySchoolId(authData?.schoolId);
 
-    // Extract data from API responses
+  // Extract data from API responses
   const categories = categoriesResponse?.data || [];
   const terms = academicTerms || [];
   
   // Show loading state if any data is still loading
-  const isDataLoading = categoriesLoading || classesLoading || academicLoading;
-  
-  // Debug logging
-  console.log('FeeStructureModal - structure prop:', structure);
-  console.log('FeeStructureModal - initialValues:', initialValues);
+  const isDataLoading = categoriesLoading || classesBySchoolIdLoading || academicLoading;
 
   return (
     <Modal
@@ -160,12 +152,12 @@ const FeeStructureModal = ({ visible, onCancel, onSubmit, structure, loading }) 
               </div>
             )}
             
-            {(categoriesError || classesError || academicError) && (
+            {(categoriesError || classesBySchoolIdError || academicError) && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
                 <div className="text-red-700">
                   <div className="font-medium mb-1">Error loading data:</div>
                   {categoriesError && <div>• Categories: {categoriesError?.response?.data?.message || 'Failed to load'}</div>}
-                  {classesError && <div>• Classes: {classesError?.response?.data?.message || 'Failed to load'}</div>}
+                  {classesBySchoolIdError && <div>• Classes: {classesBySchoolIdError?.response?.data?.message || 'Failed to load'}</div>}
                   {academicError && <div>• Academic data: {academicError?.response?.data?.message || 'Failed to load'}</div>}
                 </div>
               </div>
@@ -202,13 +194,13 @@ const FeeStructureModal = ({ visible, onCancel, onSubmit, structure, loading }) 
                 <Select
                   value={values.classId}
                   onChange={(value) => setFieldValue('classId', value)}
-                  placeholder={classesLoading ? "Loading classes..." : "Select class"}
+                  placeholder={classesBySchoolIdLoading ? "Loading classes..." : "Select class"}
                   size="large"
-                  loading={classesLoading}
-                  disabled={classesLoading}
+                  loading={classesBySchoolIdLoading}
+                  disabled={classesBySchoolIdLoading}
                 >
-                  {classes && classes.length > 0 ? (
-                    classes.map(cls => (
+                  {classesBySchoolId && classesBySchoolId.length > 0 ? (
+                    classesBySchoolId.map(cls => (
                       <Option key={cls._id || cls.id} value={cls._id || cls.id}>{cls.name}</Option>
                     ))
                   ) : (
@@ -446,9 +438,9 @@ const FeeStructureModal = ({ visible, onCancel, onSubmit, structure, loading }) 
                 loading={loading || isSubmitting}
                 size="large"
                 className="w-full sm:w-auto"
-                disabled={isDataLoading || categoriesError || classesError || academicError}
+                disabled={isDataLoading || categoriesError || classesBySchoolIdError || academicError}
               >
-                {structure ? 'Update' : 'Create'}
+                {structure ? 'Update' : 'Create'} 
               </Button>
             </div>
           </Form>

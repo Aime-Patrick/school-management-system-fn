@@ -70,6 +70,22 @@ const FeeAssignmentsPage = () => {
     return matchesSearch && matchesStatus && matchesClass;
   });
 
+  const studentNameBodyTemplate = (rowData) => {
+    return <span>{rowData.student?.firstName} {rowData.student?.lastName}</span>;
+  };
+
+  const classBodyTemplate = (rowData) => {
+    return <span>{rowData.feeStructure?.classId?.name}</span>;
+  };
+
+  const feeCategoryBodyTemplate = (rowData) => {
+    return <span>{rowData.feeStructure?.categoryId?.name}</span>;
+  };
+
+  const academicYearBodyTemplate = (rowData) => {
+    return <span>{rowData.feeStructure?.academicYearId?.name}</span>;
+  };
+
   const amountBodyTemplate = (rowData) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -92,14 +108,14 @@ const FeeAssignmentsPage = () => {
     let color = 'default';
     
     switch (status) {
-      case 'paid':
+      case 'active':
         color = 'green';
         break;
-      case 'overdue':
+      case 'inactive':
         color = 'red';
         break;
-      case 'pending':
-        color = 'orange';
+      case 'completed':
+        color = 'blue';
         break;
       default:
         color = 'default';
@@ -170,9 +186,9 @@ const FeeAssignmentsPage = () => {
             className="w-full"
           >
             <Option value="all">All Statuses</Option>
-            <Option value="pending">Pending</Option>
-            <Option value="paid">Paid</Option>
-            <Option value="overdue">Overdue</Option>
+            <Option value="active">Active</Option>
+            <Option value="inactive">Inactive</Option>
+            <Option value="completed">Completed</Option>
           </Select>
           <Select
             placeholder="Filter by class"
@@ -203,9 +219,10 @@ const FeeAssignmentsPage = () => {
           showGridlines
           stripedRows
         >
-          <Column field="student.name" header="Student Name" sortable style={{ minWidth: '140px' }} />
-          <Column field="class.name" header="Class" sortable style={{ minWidth: '100px' }} />
-          <Column field="feeStructure.category.name" header="Fee Category" sortable style={{ minWidth: '120px' }} />
+          <Column header="Student Name" sortable style={{ minWidth: '140px' }} body={studentNameBodyTemplate} />
+          <Column header="Class" sortable style={{ minWidth: '100px' }} body={classBodyTemplate} />
+          <Column header="Fee Category" sortable style={{ minWidth: '120px' }} body={feeCategoryBodyTemplate} />
+          <Column header="Academic Year" sortable style={{ minWidth: '100px' }} body={academicYearBodyTemplate} />
           <Column field="feeStructure.amount" header="Amount" body={amountBodyTemplate} sortable style={{ minWidth: '100px' }} />
           <Column field="feeStructure.dueDate" header="Due Date" body={dueDateBodyTemplate} sortable style={{ minWidth: '100px' }} />
           <Column field="status" header="Status" body={statusBodyTemplate} sortable style={{ minWidth: '100px' }} />

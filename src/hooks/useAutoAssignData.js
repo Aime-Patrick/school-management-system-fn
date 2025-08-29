@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { getFeeStructures } from '../services/api/feesApi';
-import { getClass } from '../services/api/classApi';
 import { getStudentBySchool } from '../services/api/studentApi';
+import { getClassBySchoolId } from '../services/api/classApi';
 
-export const useAutoAssignData = () => {
+export const useAutoAssignData = (schoolId) => {
   // Fetch fee structures
   const { 
     data: feeStructuresResponse, 
@@ -21,7 +21,7 @@ export const useAutoAssignData = () => {
     error: classesError 
   } = useQuery({
     queryKey: ['classes'],
-    queryFn: getClass,
+    queryFn: () => getClassBySchoolId(schoolId),
   });
 
   // Fetch students
@@ -35,19 +35,25 @@ export const useAutoAssignData = () => {
   });
 
   // Process fee structures data
-  const feeStructures = Array.isArray(feeStructuresResponse) 
-    ? feeStructuresResponse 
-    : feeStructuresResponse?.data || [];
+  const feeStructures = Array.isArray(feeStructuresResponse?.data) 
+    ? feeStructuresResponse.data 
+    : Array.isArray(feeStructuresResponse) 
+      ? feeStructuresResponse 
+      : [];
 
   // Process classes data
-  const classes = Array.isArray(classesResponse) 
-    ? classesResponse 
-    : classesResponse?.data || [];
+  const classes = Array.isArray(classesResponse?.data) 
+    ? classesResponse.data 
+    : Array.isArray(classesResponse) 
+      ? classesResponse 
+      : [];
 
   // Process students data
-  const students = Array.isArray(studentsResponse) 
-    ? studentsResponse 
-    : studentsResponse?.data || [];
+  const students = Array.isArray(studentsResponse?.data) 
+    ? studentsResponse.data 
+    : Array.isArray(studentsResponse) 
+      ? studentsResponse 
+      : [];
 
   return {
     feeStructures,

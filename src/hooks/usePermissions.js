@@ -21,12 +21,60 @@ import {
 } from '../services/api/permissionsApi';
 import { getSchools } from '../services/api/schoolApi';
 
-// Existing hooks (keeping for backward compatibility)
+// Updated usePermissions hook to work with your backend data structure
 export const usePermissions = () => {
-  return useQuery({
+  const { data: permissions, isLoading } = useQuery({
     queryKey: ['permissions'],
     queryFn: getPermissions,
   });
+
+  // Permission checking functions - Updated to match backend data structure
+  const hasPermission = (role, resource, action) => {
+    if (!permissions || !role) return false;
+    
+    // Backend returns individual permission objects with roles array
+    // Format: { resource: "FEE_CATEGORIES", action: "CREATE", roles: ["school-admin", "system-admin"] }
+    return permissions.some(p => 
+      p.resource === resource && 
+      p.action === action && 
+      p.roles.includes(role) &&
+      p.isActive !== false
+    );
+  };
+
+  const hasAnyPermission = (role, resource, actions) => {
+    if (!permissions || !role || !Array.isArray(actions)) return false;
+    
+    return actions.some(action => 
+      permissions.some(p => 
+        p.resource === resource && 
+        p.action === action && 
+        p.roles.includes(role) &&
+        p.isActive !== false
+      )
+    );
+  };
+
+  const hasAllPermissions = (role, resource, actions) => {
+    if (!permissions || !role || !Array.isArray(actions)) return false;
+    
+    return actions.every(action => 
+      permissions.some(p => 
+        p.resource === resource && 
+        p.action === action && 
+        p.roles.includes(role) &&
+        p.isActive !== false
+      )
+    );
+  };
+
+  return {
+    permissions,
+    isLoading,
+    hasPermission,
+    hasAnyPermission,
+    hasAllPermissions,
+  };
 };
 
 export const useFormattedPermissions = () => {

@@ -88,16 +88,29 @@ const FeeReportsPage = () => {
     handleExport(exportData, 'defaulter-list');
   };
 
-  const amountBodyTemplate = (rowData) => {
+  const assignedAmountBodyTemplate = (rowData) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD'
-    }).format(rowData.amount || 0);
+    }).format(rowData.assignedAmount || 0);
+  };
+    const totalPaidBodyTemplate = (rowData) => {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(rowData.totalPaid || 0);
+    };
+
+  const outstandingAmountBodyTemplate = (rowData) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(rowData.outstandingAmount || 0);
   };
 
   const dueDateBodyTemplate = (rowData) => {
     if (!rowData.dueDate) return '-';
-    return format(new Date(rowData.dueDate), 'MMM dd, yyyy');
+    return dayjs(rowData.dueDate).format('MMM DD, YYYY');
   };
 
   const daysOverdueBodyTemplate = (rowData) => {
@@ -144,7 +157,7 @@ const FeeReportsPage = () => {
 
   const lastPaymentDateBodyTemplate = (rowData) => {
     if (!rowData.lastPaymentDate) return 'No payments';
-    return format(new Date(rowData.lastPaymentDate), 'MMM dd, yyyy');
+    return dayjs(rowData.lastPaymentDate).format('MMM DD, YYYY');
   };
 
   if (outstandingLoading || summaryLoading || defaulterLoading) {
@@ -226,7 +239,7 @@ const FeeReportsPage = () => {
       {/* Reports Tabs */}
       <div className="bg-white rounded-lg shadow">
         <Tabs defaultActiveKey="outstanding" onChange={setSelectedReport}>
-          <TabPane tab="Outstanding Fees" key="outstanding">
+          <TabPane tab="Outstanding Fees" key="outstanding" className="p-4 px-4">
             <div className="p-4">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                 <h3 className="text-lg font-semibold">Outstanding Fees Report</h3>
@@ -258,9 +271,9 @@ const FeeReportsPage = () => {
                   <Column field="registrationNumber" header="Reg. Number" sortable style={{ minWidth: '120px' }} />
                   <Column field="className" header="Class" sortable style={{ minWidth: '100px' }} />
                   <Column field="feeCategory" header="Fee Category" sortable style={{ minWidth: '120px' }} />
-                  <Column field="assignedAmount" header="Assigned Amount" body={amountBodyTemplate} sortable style={{ minWidth: '120px' }} />
-                  <Column field="totalPaid" header="Total Paid" body={amountBodyTemplate} sortable style={{ minWidth: '100px' }} />
-                  <Column field="outstandingAmount" header="Outstanding" body={amountBodyTemplate} sortable style={{ minWidth: '100px' }} />
+                  <Column field="assignedAmount" header="Assigned Amount" body={assignedAmountBodyTemplate} sortable style={{ minWidth: '120px' }} />
+                  <Column field="totalPaid" header="Total Paid" body={totalPaidBodyTemplate} sortable style={{ minWidth: '100px' }} />
+                  <Column field="outstandingAmount" header="Outstanding" body={outstandingAmountBodyTemplate} sortable style={{ minWidth: '100px' }} />
                   <Column field="dueDate" header="Due Date" body={dueDateBodyTemplate} sortable style={{ minWidth: '100px' }} />
                   <Column field="daysOverdue" header="Overdue" body={daysOverdueBodyTemplate} sortable style={{ minWidth: '100px' }} />
                 </DataTable>
@@ -268,7 +281,7 @@ const FeeReportsPage = () => {
             </div>
           </TabPane>
 
-          <TabPane tab="Payment Summary" key="summary">
+          <TabPane tab="Payment Summary" key="summary" className="p-4 px-4">
             <div className="p-4">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                 <h3 className="text-lg font-semibold">Payment Summary Report</h3>
@@ -324,7 +337,7 @@ const FeeReportsPage = () => {
             </div>
           </TabPane>
 
-          <TabPane tab="Defaulter List" key="defaulter">
+          <TabPane tab="Defaulter List" key="defaulter" className="p-4 px-4">
             <div className="p-4">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                 <h3 className="text-lg font-semibold">Defaulter List</h3>
@@ -357,9 +370,9 @@ const FeeReportsPage = () => {
                   <Column field="phoneNumber" header="Phone" sortable style={{ minWidth: '120px' }} />
                   <Column field="className" header="Class" sortable style={{ minWidth: '100px' }} />
                   <Column field="feeCategory" header="Fee Category" sortable style={{ minWidth: '120px' }} />
-                  <Column field="assignedAmount" header="Assigned Amount" body={amountBodyTemplate} sortable style={{ minWidth: '120px' }} />
-                  <Column field="totalPaid" header="Total Paid" body={amountBodyTemplate} sortable style={{ minWidth: '100px' }} />
-                  <Column field="outstandingAmount" header="Outstanding" body={amountBodyTemplate} sortable style={{ minWidth: '100px' }} />
+                  <Column field="assignedAmount" header="Assigned Amount" body={assignedAmountBodyTemplate} sortable style={{ minWidth: '120px' }} />
+                  <Column field="totalPaid" header="Total Paid" body={totalPaidBodyTemplate} sortable style={{ minWidth: '100px' }} />
+                  <Column field="outstandingAmount" header="Outstanding" body={outstandingAmountBodyTemplate} sortable style={{ minWidth: '100px' }} />
                   <Column field="dueDate" header="Due Date" body={dueDateBodyTemplate} sortable style={{ minWidth: '100px' }} />
                   <Column field="daysOverdue" header="Days Overdue" sortable style={{ minWidth: '100px' }} />
                 </DataTable>
